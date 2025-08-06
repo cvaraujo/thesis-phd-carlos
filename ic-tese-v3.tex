@@ -80,6 +80,13 @@
 % read data
 \usepackage{readarray,tokcycle}
 
+\SetKwInput{Input}{Input}%
+\SetKwInput{Output}{Output}%
+
+\newtheorem{property}{Property}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+
 \newcommand{\z}{$\bullet$}
 \newcommand{\drawBlock}[3]{
   \draw [fill=#3, draw = white] (#1) \foreach \v [count=\i] in #2 {
@@ -142,6 +149,12 @@
 \newacronym{cbrp}{CBRP}{City Block Routing Problem}
 \newacronym{ilp}{ILP}{Integer Linear Programming}
 \newacronym{milp}{MILP}{Mixed Interger Linear Programming}
+\newacronym{mtz}{MTZ}{Miller-Tucker-Zemlin}
+\newacronym{scbrp}{SCBRP}{Stochastic City Block Routing Problem}
+\newacronym{lr}{LR}{Lagrangean Relaxation}
+\newacronym{lpp}{LPP}{Lagrangian Primal Problem}
+\newacronym{ldp}{LDP}{Lagrangian Dual Problem}
+
 
 
 \begin{document}
@@ -217,13 +230,13 @@ Os agradecimentos devem ocupar uma única página.
 
 % Sempre deve haver um resumo em português:
 \begin{resumo}
-O resumo deve ter no máximo 500 palavras e deve ocupar uma única página.
+	O resumo deve ter no máximo 500 palavras e deve ocupar uma única página.
 \end{resumo}
 
 
 % Sempre deve haver um abstract:
 \begin{abstract}
-The abstract must have at most 500 words and must fit in a single page.
+	The abstract must have at most 500 words and must fit in a single page.
 \end{abstract}
 
 
