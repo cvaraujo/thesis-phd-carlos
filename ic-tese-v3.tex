@@ -1,0 +1,366 @@
+% Escolha: Portugues ou Ingles ou Espanhol.
+% Para a versão final do texto, após a defesa, acrescente Final:
+
+\documentclass[Ingles]{ic-tese-v3}
+%\documentclass[Portugues,Final]{ic-tese-v3}
+
+\usepackage[latin1,utf8]{inputenc}
+
+% Para acrescentar comentários ao PDF descomente:
+\usepackage
+%  [pdfauthor={nome do autor},
+%   pdftitle={titulo},
+%   pdfkeywords={palavra-chave, palavra-chave},
+%   pdfproducer={Latex with hyperref},
+%   pdfcreator={pdflatex}]
+{hyperref}
+
+\usepackage{hyperref}
+\usepackage{ae}
+\usepackage{indentfirst}
+\usepackage{colortbl}
+\usepackage{amssymb,amsmath,graphicx,fancyhdr,psfrag,tabularx,float,textcomp,fancybox,amsfonts}
+\usepackage{algorithmic}
+\usepackage{color}
+\usepackage{rotating}
+\usepackage{epsfig}
+\usepackage{ifthen}
+\usepackage{lscape}
+\usepackage{array}
+\usepackage{forest}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{lipsum}
+\usepackage{pbox}
+\usepackage{multirow}
+\RequirePackage{multicol}
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage[autostyle]{csquotes}
+\usepackage{comment}
+\usepackage{enumerate}
+\usepackage{manyfoot}
+\usepackage{listings}
+\usepackage{arydshln}
+\usetikzlibrary{arrows,shapes}
+\usepackage{pgf-pie}
+\usepackage{bbding}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{makecell}
+\usepackage{pifont}
+\usepackage{natbib}
+\usepackage[noabbrev,nameinlink,capitalise]{cleveref}
+\usepackage{eqparbox}
+\usepackage{enumitem}
+
+% algorithms
+\usepackage[english,ruled,lined,linesnumbered]{algorithm2e} % Escrever algoritmos
+
+% images
+\usepackage{tikz}
+\usepackage{pgf}
+\usepackage{pgfplots}
+\usepackage{geometry}
+\usepackage{subcaption}
+
+% fonts
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+
+% math
+\usepackage{calc}% http://ctan.org/pkg/calc
+\usepackage[T1]{fontenc}
+\usepackage{theoremref}
+
+% read data
+\usepackage{readarray,tokcycle}
+
+\newcommand{\z}{$\bullet$}
+\newcommand{\drawBlock}[3]{
+  \draw [fill=#3, draw = white] (#1) \foreach \v [count=\i] in #2 {
+    \ifnum\i>1
+      -- (\v)
+    \fi
+  } -- cycle;
+}
+\newcommand{\drawArcs}[3]{
+  \foreach \i in {1,...,#2}{
+    \draw [#3] (#1[\i,1]) -- (#1[\i,2]);
+  }
+}
+\newcommand{\drawArcsBend}[3]{
+  \foreach \i in {1,...,#2}{
+    \draw [#3] (#1[\i,1]) to [bend right=3] (#1[\i,2]);
+  }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%% Tikz settings %%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usetikzlibrary{arrows.meta,arrows}
+\usetikzlibrary{arrows,positioning,automata,shadows,fit,shapes,calc,shapes.geometric}
+\usetikzlibrary{decorations.pathmorphing}
+\tikzset{triangle_black/.style={regular polygon, regular polygon sides=3, minimum size=0.3cm, fill=black}}
+\tikzset{triangle/.style={regular polygon, regular polygon sides=3, minimum size=0.3cm, fill=white}}
+\tikzset{square/.style={regular polygon, regular polygon sides=4, minimum size=0.3cm, fill=white}}
+\tikzset{circufe/.style={circle,draw, minimum size=0.2cm, fill=white}}
+\tikzset{raio/.style={circle,draw, minimum size=1.45cm, fill=white}} 
+\tikzset{circle_new/.style={circle,draw, minimum size=0.2cm, fill=white}}   
+\geometry{
+  a4paper,
+%  total={170mm,257mm},
+  left=1in,
+  top=1in,
+  bottom=1in,
+  right=1in
+}
+
+\usepackage{glossaries}
+
+\makeglossaries
+\newacronym{ew}{EW}{Epidemiological Week}
+\newacronym{ml}{ML}{Machine Learning}
+\newacronym{gis}{GIS}{Geographic Information System}
+\newacronym{paho}{PAHO}{Pan American Health Organization}
+\newacronym{who}{WHO}{World Health Organization}
+\newacronym{or}{OR}{Operations Research}
+\newacronym{osm}{OSM}{Open Street Maps}
+\newacronym{mabs}{MABS}{Multi-Agent-Based Simulation}
+\newacronym{ode}{ODE}{Ordinary Differential Equations}
+\newacronym{darp}{Dengue-PARP}{Dengue Prize-collecting Arc Routing Problem}
+\newacronym{sinan}{SINAN}{Information System for Notifiable Disease}
+\newacronym{ibge}{IBGE}{Brazilian Institute of Geography and Statistics}
+\newacronym{mae}{MAE}{Mean Absolute Error}
+\newacronym{vrp}{VRP}{Vehicle Routing Problem}
+\newacronym{arp}{ARP}{Arc Routing Problem}
+\newacronym{cbrp}{CBRP}{City Block Routing Problem}
+\newacronym{ilp}{ILP}{Integer Linear Programming}
+\newacronym{milp}{MILP}{Mixed Interger Linear Programming}
+
+
+\begin{document}
+
+% Escolha entre autor ou autora:
+\autor{Carlos Victor Dantas Araújo}
+%\autora{Nome da Autora}
+
+% Sempre deve haver um título em português:
+% \titulo{Dengue Control}
+
+% Se a língua for o inglês ou o espanhol defina:
+\title{Dengue Control}
+
+% Escolha entre orientador ou orientadora. Inclua os títulos acadêmicos:
+\orientador{Prof. Dr. Fábio Luiz Usberti}
+%\orientadora{Profa. Dra. Nome da Orientadora}
+
+% Escolha entre coorientador ou coorientadora, se houver.  Inclua os títulos acadêmicos:
+%\coorientador{Prof. Dr. Eng. Lic. Nome do Co-Orientador}
+%\coorientadora{Profa. Dra. Eng. Lic. Nome da Co-Orientadora}
+
+% Escolha entre mestrado ou doutorado:
+% \mestrado
+\doutorado
+
+% Se houve cotutela, defina:
+%\cotutela{Universidade Nova de Plutão}
+
+\datadadefesa{22}{09}{2025}
+
+% Para a versão final defina:
+%\avaliadorA{Prof. Dr. Primeiro Avaliador}{Instituição do primeiro avaliador}
+%\avaliadorB{Profa. Dra. Segunda Avaliadora}{Instituição da segunda avaliadora}
+%\avaliadorC{Dr. Terceiro Avaliador}{Instituição do terceiro avaliador}
+%\avaliadorD{Prof. Dr. Quarto Avaliador}{Instituição do quarto avaliador}
+%\avaliadorE{Prof. Dr. Quinto Avaliador}{Instituição do quinto avaliador}
+%\avaliadorF{Prof. Dr. Sexto Avaliador}{Instituição do sexto avaliador}
+%\avaliadorG{Prof. Dr. Sétimo Avaliador}{Instituição do sétimo avaliador}
+%\avaliadorH{Prof. Dr. Oitavo Avaliador}{Instituição do oitavo avaliador}
+
+
+% Para incluir a ficha catalográfica em PDF na versão final, descomente e ajuste:
+%\fichacatalografica{arquivo.pdf}
+
+
+% Este comando deve ficar aqui:
+\paginasiniciais
+
+
+% Se houver dedicatória, descomente:
+%\prefacesection{Dedicatória}
+%A dedicatória deve ocupar uma única página.
+
+
+% Se houver epígrafe, descomente e edite:
+% \begin{epigrafe}
+% {\it
+% Vita brevis,\\
+% ars longa,\\
+% occasio praeceps,\\
+% experimentum periculosum,\\
+% iudicium difficile.}
+%
+% \hfill (Hippocrates)
+% \end{epigrafe}
+
+
+% Agradecimentos ou Acknowledgements ou Agradecimientos
+\prefacesection{Acknowledgements}
+Os agradecimentos devem ocupar uma única página.
+
+
+% Sempre deve haver um resumo em português:
+\begin{resumo}
+O resumo deve ter no máximo 500 palavras e deve ocupar uma única página.
+\end{resumo}
+
+
+% Sempre deve haver um abstract:
+\begin{abstract}
+The abstract must have at most 500 words and must fit in a single page.
+\end{abstract}
+
+
+% Se houver um resumo em espanhol, descomente:
+%\begin{resumen}
+% A mesma regra aplica-se.
+%\end{resumen}
+
+
+% A lista de figuras é opcional:
+\listoffigures
+
+% A lista de tabelas é opcional:
+\listoftables
+
+% A lista de abreviações e siglas é opcional:
+% \prefacesection{Lista de Abreviações e Siglas}
+\printglossary[type=\acronymtype]
+% \printglossaries
+
+% A lista de símbolos é opcional:
+% \prefacesection{Lista de Símbolos}
+
+% Quem usa o pacote nomencl pode incluir:
+% \renewcommand{\nomname}{Lista de Abreviações e Siglas}
+% \printnomenclature[3cm]
+
+
+% O sumário vem aqui:
+\tableofcontents
+
+
+% E esta linha deve ficar bem aqui:
+\fimdaspaginasiniciais
+
+\include{textual/1-introduction}
+\include{textual/2-preliminary}
+
+% \include{textual/models}
+% \include{textual/stochastic-heuristics}
+
+% O corpo da dissertação ou tese começa aqui:
+% \chapter{Introdução}
+
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+% tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+% veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+% commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+% velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+% cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+% est laborum.
+
+% \begin{table}
+% \caption[Shorter table caption]{Table caption caption caption caption
+%   caption caption caption caption caption caption caption caption caption
+%   caption caption caption caption caption caption caption caption caption
+%   caption caption.}
+% \label{t:label0}
+% \begin{center}
+% \begin{tabular}{|c|c|}
+% \hline
+% a & b \\\hline
+% c & d \\\hline
+% \end{tabular}
+% \end{center}
+% \end{table}
+
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+% tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+% veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+% commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+% velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+% cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+% est laborum.
+
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+% tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+% veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+% commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+% velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+% cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+% est laborum.
+
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+% tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+% veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+% commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+% velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+% cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+% est laborum.
+
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+% tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+% veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+% commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+% velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+% cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+% est laborum~\cite{2014-bic,2015-ela}.
+
+% \begin{figure}
+% \centerline{\includegraphics[scale=0.2]{logo-ic-unicamp.eps}}
+% \caption[Shorter figure caption]{Figure Caption caption caption caption
+%   caption caption caption caption caption caption caption caption caption
+%   caption caption caption caption caption caption caption caption caption
+%   caption caption.}
+% \label{f:label1}
+% \end{figure}
+
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+% tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+% veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+% commodo consequat\footnote{Footnote footnote footnote footnote footnote
+%   footnote footnote footnote footnote footnote footnote footnote footnote
+%   footnote footnote footnote.}.  Duis aute irure dolor in reprehenderit in
+% voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+% occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+% anim id est laborum.
+
+
+% \chapter{Hipóteses}
+
+
+% \chapter{Resultados}
+
+
+% \chapter{Conclusões}
+
+
+
+% As referências:
+\bibliographystyle{plain}
+\bibliography{ic-tese-v3}
+
+
+% Os anexos, se houver, vêm depois das referências:
+% \appendix
+% \chapter{Anexo 1}
+% \chapter{Anexo 2}
+
+\end{document}

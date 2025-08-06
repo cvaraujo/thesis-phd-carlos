@@ -1,0 +1,85 @@
+\chapter{Mathematical Models} \label{chapter:models}
+
+Since routes may start and end at different nodes of $D$, we augment the digraph to $D' = (V', A')$  to include a dummy depot $0$ and a set of arcs such that $A' = \{(0, u), (u, 0)\}$, and $t_{u0} = t_{0u} = 0$, $\forall u \in V$. Consider $B(i)$ as the set of blocks touching node $i$, $V(b)$ as the set of vertices in block $b$, and the following sets of variables:
+
+ \section{Model Without repeating Nodes}
+ 
+\begin{itemize}
+  \item $x_{ij}$: binary variable that indicates whether arc $(i, j) \in
+    A'$ belongs to the route ($x_{ij} = 1$) or not ($x_{ij} = 0$);
+  \item $y_{ib}$: binary variable that is valued 1 if node $i \in V$ is
+    used as the starting point to service block $b \in B(i)$, and valued 0 otherwise; 
+\end{itemize}
+
+With these variables, the T-CBRP formulation reads:
+\allowdisplaybreaks
+\begin{align}
+  \text{(T-CBRP) } & \max \sum_{i \in V} \sum_{b \in B} p_b y_{ib} & \label{eq:of}\\
+  \nonumber \text{subject to:} & & \\
+       & \sum_{a \in \delta^{-}(0)} x_{a} = \sum_{a' \in \delta^{+}(0)} x_{a'} = 1 & \label{eq:s-t-all} \\
+       %
+       & \sum_{a \in \delta^{-}(i)} x_{a} - \sum_{a' \in \delta^{+}(i)} x_{a'} = 0 & \ \forall i \in V \label{eq:flow-conservation} \\
+       % & \sum_{i \in V'} \sum_{b \in B} f^I_b y_{ib} \leq I_{\max} & \label{eq:max-insecticide} \\
+       %
+       & \sum_{i \in V(b)} y_{ib} \leq 1 & \ \forall b \in B \label{eq:max-attend} \\
+       %
+       & \sum_{a \in \delta^{+}(i)} x_{a} \geq y_{ib} & \ \forall i \in V(b), b \in B \label{eq:in-path} \\
+       %
+       & \sum_{a \in A'} x_{a}t_{a} + \sum_{i \in V'} \sum_{b \in B} y_{ib}t_{b} \leq T & \label{eq:max-time} \\
+       %
+       & \sum_{a \in A(S)} x_{a} \leq |V(S)| - 1 & \ \forall S \subseteq V \label{eq:circuit-subtour-elimination} \\
+       %
+       & x \in \mathbb{B}^{|A'|} & \label{eq:dom-x} \\
+       & y \in \mathbb{B}^{|V'| * |B|} & \label{eq:dom-y}
+\end{align}
+
+The T-CBRP formulation generates a tour that starts and ends at the dummy depot. The objective function~\eqref{eq:of} maximizes the profit collected from each block. Constraints~\eqref{eq:s-t-all}-\eqref{eq:flow-conservation} enforce flow conservation in each node. Constraints~\eqref{eq:max-attend} and~\eqref{eq:in-path} ensure that only one node is used as the starting point for servicing a block. Constraints~\eqref{eq:max-time} limit the time used by the route, considering different times whether the vehicle is servicing or not. Constraints~\eqref{eq:circuit-subtour-elimination} eliminate subcycles. Constraints~\eqref{eq:dom-x}-\eqref{eq:dom-y} define the domain of the variables.
+
+The subcycle elimination constraints, exponentially large in the size of the input, 
+can be replaced by the compact set of variables and constraints known as MTZ (Miller-Tucker-Zemlin). To this end, consider the following variables:
+
+\begin{itemize}
+    \item $w_{a}$: real variable representing the accumulated time in arc $a \in A'$.
+\end{itemize}
+
+Now it is possible to replace constraints \eqref{eq:circuit-subtour-elimination} with the following:
+
+\begin{align}
+  & w_{a'} \geq w_{a} + x_{a}t_{a} - (2 - x_{a'} - x_{a})T & \ \forall a \in \delta^{+}(i), a' \in \delta^{-}(i), i \in V' \label{eq:max-time-compact-leq} \\
+   %
+   & w_{a} \leq T & \ \forall a \in \delta^{+}(0) & \label{eq:max-time-compact}
+\end{align}
+
+Constraints~\eqref{eq:max-time-compact-leq} compute the accumulated time for each arc while  Constraints~\eqref{eq:max-time-compact} limit the amount of time used in the route. This new formulation has a number of constraints that grows polynomially with the size of the instance and the resulting route is equivalent to the formulation T-CBRP, i.e., a closed path.
+
+\section{Models That Allows Repetitions os Arcs}
+
+The first option is to use the above models with a new Graph create from the transitive closure of D.
+
+The second options is to use the plannar input graph with the following model:
+
+\begin{itemize}
+  \item $x_{ij}$: integer variable that count how many times the arc $(i, j) \in A'$ was traveled in the route;
+  \item $y_{b}$: binary variable that is valued 1 if block $b \in B(i)$ is serviced, and valued 0 otherwise; 
+\end{itemize}
+
+\begin{align}
+  \text{(W-CBRP) } & \max \sum_{i \in V} \sum_{b \in B} p_b y_{b} & \label{eq:of}\\
+  \nonumber \text{subject to:} & & \\
+       & \sum_{a \in \delta^{-}(0)} x_{a} = \sum_{a' \in \delta^{+}(0)} x_{a'} = 1 & \label{eq:s-t-all} \\
+       %
+       & \sum_{a \in \delta^{-}(i)} x_{a} - \sum_{a' \in \delta^{+}(i)} x_{a'} = 0 & \ \forall i \in V \label{eq:flow-conservation} \\
+       % & \sum_{i \in V'} \sum_{b \in B} f^I_b y_{ib} \leq I_{\max} & \label{eq:max-insecticide} \\
+       %
+       % & \sum_{i \in V(b)} y_{ib} \leq 1 & \ \forall b \in B \label{eq:max-attend} \\
+       %
+       & \sum_{a \in \delta^{+}(i)} x_{a} \geq y_{b} & \ \forall i \in V(b), b \in B \label{eq:in-path} \\
+       %
+       & \sum_{a \in A'} x_{a}t_{a} + \sum_{b \in B} y_{b}t_{b} \leq T & \label{eq:max-time} \\
+       %
+       & \sum_{a \in A(S)} x_{a} \leq |V(S)| - 1 + \sum_{a' \in \delta^{+}(S)} x_{a'} & \ \forall S \subseteq V \label{eq:new-walk-subtour-elimination} \\
+       %
+       & x \in \mathbb{Z}^{|A'|} & \label{eq:dom-x} \\
+       & y \in \mathbb{B}^{|B|} & \label{eq:dom-y}
+\end{align}
+

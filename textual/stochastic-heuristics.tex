@@ -1,0 +1,203 @@
+\chapter{Heuristics}
+
+\section{Constructive Heuristic}
+
+How to connect blocks:
+
+\begin{figure}[ht!]
+  \centering
+  \begin{subfigure}{0.49\textwidth}
+      \centering
+      \begin{tikzpicture}[>=latex]
+        \coordinate (s) at (2, 5);
+        \coordinate (v11) at (0, 4);
+        \coordinate (v12) at (2, 4);
+        \coordinate (v13) at (4, 4);
+        \coordinate (v21) at (0, 2);
+        \coordinate (v22) at (2, 2);
+        \coordinate (v23) at (4, 2);
+        \coordinate (v31) at (0, 0);
+        \coordinate (v32) at (1, 0);
+        \coordinate (v33) at (2, 0);
+        \coordinate (v34) at (3, 0);
+        \coordinate (v35) at (4, 0);
+        \coordinate (v41) at (0, -2);
+        \coordinate (v42) at (1, -2);
+        \coordinate (v43) at (2, -2);
+        \coordinate (v44) at (3, -2);
+        \coordinate (v45) at (4, -2);
+        \coordinate (t)   at (2, -3);
+        \node (ns)   at (s)   {\small$s$};
+        \node (nv11) at (v11) {\small$v^1_{b_4^1}$};
+        \node (nv12)  at (v12) {\small$v^1_{b_4^2}$};
+        \node (nv13)  at (v13) {\small$v^1_{b_4^3}$};
+        \node (nv21)  at (v21) {\small$v^2_{b_3^1}$};
+        \node (nv22)  at (v22) {\small$v^2_{b_3^2}$};
+        \node (nv23)  at (v23) {\small$v^2_{b_3^3}$};
+        \node (nv31)  at (v31) {\small$v^3_{b_2^1}$};
+        \node (nv32)  at (v32) {\small$v^3_{b_2^2}$};
+        \node (nv33)  at (v33) {\small$v^3_{b_2^3}$};
+        \node (nv34)  at (v34) {\small$v^3_{b_2^4}$};
+        \node (nv35)  at (v35) {\small$v^3_{b_2^3}$};
+        \node (nv41)  at (v41) {\small$v^4_{b_1^1}$};
+        \node (nv42)  at (v42) {\small$v^4_{b_1^2}$};
+        \node (nv43)  at (v43) {\small$v^4_{b_1^3}$};
+        \node (nv44)  at (v44) {\small$v^4_{b_1^4}$};
+        \node (nv45)  at (v45) {\small$v^4_{b_1^3}$};
+        \node (nt)    at (t)   {\small$t$};
+        % arcs
+        \def\arcs{%
+          ns nv11
+          ns nv12
+          ns nv13
+          nv11 nv21
+          nv11 nv22
+          nv11 nv23
+          nv12 nv21
+          nv12 nv22
+          nv12 nv23
+          nv13 nv21
+          nv13 nv22
+          nv13 nv23
+          nv21 nv31
+          nv21 nv32
+          nv21 nv33
+          nv21 nv34
+          nv21 nv35
+          nv22 nv31
+          nv22 nv32
+          nv22 nv33
+          nv22 nv34
+          nv22 nv35
+          nv23 nv31
+          nv23 nv32
+          nv23 nv33
+          nv23 nv34
+          nv23 nv35
+          nv31 nv41
+          nv31 nv42
+          nv31 nv43
+          nv31 nv44
+          nv31 nv45
+          nv32 nv41
+          nv32 nv42
+          nv32 nv43
+          nv32 nv44
+          nv32 nv45
+          nv33 nv41
+          nv33 nv42
+          nv33 nv43
+          nv33 nv44
+          nv33 nv45
+          nv34 nv41
+          nv34 nv42
+          nv34 nv43
+          nv34 nv44
+          nv34 nv45
+          nv35 nv41
+          nv35 nv42
+          nv35 nv43
+          nv35 nv44
+          nv35 nv45
+          nv41 nt
+          nv42 nt
+          nv43 nt
+          nv44 nt
+          nv45 nt
+        }
+        \readarray\arcs\Arcs[9,2]
+        % print arcs
+        \drawArcs{\Arcs}{\ArcsROWS}{->}
+      \end{tikzpicture}
+      \caption{$D^G$ example.}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+      \centering
+      \begin{tikzpicture}[>=latex]
+        \coordinate (s) at (2, 5);
+        \coordinate (v11) at (0, 4);
+        \coordinate (v12) at (2, 4);
+        \coordinate (v13) at (4, 4);
+        \coordinate (v21) at (0, 2);
+        \coordinate (v22) at (2, 2);
+        \coordinate (v23) at (4, 2);
+        \coordinate (v31) at (0, 0);
+        \coordinate (v32) at (1, 0);
+        \coordinate (v33) at (2, 0);
+        \coordinate (v34) at (3, 0);
+        \coordinate (v35) at (4, 0);
+        \coordinate (v41) at (0, -2);
+        \coordinate (v42) at (1, -2);
+        \coordinate (v43) at (2, -2);
+        \coordinate (v44) at (3, -2);
+        \coordinate (v45) at (4, -2);
+        \coordinate (t)   at (2, -3);
+        \node (ns)   at (s)   {\small$s$};
+        \node (nv11) at (v11) {\small$v^1_{b_4^1}$};
+        \node (nv12)  at (v12) {\small$v^1_{b_4^2}$};
+        \node (nv13)  at (v13) {\small$v^1_{b_4^3}$};
+        \node (nv21)  at (v21) {\small$v^2_{b_3^1}$};
+        \node (nv22)  at (v22) {\small$v^2_{b_3^2}$};
+        \node (nv23)  at (v23) {\small$v^2_{b_3^3}$};
+        \node (nv31)  at (v31) {\small$v^3_{b_2^1}$};
+        \node (nv32)  at (v32) {\small$v^3_{b_2^2}$};
+        \node (nv33)  at (v33) {\small$v^3_{b_2^3}$};
+        \node (nv34)  at (v34) {\small$v^3_{b_2^4}$};
+        \node (nv35)  at (v35) {\small$v^3_{b_2^3}$};
+        \node (nv41)  at (v41) {\small$v^4_{b_1^1}$};
+        \node (nv42)  at (v42) {\small$v^4_{b_1^2}$};
+        \node (nv43)  at (v43) {\small$v^4_{b_1^3}$};
+        \node (nv44)  at (v44) {\small$v^4_{b_1^4}$};
+        \node (nv45)  at (v45) {\small$v^4_{b_1^3}$};
+        \node (nt)    at (t)   {\small$t$};
+        % arcs
+        \def\arcs{%
+          nv11 nv23
+          nv23 nv32
+        }
+        \readarray\arcs\Arcs[9,2]
+        % print arcs
+        \drawArcs{\Arcs}{\ArcsROWS}{->}
+      \end{tikzpicture}
+      \caption{Obtained tour with $k = 3$.}
+  \end{subfigure}
+  \caption{Block connection heuristic.}
+  \label{fig:brkga_example}
+\end{figure}
+
+% \begin{algorithm}[!ht]
+% \scriptsize
+% % \DontPrintSemicolon 
+% 	\caption{\label{alg:stochastic-construction} Stochastic Initial Solution}
+% 	\KwIn{Graph G, Scenarios S, Time T}
+% 	\KwOut{$X, Y$ set of |S| routes and their respective attended blocks}
+
+%     $P_0 \leftarrow$ update profits from first stage\;
+%     $T_{UB} = 1.0 * T$\;
+%     $T_{LB} = 0.5 * T$\;
+    
+% 	\Repeat{close the gap between $T_{UB}$ and $T_{LB}$}{ \label{line:rep-beg} 
+%         $T' \leftarrow $ reserved time to attend (from binary search)\; 
+%         $Y_0, X_0 \leftarrow$ solve first stage route ($P_0, T'$)\;
+
+%         \For{$s = 1, 2, \dots, |S|$}{
+%             $P_s \leftarrow$ update second stage profit $(Y_0)$\;
+%             $Y_s, X_s \leftarrow$ solve second stage route ($P_s, T'$)\;
+%             $C_k(x) \leftarrow 0$\; 
+%             \For{$j = 1, 2, \dots, n$}{
+%                 \uIf{$k \neq j$}{
+%                    $C_k(x) \leftarrow C_k(x) + (c_{kj} * x_j)$\;
+%                 }
+%             } \label{line:calc-ckx-end}
+            
+%            \uIf{$C_k(x) < C_k/2$ \textbf{and} $x_k = 0$}{\label{line:if-change}
+%                 $x_k \leftarrow 1$\;
+%             } 
+%             \uElseIf {$C_k(x) > C_k/2$ \textbf{and} $x_k = 1$} {
+%               $x_k \leftarrow 0$\;
+%             } \label{line:if-change-two}
+%         }
+% 	} \label{line:rep-end}
+% 	\Return{$x$}\;
+
+% \end{algorithm}
