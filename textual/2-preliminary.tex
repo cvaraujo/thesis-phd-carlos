@@ -1,12 +1,14 @@
 \chapter{Preliminary Concepts and Formulations}\label{chp:preliminary-concepts}
 
-In this chapter, we introduce the fundamental concepts necessary for understanding this thesis. The basic notation and definitions are presented in Section~\ref{sec:not-e-def}. In this work, we employ basic concepts from Combinatorial Optimization, which are assumed to be known. If the reader deems a review necessary, we recommend the textbook by Nemhauser and Wolsey~\cite{Nemhauser}, which covers this topic with a focus on \gls{ilp}, one of the main tools used in this work. 
-
-Basic concepts related to graph theory are also assumed to be known. Should the reader require a refresher, the material can be found in standard textbooks on the subject, such as Diestel~\cite{diestel:2005}. 
+In this chapter, we introduce the fundamental concepts necessary for understanding this thesis. The basic notation and definitions are presented in Section~\ref{sec:not-e-def}. In this work, we employ basic concepts from Combinatorial Optimization, which are assumed to be known. If the reader deems a review necessary, we recommend the textbook by Nemhauser and Wolsey~\cite{Nemhauser}, which covers this topic with a focus on \gls{ilp}, one of the main tools used in this work. Basic concepts related to graph theory are also assumed to be known. Should the reader require a refresher, the material can be found in standard textbooks on the subject, such as Diestel~\cite{diestel:2005}. 
 
 The mathematical models are presented in Sections~\ref{sec:dmfm-pma} and~\ref{sec:ab-pma}. Section~\ref{sec:rel-lagrangiana} provides a description of the functioning and application of Lagrangian relaxation, one of the main approaches employed in this work. Finally, in Sections~\ref{sec:metaheuristic} and~\ref{subsec:brkga}, we present a general discussion on metaheuristics.
 
 \section{Notations and Definitions} \label{sec:not-e-def}
+
+ Once a spraying vehicle begins to service a city block, it must sequentially cover all surrounding edges in a clockwise direction. \textcolor{red}{The traversal ensures that the insecticide fog forms a continuous barrier, preventing mosquitoes from escaping. The clockwise direction is due to real operational factors, as the nebulizer equipment points to the right side of the vehicle.
+Figure~\ref{fig:instance_digraph_fumace_car} shows an example of a map,
+with four blocks to service, and Figure~\ref{fig:route_fumace_car} presents a spraying route for these blocks where the nebulizer is activated in the black dots and follows the direction of the arrow, starts by serving Block 2, goes to Blocks 1, 3 and 4, respectively.
 
 Let $G = (V, A)$ be a weighted and directed graph, where $V = \{1, \dots, n\}$ is the set of vertices and $A = \{(u, v) : u \text{ and } v \in V, u \neq v\}$ is the set of $m$ arcs. In each arc, the first vertex is the source and also the predecessor of the second vertex in the ordered pair, which is known as the destination.
 
