@@ -1,0 +1,309 @@
+\chapter{Literature Review}\label{sec:literature-review}
+
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) --
+	cycle;}
+
+This section presents the existing literature related to the main topics
+considered in this paper. The focus is on methodologies that simulated the
+spread and impact of Dengue and other arboviral diseases, along with
+computational methodologies for support decisions in vector control.
+
+\section{Dengue Spread Simulation}\label{sec:dengue-spread-simulation}
+
+In~\cite{Borges2015}, the authors propose a \gls{mabs} to assess the pupal
+productivity of the \textit{Aedes Aegypti} mosquito. The model considers the
+productivity of water-holding containers, defined as the number of adult
+mosquitoes each site can produce. The findings indicate that factoring in pupal
+productivity is crucial for effective dengue control and prevention strategies.
+Consequently, they assert that prevention measures should incorporate pupal
+productivity and recognize that the proximity of containers can enhance
+productivity, thereby heightening the risk of transmission.
+
+\cite{maneerat:2016} presented the Model of Mosquito Aedes (MOMA), a \gls{mabs}
+that explores the population dynamics of the \textit{Aedes aegypti} female
+mosquito. This model produced statistical data on mosquito behaviors and
+population dynamics that are difficult to obtain through field surveys, such as
+population densities in various geographical and climatic conditions. The paper
+gives a detailed description of the model and its calibration process. The data
+employed by the model is from a developing neighborhood in Delhi, India,
+processed using a \gls{gis}. Results showed a strong relationship between urban
+topology and adult mosquito flight range: in areas with limited open space,
+mosquitoes tend to remain close to their site of birth. Thus, densely built-up
+areas and wide roads act as barriers, restricting mosquito movement and access
+to resources.
+
+\cite{Legros2016} compare two intricate, spatially explicit, stochastic models
+that analyze the population dynamics of \textit{Aedes aegypti}. While both
+models account for the mosquito's biological and ecological attributes, their
+complexity and underlying assumptions differ. The authors evaluate the models’
+predictions within two distinct climatic environments: the tropical and mildly
+seasonal climate of Iquitos, Peru, and the temperate, highly seasonal
+environment of Buenos Aires, Argentina. The models were employed to simulate
+killing larvae and/or adult mosquitoes. The results reveal considerable
+differences in the models' predictions regarding population recovery, likely
+attributable to differing assumptions about larval development and density
+dependence -- that is, the negative impact of higher larval density on
+development time and survival due to resource competition.
+
+\cite{damien:2017} focuses on the East-West economic corridor in Southeast
+Asia, where a notable correlation between corridor opening and dengue fever
+cases has been observed, though causality remains undetermined. To address this,
+authors employ an \gls{mabs} model integrating dengue dynamics, climate data,
+economic mobility, and health policies. The approach decomposes these factors
+into sub-models linked to form an integrated model, and it also proposes
+strategies to manage data gaps in modeling. Simulation results show the
+influence of increased mobility and varied control policies on rising dengue
+cases.
+
+In~\cite{Carvalho2019}, various control strategies and recommendations for the
+vaccination campaign are assessed. The proposed mathematical model integrates
+mechanical and chemical control. Mechanical control is determined by the
+environmental support capacity, influenced by a discrete function that
+represents the elimination of breeding sites. Chemical control involves the
+application of insecticides and larvicides. The authors conclude that
+eradicating the dengue epidemic is only possible with the introduction of an
+immunizing vaccine, as in some scenarios, vector control measures alone are not
+sufficient to eliminate the disease, which may persist or reemerge even after
+infected mosquitoes are removed.
+
+
+\cite{da-silva:2020} presented a work to simulate the dengue virus propagation
+using a \gls{mabs} approach. Inspired by compartmental models in epidemiology,
+the agent-based model was implemented on the GAMA platform alongside a classical
+model based on ordinary differential equations. Despite some simplifying
+assumptions, comparing the outputs of the two models validated the approach,
+indicating that the model could serve as a foundation for developing more
+refined models in the future.
+
+In~\cite{Imran2020}, the authors expand the conventional SEIR mathematical model
+by introducing a \gls{mabs} to analyze the interactions between hosts and
+vectors. They estimate the growth of the vector density based on reproductive
+behavior and simulate agent interactions for virus transmission within a
+spatiotemporal context, predicting disease spread in a specified area over time.
+Their simulation results reveal expected dengue cases and their movement
+patterns, which can assist in the early detection of epidemic outbreaks. The
+authors demonstrate a similar trend between the real and simulated data. This
+similarity is quantified by a Root Mean Square Error (RMSE) of 0.064.
+
+A model comprising eight distinct compartments was presented
+in~\cite{Abidemi2020}. This model captures the dynamics of dengue fever
+transmission while incorporating interventions such as personal protective
+measures, larvicide, and adulticide applications. The calibration of this model
+is based on data from the dengue outbreak that occurred in Johor, Malaysia, in
+2012, utilizing the least-squares method. Optimal control theory is applied to
+effectively explore the synergistic effects of combined control strategies to
+mitigate the spread of dengue fever.
+
+An \gls{ode} model taking into account multiple strains of dengue virus is
+presented in~\cite{Xue2021}. This model allows the evaluation of human
+vaccination effectiveness considering the decline and failure of immunity. A
+sensitivity analysis was conducted, and the influence of different parameters on
+the basic reproduction number was measured. The findings suggest that
+early-stage vaccination of humans is more beneficial.
+
+\cite{hamdan:2021} developed a deterministic mathematical model of dengue
+transmission, incorporating the effect of temperature. The model exhibits a
+disease-free equilibrium (DFE),a state in which dengue eventually disappears
+from the population, when the basic reproduction number (R0) is below 1.
+However, it also displays a backward bifurcation, meaning that even when R0 is
+less than 1, the disease may persist under certain conditions, such as high
+initial numbers of infected individuals. Using entomological and experimental
+data from Malaysia, the model evaluates R0 at different temperatures, peaking at
+32°C. The model's solutions show oscillatory behavior in the number of cases,
+which are smoothed when using an alternative mathematical formulation that
+incorporates memory effects and gradual change, known as a fractional-order
+model. This suggests that dengue can spread in temperate areas and that the
+fractional-order approach is a promising alternative for modeling dengue
+transmission dynamics.
+
+
+In~\cite{Gramajo2022}, the authors propose a \gls{mabs} to simulate mosquito
+population dynamics by incorporating key biological and behavioral
+characteristics of Aedes aegypti. The model also introduces parameters to
+represent human responses to awareness campaigns focused on eliminating water
+containers. These parameters include: the effectiveness of bucket-emptying
+actions, the frequency of these actions, and a delay parameter that models the
+time until emptied containers become refillable and suitable again for
+oviposition. Through numerical simulations, the study analyzes how different
+combinations of these protocols impact both adult and aquatic mosquito
+populations. The results indicate the existence of a critical effectiveness
+threshold above which mosquito populations can be significantly reduced.
+
+\cite{Pascoe2023} present a \gls{mabs} for dengue fever developed using the
+Multi-Agent Research and Simulation (MARS) framework, a platform for modeling
+and simulating agent-based models in C\#. The model is designed considering
+climatic and environmental factors and is contextualized in the region of Dar es
+Salaam, Tanzania. However, the study is limited to the conceptual and design
+stages, without performing simulation experiments or analyzing the actual impact
+of these factors on disease dynamics.
+
+\cite{Cavany2023} introduce a hybrid model that combines statistics and
+\gls{mabs} to analyze mosquito population dynamics. A central step in their
+methodology involves calibrating a key model parameter using spatiotemporal
+abundance estimates generated by a Generalized Additive Model (GAM), a
+statistical model that captures non-linear relationships between mosquito
+abundance and environmental factors such as temperature and precipitation.
+Utilizing this calibrated parameter alongside literature-derived values in the
+\gls{mabs}, the authors explore the dynamics of the mosquito population and the
+effects of insecticide spraying on adult mosquitoes. The model is validated
+using a large dataset of 176.352 field observations of adult \textit{Aedes
+	aegypti}, collected from mosquito traps between 1999 and 2011 in Iquitos, Peru.
+Their results suggest that the success of insecticide spraying campaigns
+strongly depends on achieving high coverage and repeated applications, as
+targeting only a fraction of households proves insufficient.
+
+
+\cite{Uribe2023} propose a comparative study of three implementations of a
+\gls{mabs} designed to simulate the dynamics of \textit{Aedes aegypti}
+mosquitoes and the transmission of vector-borne diseases. The models were
+implemented using different platforms -- Mesa-Geo, Repast Simphony and Repast
+HPC -- to evaluate their performance in terms of computational efficiency,
+scalability, memory usage, and suitability for incorporating geospatial and
+epidemiological factors in an urban context. The authors conclude that while
+Mesa-Geo facilitates model development and visualization, Repast HPC offers
+superior scalability and performance, making it more appropriate for large-scale
+simulations aimed at informing public health decision-making.
+
+This research introduces a Multi-Agent-Based Simulation (\gls{mabs}) approach
+with novel contributions compared to previous studies. Our model integrates
+geographical data to define population density, position agents within street
+blocks, and dynamically determine the initial population size. Using historical
+case notifications, we generate the simulation’s starting scenario by estimating
+the initial number of infected individuals and calibrating parameters based on
+the specific city. The objective is to project short- to mid-term future
+scenarios (up to 14 \gls{ews}), assisting cities of different scales in making
+timely decisions to prevent and mitigate epidemic seasons while optimizing
+resource allocation. Thus, this methodology aims to provide more localized and
+detailed insights into Dengue propagation, considering the specific dynamics and
+characteristics of smaller urban areas in Brazil.
+
+Table~\ref{tab:dengue-literature} highlights the key differences between the
+papers cited in this section, including our work. If a paper includes the
+specified property or data listed in a column, the corresponding cell in the
+table is marked with a \checkmark.
+
+The analysis of the table shows that our approach stands out in two key aspects:
+The location of agents in street blocks that contributes to the simulation
+environment closer to real urban settings. In this work, human agents have fixed
+home and work locations within specific blocks, enabling more realistic mobility
+patterns. This mapping also supports flexible spatial granularity, as the
+simulation can be adapted to different levels of detail by adjusting the number
+and size of blocks or by focusing on specific city regions or neighborhoods. The
+second element is the use of short-range historical notifications to define the
+initial simulation scenario. This decision replicates the current procedure
+adopted by the public health authorities to evaluate current epidemiological
+conditions, such as the number of dengue cases in recent weeks and take
+preventive actions accordingly.
+
+\begin{table}[!ht]
+	\caption{Summary of the literature on Dengue simulation.}
+	\label{tab:dengue-literature}
+	\centering
+	\rowcolors{2}{gray!25}{white}
+	%\rowcolors{2}{white}{gray!25}
+	\resizebox{\columnwidth}{!}{%
+		\begin{tabular}{lcccccc}
+			\toprule
+			\multicolumn{1}{c}{\textbf{Paper}}                                  &
+			\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}} \textbf{Agent-based}
+					                   \\
+					                   \textbf{Simulation}\end{tabular}} &
+			\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}} \textbf{Use
+					                   Mortality} \\
+					                   \textbf{and Birth Rates}\end{tabular}}          &
+			\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}} \textbf{Map agents
+					                   into} \\
+					                   \textbf{Street blocks}\end{tabular}}   &
+			\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}} \textbf{Use}
+					                   \gls{gis} \\
+					                   \textbf{Data}\end{tabular}}         &
+			\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}
+					                   \textbf{Start}
+					                   \\
+					                   \textbf{Simulation
+						                   From}
+					                   \\
+					                   \textbf{Real
+						                   Notifications}\end{tabular}}
+			                                                                    &
+			\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}
+					                   \textbf{Validate}
+					                   \\
+					                   \textbf{Results
+						                   with}
+					                   \\
+					                   \textbf{Historical
+						                   Data}\end{tabular}}
+			\\
+			\midrule
+			\cite{Borges2015}
+			                                                                    &
+			\checkmark
+			                                                                    &
+			\checkmark
+			                                                                    &
+			---
+			                                                                    &
+			---
+			                                                                    &
+			---
+			                                                                    &
+			---
+			\\
+			\cite{maneerat:2016}
+			                                                                    & \checkmark &
+			\checkmark                                                          &
+			---                                                                 & \checkmark & ---        & ---        \\
+			\cite{Legros2016}
+			                                                                    & ---        & ---        &
+			---                                                                 & \checkmark & ---        & \checkmark \\
+			\cite{damien:2017}
+			                                                                    & \checkmark &
+			\checkmark                                                          &
+			---                                                                 & \checkmark & ---        & ---        \\
+			% \cite{Perkins2019} & \checkmark & \checkmark & --- & \checkmark &
+			% --- & ---
+			% \\
+			\cite{Carvalho2019}
+			                                                                    & ---        &
+			\checkmark                                                          &
+			---                                                                 & ---        & ---        & ---        \\
+			\cite{da-silva:2020}
+			                                                                    & \checkmark & ---        &
+			---                                                                 & ---        & ---        & ---        \\
+			\cite{Imran2020}
+			                                                                    & \checkmark & ---        &
+			---                                                                 & ---        & ---        & \checkmark \\
+			\cite{Abidemi2020}
+			                                                                    & ---        &
+			\checkmark                                                          &
+			---                                                                 & \checkmark & ---        & ---        \\
+			\cite{Xue2021}
+			                                                                    & ---        &
+			\checkmark                                                          &
+			---                                                                 & ---        & ---        & ---        \\
+			\cite{hamdan:2021}
+			                                                                    & ---        & ---        &
+			---                                                                 & \checkmark & ---        & \checkmark \\
+			\cite{Gramajo2022}
+			                                                                    & \checkmark &
+			\checkmark                                                          &
+			\checkmark                                                          & ---        & ---        & ---        \\
+			\cite{Pascoe2023}
+			                                                                    & \checkmark &
+			\checkmark                                                          &
+			---                                                                 & \checkmark & ---        & ---        \\
+			\cite{Cavany2023}
+			                                                                    & \checkmark &
+			\checkmark                                                          &
+			---                                                                 & \checkmark & ---        & ---        \\
+			\cite{Uribe2023}
+			                                                                    & \checkmark &
+			\checkmark                                                          &
+			---                                                                 & \checkmark & ---        & ---        \\
+			\midrule \textbf{This paper}                                        & \checkmark & \checkmark & \checkmark
+			                                                                    & \checkmark & \checkmark &
+			\checkmark
+			\\ \bottomrule\end{tabular}%
+	}
+\end{table}
