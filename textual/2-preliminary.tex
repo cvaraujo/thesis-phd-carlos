@@ -10,9 +10,6 @@ also assumed to be known. Should the reader require a refresher, the material
 can be found in standard textbooks on the subject, such as
 Diestel~\cite{diestel:2005}.
 
-% Considering the basic concepts from
-% Stochastic Programming, we recommend the textbook by Birge and
-% Louveaux~\cite{birge:2011}. 
 % TODO: add references to the sections
 % The mathematical models are presented in Sections~\ref{sec:dmfm-pma}
 % and~\ref{sec:ab-pma}. Section~\ref{sec:rel-lagrangiana} provides a description
@@ -21,34 +18,6 @@ Diestel~\cite{diestel:2005}.
 % and~\ref{subsec:brkga}, we present a general discussion on metaheuristics.
 
 \section{Notations and Definitions}\label{sec:not-e-def}
-
-% Once a spraying vehicle begins to service a city block, it must sequentially
-% cover all surrounding edges in a clockwise direction. The
-% traversal ensures that the insecticide fog forms a continuous barrier,
-% preventing mosquitoes from escaping. 
-% The clockwise direction is due to real operational factors, 
-% as the nebulizer equipment points to the right side of the
-% vehicle. 
-% Figure~\ref{fig:instance_digraph_fumace_car} shows an example of a map,
-% with four blocks to service, and Figure~\ref{fig:route_fumace_car} presents a
-% spraying route for these blocks where the nebulizer is activated in the black
-% dots and follows the direction of the arrow, starts by serving Block 2, goes to
-% Blocks 1, 3 and 4, respectively. 
-
-% \begin{figure}[!ht]
-% 	\begin{minipage}[c]{.49\textwidth}
-% 		\centering
-% 		\subfloat[A CBRP instance
-% 			digraph.]{\label{fig:instance_digraph_fumace_car}\includegraphics[width=5cm,
-% 				height=5cm]{images/cbrp-instance.pdf}} \end{minipage}%
-% 	\begin{minipage}[c]{.49\textwidth}
-% 		\centering
-% 		\subfloat[A spraying vehicle route covering four city
-% 			blocks.]{\label{fig:route_fumace_car}\includegraphics[width=8cm,
-% 				height=5cm]{images/nebulizer-activated.pdf}}
-% 	\end{minipage}
-% 	\caption{\label{fig:route-ex} CBRP example.}
-% \end{figure}
 
 Let $G = (V, A, B)$ be a weighted and directed graph, where $V = \{1, \dots,
 	n\}$ is the set of vertices, $A = \{(i, j) : i, j \in V, i \neq j\}$ is the
@@ -124,12 +93,12 @@ of this strategy, where servicing is achieved without requiring a full traversal
 of the block's perimeter.
 
 \begin{figure}[h!]
-	\begin{minipage}[c]{.4\textwidth}
+	\begin{minipage}[c]{.31\textwidth}
 		\begin{tikzpicture}[
 				> = stealth, % arrow head style
 				shorten > = 0.8pt, % don't touch arrow head to node
 				auto,
-				node distance = 1.4cm, % distance between nodes
+				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
 			
@@ -145,14 +114,14 @@ of the block's perimeter.
 			\node[state, above of = a] (c) {$3$};
 			\node[state, above of = b] (d) {$4$};
 			
-			\node[state, right of = b, xshift=0.3cm] (e) {$5$};
-			\node[state, right of = d, xshift=0.3cm] (f) {$6$};
+			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
+			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
 			
 			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
 			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
-			\node[state, below of = i, left of = j, xshift=0.5cm] (k) {$11$};
+			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
 			
 			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
 			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (d); 
@@ -174,12 +143,12 @@ of the block's perimeter.
 		\subcaption{Instance Example.}
 	\end{minipage}
 	\hfill
-	\begin{minipage}[c]{.4\textwidth}
+	\begin{minipage}[c]{.31\textwidth}
 		\begin{tikzpicture}[
 				> = stealth, % arrow head style
 				shorten > = 0.8pt, % don't touch arrow head to node
 				auto,
-				node distance = 1.4cm, % distance between nodes
+				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
 			
@@ -195,14 +164,14 @@ of the block's perimeter.
 			\node[state, above of = a] (c) {$3$};
 			\node[state, above of = b] (d) {$4$};
 			
-			\node[state, right of = b, xshift=0.3cm] (e) {$5$};
-			\node[state, right of = d, xshift=0.3cm] (f) {$6$};
+			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
+			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
 			
 			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
 			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
-			\node[state, below of = i, left of = j, xshift=0.5cm] (k) {$11$};
+			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
 			
 			\path[->, draw = gray, opacity = 1.0] (a) edge node {} (c); 
 			\path[->, draw = gray, opacity = 1.0] (c) edge node {} (d); 
@@ -222,14 +191,14 @@ of the block's perimeter.
 			\path[->, draw = gray, opacity = 1.0, dashed] (b) edge node {} (e);
 		\end{tikzpicture}
 		\subcaption{Explicity Block Servicing.}
-	\end{minipage}\\
-	\centering
-	\begin{minipage}[c]{.4\textwidth}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.31\textwidth}
 		\begin{tikzpicture}[
 				> = stealth, % arrow head style
 				shorten > = 0.8pt, % don't touch arrow head to node
 				auto,
-				node distance = 1.4cm, % distance between nodes
+				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
 			
@@ -245,14 +214,14 @@ of the block's perimeter.
 			\node[state, above of = a] (c) {$3$};
 			\node[state, above of = b] (d) {$4$};
 			
-			\node[state, right of = b, xshift=0.3cm] (e) {$5$};
-			\node[state, right of = d, xshift=0.3cm] (f) {$6$};
+			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
+			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
 			
 			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
 			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
-			\node[state, below of = i, left of = j, xshift=0.5cm] (k) {$11$};
+			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
 			
 			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
 			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (d); 
@@ -275,6 +244,24 @@ of the block's perimeter.
 	\end{minipage}
 	\caption{\label{fig:servicing_block_no_surrounding_strategy} Strategies for servicing blocks.}
 \end{figure}
+
+Assuming the implicit servicing of a block as allowed by
+Property~\ref{claim:core_insight}, additional properties can be established
+concerning optimal solutions. Let $V_B = \bigcup_{b \in B} V(b)$ be the set of
+nodes belonging to some city block, and let $S^{*} = (v_1, \ldots v_n)$
+represent an optimal route.
+
+\begin{property}
+	\label{lemma_solution_extremities}
+	There exists an optimal route $S^{*}$ with both extremities in $V_B$.
+\end{property}
+
+\begin{proof}
+	Suppose $S^{*}$ does not have both extremities in $V_B$. By removing the
+	prefix and/or suffix of $S^{*}$ whose nodes do not belong to $V_B$, we
+	obtain another solution that preserves the total collected prize and does
+	not increase the total time spent, since $t_a \geqslant 0$.
+\end{proof}
 
 \section{Deterministic Optimization Models}\label{sec:cbrp-deterministic-models}
 
@@ -368,8 +355,11 @@ Path-CBRP-MTZ.
 The possibility of visiting a vertex more than once is a significant difference
 between the Path-CBRP and the Walk-CBRP. This allows for more flexibility in the
 solution, and achieve values always greater than or equal to the Path-CBRP.
-Figure~\ref{fig:walk-feasible-solution-example} presents a feasible solution for
-the Walk-CBRP, which also is a solution that is not feasible for the Path-CBRP.
+\Cref{fig:walk-feasible-solution-example} presents a feasible route for the
+Walk-CBRP, that is not feasible for the Path-CBRP. In the example, the route
+starts at the depot, then visits node $2$, and goes to node $5$, then goes back
+to $2$, does the same to node $10$ and finally ends the route going to node $13$
+and depot.
 
 
 \begin{figure}[h!]
@@ -378,7 +368,7 @@ the Walk-CBRP, which also is a solution that is not feasible for the Path-CBRP.
 				> = stealth, % arrow head style
 				shorten > = 0.8pt, % don't touch arrow head to node
 				auto,
-				node distance = 1.4cm, % distance between nodes
+				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
 			
@@ -399,12 +389,12 @@ the Walk-CBRP, which also is a solution that is not feasible for the Path-CBRP.
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
 			
-			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
-			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
+			\node[state, below of = b, yshift=-0.1cm] (i) {$9$};
+			\node[state, below of = e, yshift=-0.1cm] (j) {$10$};
 			\node[state, below of = i, left of = j, xshift=0.4cm] (k) {$11$};
 			
-			\node[state, above of = d, yshift=0.5cm] (l) {$12$};
-			\node[state, above of = f, yshift=0.5cm] (m) {$13$};
+			\node[state, above of = d, yshift=0.1cm] (l) {$12$};
+			\node[state, above of = f, yshift=0.1cm] (m) {$13$};
 			\node[state, above of = l, left of = m, xshift=0.4cm] (n) {$14$};
 			
 			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
@@ -440,7 +430,7 @@ the Walk-CBRP, which also is a solution that is not feasible for the Path-CBRP.
 				> = stealth, % arrow head style
 				shorten > = 0.8pt, % don't touch arrow head to node
 				auto,
-				node distance = 1.4cm, % distance between nodes
+				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
 			
@@ -460,13 +450,16 @@ the Walk-CBRP, which also is a solution that is not feasible for the Path-CBRP.
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
 			
-			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
-			\node[state, rectangle, double, below of = e, yshift=-0.5cm] (j) {$10$};
+			\node[state, below of = b, yshift=-0.1cm] (i) {$9$};
+			\node[state, rectangle, double, below of = e, yshift=-0.1cm] (j) {$10$};
 			\node[state, below of = i, left of = j, xshift=0.4cm] (k) {$11$};
 			
-			\node[state, above of = d, yshift=0.5cm] (l) {$12$};
-			\node[state, rectangle, double, above of = f, yshift=0.5cm] (m) {$13$};
+			\node[state, above of = d, yshift=0.1cm] (l) {$12$};
+			\node[state, rectangle, double, above of = f, yshift=0.1cm] (m) {$13$};
 			\node[state, above of = l, left of = m, xshift=0.4cm] (n) {$14$};
+			
+			\node[state, double, below of = a, left of = i] (s) {$s$};
+			\node[state, double, above of = h, right of = m] (t) {$t$};
 			
 			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
 			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
@@ -485,12 +478,14 @@ the Walk-CBRP, which also is a solution that is not feasible for the Path-CBRP.
 			\path[->, draw = gray, opacity = 0.2] (n) edge node {} (m);
 			\path[->, draw = gray, opacity = 0.2] (m) edge node {} (l);
 			
-			\path[->, draw = black, opacity = 1.0, bend right=10] (b) edge node {} (m);
-			\path[->, draw = black, opacity = 1.0, bend right=10] (m) edge node {} (b);
-			\path[->, draw = black, opacity = 1.0, bend right=10] (b) edge node {} (e);
-			\path[->, draw = black, opacity = 1.0, bend right=10] (e) edge node {} (b);
-			\path[->, draw = black, opacity = 1.0, bend right=10] (b) edge node {} (j);
-			\path[->, draw = black, opacity = 1.0, bend right=10] (j) edge node {} (b);
+			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (m);
+			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (b) edge node {} (e);
+			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (e) edge node {} (b);
+			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (b) edge node {} (j);
+			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (j) edge node {} (b);
+			% depot
+			\path[->, draw = black, opacity = 1.0, dashed] (s) edge node {} (b);
+			\path[->, draw = black, opacity = 1.0, dashed] (m) edge node {} (t);
 			
 		\end{tikzpicture}
 		\subcaption{Walk Solution.}
@@ -546,178 +541,219 @@ and does not contain the endpoints of $a''$. If two arcs $a'$ and $a''$ are
 selected simultaneously, then for every $S \in \mathrm{cut}(a', a'')$ there must
 be an outgoing arc from $S$ in the solution.
 
-As there is an exponential number of
-constraints~\eqref{eq:walk-subtour-elimination}, we initially do not add any of
-this type to the model. For each integer solution found, we use connected
-components to check for violations: Since we allow isolated nodes, we only
-consider as components those sets containing at least two nodes. If there is
-more than one component with two or more nodes, the route is not connected; in
-this case, we add a constraint~\eqref{eq:walk-subtour-elimination} to cut off
-the solution, using one of the components $S$ found, along with arcs $a'$ whose
-endpoints belong to $S$, and arcs $a''$ whose endpoints do not belong to $S$.
+\subsection{Walk-Solution Using Transitive Closure of the Graph}\label{sec:walk-solution-using-transitive-closure}
+
+In this section, we present an adaptation that consists in the adaptation of
+original planar graph that allow us to compute implicit walks using a
+formulation presented in Section~\ref{sec:cbrp-deterministic-models}. Our
+approach is to construct a new graph in which blocks are transformed into nodes.
+Let:
+
+\begin{itemize}
+	\item $G' = (V', A')$: be the graph with the node and arcs to the artificial
+	      depot $s = 0$.
+	\item $P_{i,j}$: be the shortest path from node $i$ to node $j$ in $G$ where
+	      $t_{i,j} = t_{P_{i,j}}$, and $t_{i,0} = t_{0,i} = 0$ for all $i \in
+		      V$.
+	\item $V_B = \bigcup_{b \in B} V(b)$: be the set of nodes belonging to some
+	      city block.
+	\item $V_B^0 = V_B \cup \{0\}$: represent the set of block nodes along with
+	      the artificial depot $0$.
+	\item $A_B = A(V_B)$ and $A_B^0 = A(V_B^0)$: be the sets of arcs associated
+	      with $V_B$ and $V_B^0$, respectively.
+\end{itemize}
 
 
-\section{Optimization Under Uncertainty}\label{sec:optimization-under-uncertainty}
+The construction of $G_B^0$ (blocks-as-nodes graph) follows from
+Lemma~\ref{lemma_solution_extremities}, which considers only nodes in $V_B$ from
+the original graph, and from the definition of $P_{i,j}$, ensuring that the
+shortest paths between two nodes in $V_B$ are preserved. Together, these
+properties guarantee that using $G_B^0$ preserves all optimal solutions of the
+\gls{cbrp}.
 
-Two-Stage Stochastic Programming models with recourse deal with uncertain data,
-represented by random variables. A decision must be made at the present time; we
-call this the first-stage (or first-phase) decision, and at a later time, after
-its implementation, the uncertainties are revealed. Then, based on the
-first-stage decision and the revealed uncertain data, we can make a
-complementary/corrective (recourse) decision, called the second-stage (or
-second-phase) decision~\cite{birge:2011}.
+\Cref{fig:CBRP_transitive_closure_example} illustrates the rationale for using
+graph $G_B$. Specifically, \Cref{subfig:CBRP_instance_digraph} presents a
+\gls{cbrp} instance, while \Cref{subfig:CBRP_solution_graph_G} shows the
+corresponding solution in the original graph, where the dashed arcs represent
+the non-spraying travels. Finally, \Cref{subfig:CBRP_solution_graph_G_B}
+represents the same solution mapped onto the transformed graph structure.
 
-The uncertain data of the problem are represented by a random vector~$\xi$. We
-are interested in the case where~$\xi$ is a discrete random variable, that is,
-it can take values from a finite set $\Xi = \{\xi_{1}, \ldots, \xi_{k}\}$. We
-denote each possible random event by $\omega \in \Omega$. Alternatively, $\xi$
-can be represented as a function of $\omega \in \Omega$, with $\xi(\omega)$
-being the value taken by the random variable when event $\omega$ occurs.
+\begin{figure}[h!]
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+			
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 8mm
+			]
+			
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+			
+			\node[state, right of = b, xshift=0.1cm] (d) {$4$};
+			
+			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
+			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, above of = e] (g) {$7$};
+			
+			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
+			\node[state, above of = h] (i) {$9$};
+			\node[state, left of = i] (j) {$10$};
+			\node[state, below of = j] (k) {$11$};
+			
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+			
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (d);
+			\path[->, draw = gray, opacity = 0.2] (d) edge node {} (e);
+			
+			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+			
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
+			
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
+		\end{tikzpicture}
+		\subcaption{\label{subfig:CBRP_instance_digraph} Instance Example.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+			
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 8mm
+			]
+			
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+			
+			\node[state, right of = b, xshift=0.1cm] (d) {$4$};
+			
+			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
+			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, above of = e] (g) {$7$};
+			
+			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
+			\node[state, above of = h] (i) {$9$};
+			\node[state, left of = i] (j) {$10$};
+			\node[state, below of = j] (k) {$11$};
+			
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+			
+			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (d);
+			\path[->, draw = black, opacity = 1.0, dashed] (d) edge node {} (e);
+			
+			\path[->, draw = black, opacity = 1.0, dashed] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+			
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
+			
+			\path[->, draw = black, opacity = 1.0, dashed] (f) edge node {} (h);
+		\end{tikzpicture}
+		\subcaption{\label{subfig:CBRP_solution_graph_G} Solution on Graph $G$.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+			
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 8mm
+			]
+			
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+			
+			% \node[state, right of = b, xshift=0.2cm] (d) {$4$};
+			
+			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
+			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, above of = e] (g) {$7$};
+			
+			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
+			\node[state, above of = h] (i) {$9$};
+			\node[state, left of = i] (j) {$10$};
+			\node[state, below of = j] (k) {$11$};
+			
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+			
+			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (f);
+			
+			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+			
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
+			
+			\path[->, draw = black, opacity = 1.0, dashed] (f) edge node {} (h);
+		\end{tikzpicture}
+		\subcaption{\label{subfig:CBRP_solution_graph_G_B} Solution on Graph $G_B$.}
+	\end{minipage}
+	\caption{\label{fig:CBRP_transitive_closure_example} Solution with Transitive Closure.}
+\end{figure}
 
-First-stage decision variables are represented by vector~$x$, of
-dimension~$n_{1}$, while second-stage decision variables are represented by the
-random vector~$y$, of dimension~$n_{2}$. We denote by $y(\omega)$ the
-second-stage decision variables associated with the realization of random
-event~$\omega$.
+This adaptation in the original graph allows us to use any \gls{cbrp} fomulation
+presented in Section~\ref{sec:cbrp-deterministic-models} in $G_B$ and generate a
+implicit walk solution, i.e., a solution that is a path in $G_B$, however when
+the arcs represented by shortest paths are converted to real arcs in the
+original graph $G$, the solution could turn into a walk. However, this
+adjustment demands the creation of all arcs between nodes in $V_B$, fact that
+could increase significantly the size of $G_B$ according to the number of blocks
+in the instance.
 
-A traditional two-stage stochastic programming problem, also called a
-\emph{Recourse Problem} (RP) or \emph{here-and-now} problem — since a decision
-must be made in the present before the uncertainties are revealed — is generally
-formulated as:
-\begin{align}
-	\max \quad        & c^{T} x + \mathbb{E}_{\xi} \left[ \max q(\omega)^{T} y(\omega) \right] \nonumber \\
-	\text{s.t.} \quad & A x = b \nonumber                                                                \\
-	                  & T(\omega)x + W y(\omega) = h(\omega) \nonumber                                   \\
-	                  & x \geq 0 \nonumber                                                               \\
-	                  & y(\omega) \geq 0
-	\label{eq:rp}
-\end{align}
-
-The first-stage data matrices and vectors $A$, $b$, and $c$ have dimensions
-$m_{1} \times n_{1}$, $m_{1}$, and $n_{1}$, respectively. Once uncertainties are
-revealed through the realization of event $\omega \in \Omega$, $T(\omega)$,
-$h(\omega)$, and $q(\omega)$, with dimensions $m_{2} \times n_{1}$, $m_{2}$, and
-$n_{2}$, respectively, become known. To represent the problem's uncertainties as
-a single random vector, we define
-\[
-	\xi(\omega)^{T} = \left(q(\omega)^{T}, \; h(\omega)^{T}, \; T_{1\cdot}(\omega), \ldots, T_{m_{2}\cdot}(\omega) \right),
-\]
-for every $\omega \in \Omega$, where $T_{i\cdot}(\omega)$ denotes the $i$-th row
-of matrix $T(\omega)$. We are interested in the class of \emph{fixed recourse
-	problems}~\cite{birge:2011}, in which the matrix $W$, of dimension $m_{2}
-	\times n_{2}$, represents the second-stage actions and does not depend on the
-realization of the random event, and is thus known before making the first-stage
-decision.
-
-Note that the objective function in~\eqref{eq:rp} has a deterministic term
-$c^{T}x$ and the expected value of $q(\omega)^{T} y(\omega)$ over all
-realizations~$\omega$. What makes solving a two-stage stochastic program
-difficult is that, for each $\omega \in \Omega$, determining $y(\omega)$
-requires solving a Linear Programming (or Integer Linear Programming) problem.
-To make this more explicit, an alternative notation for the same problem is
-known as the \emph{deterministic equivalent program}. For a given
-realization~$\omega$ and first-stage decision~$x$, we define:
-\[
-	Q(x, \xi(\omega)) = \max_{y} \left\{ q(\omega)^{T} y \; \middle| \; W y = h(\omega) - T(\omega) x, \; y \geq 0 \right\},
-\]
-as the second-stage value function. Then, the expected second-stage value for
-the first-stage decision~$x$ is:
-\[
-	Q(x) = \mathbb{E}_{\xi} \left[ Q(x, \xi) \right].
-\]
-With this, the deterministic equivalent program can be formulated as:
-\begin{align}
-	\max \quad        & c^{T} x + Q(x) \nonumber \\
-	\text{s.t.} \quad & A x = b \nonumber        \\
-	                  & x \geq 0.
-	\label{eq:rp_det}
-\end{align}
-
-\subsection{Expected Value of Perfect Information (EVPI)}
-
-The \gls{evpi} measures the maximum amount a decision-maker would be willing to
-pay to have perfect foresight of the future. This allows determining to what
-extent a more accurate forecast would improve the quality of the obtained
-solution. Consider:
-\begin{align}
-	\max \quad        & z(x, \xi(\omega)) = c^{T} x + Q(x, \xi(\omega)) \nonumber \\
-	\text{s.t.} \quad & A x = b \nonumber                                         \\
-	                  & x \geq 0,
-	\label{eq:scenario_problem}
-\end{align}
-which is the optimization problem for a given scenario $\xi(\omega)$. We assume
-that for every $\xi(\omega) \in \Xi$, this problem is neither infeasible nor
-unbounded.
-
-Suppose there is an efficient way to obtain an optimal solution
-$\bar{x}(\xi(\omega))$ to~\eqref{eq:scenario_problem} for
-scenario~$\xi(\omega)$, and let $z(\bar{x}(\xi(\omega)), \xi(\omega))$ be its
-objective value. The so-called \gls{ws} solution is given by:
-
-\begin{equation}
-	WS = \mathbb{E}_{\xi} \left[ z(\bar{x}(\xi), \xi) \right].
-	\label{eq:ws}
-\end{equation}
-
-That is, for each scenario $\xi(\omega)$, we solve~\eqref{eq:scenario_problem}
-to optimality and take the expected value of the objective over all $\omega \in
-	\Omega$. The \gls{rp}, defined by~\eqref{eq:rp}
-or~\eqref{eq:rp_det}, can be written as:
-
-\begin{equation}
-	RP = \max_{x} \mathbb{E}_{\xi} \left[ z(x, \xi) \right].
-	\label{eq:rp_exp}
-\end{equation}
-By definition, the EVPI is the difference between the wait-and-see and
-here-and-now solutions:
-\[
-	EVPI = WS - RP.
-\]
-
-\subsection{Value of the Stochastic Solution}
-
-A practical difficulty of the wait-and-see approach is that we must solve a
-subproblem for each scenario~$\xi(\omega)$. A simpler approach is to replace the
-random vector~$\xi$ with its expected value $\bar{\xi} = \mathbb{E}[\xi]$. This
-problem is known as the \gls{evp}, or \emph{mean value
-	problem}~\cite{birge:2011}. This corresponds to a simpler problem than the
-recourse problem, since we only solve for a single future scenario. The
-objective of the \gls{evp} is:
-
-\begin{equation}
-	EV = \max z(x, \bar{\xi}).
-	\label{eq:evp}
-\end{equation}
-
-Let $\bar{x}(\bar{\xi})$ be an optimal solution to~\eqref{eq:evp}. Given the
-stochastic nature of the problem, in general $\bar{x}(\bar{\xi})$ may not be
-close to the optimal solution of the recourse problem~\eqref{eq:rp}. However,
-this solution is useful for defining the \gls{vss}, which measures the quality
-of the solution in terms of~\eqref{eq:rp}. We define the expected value of the
-\gls{evp} solution as:
-
-\begin{equation}
-	EEV = \mathbb{E}_{\xi} \left[ z(\bar{x}(\bar{\xi}), \xi) \right].
-	\label{eq:eev}
-\end{equation}
-
-This is equivalent to solving the recourse problem while fixing the first-stage
-decision obtained from the \gls{evp}. Given the EEV, the \gls{vss} is:
-\[
-	VSS = RP - EEV,
-\]
-which indicates the loss incurred by adopting only the expected scenario
-$\bar{\xi}$ compared to the full recourse problem~\eqref{eq:rp}. This
-corresponds to the cost of ignoring uncertainty. The values $WS$~\eqref{eq:ws},
-$RP$~\eqref{eq:rp_exp}, and $EEV$~\eqref{eq:eev} satisfy:
-\[
-	EEV \leq RP \leq WS.
-\]
-Thus, for a maximization problem, EEV  and \gls{ws} serve, respectively,
-as lower and upper bounds for the problem of interest — the recourse problem.
-
-
-\section{Walk Solution}\label{sec:cbrp-walk-solution}
+% As there is an exponential number of
+% constraints~\eqref{eq:walk-subtour-elimination}, we initially do not add any of
+% this type to the model. For each integer solution found, we use connected
+% components to check for violations: Since we allow isolated nodes, we only
+% consider as components those sets containing at least two nodes. If there is
+% more than one component with two or more nodes, the route is not connected; in
+% this case, we add a constraint~\eqref{eq:walk-subtour-elimination} to cut off
+% the solution, using one of the components $S$ found, along with arcs $a'$ whose
+% endpoints belong to $S$, and arcs $a''$ whose endpoints do not belong to $S$.
 
 \section{Lagrangean Relaxation}\label{sec:cbrp-lagrangean-relaxation}
 
@@ -872,91 +908,281 @@ is presented in Algorithm~\ref{code:subgradient}.
 	}
 \end{algorithm}
 
-The algorithm takes three input parameters: `threshold`, `maxIter`, and
-`updatePi`. The first two are stopping criteria. The `threshold` indicates the
+The algorithm takes three input parameters: `threshold', `maxIter', and
+`updatePi'. The first two are stopping criteria. The `threshold' indicates the
 maximum gap value for the solution to be considered optimal, terminating the
-execution. The `maxIter` limits the maximum number of iterations of the
+execution. The `maxIter' limits the maximum number of iterations of the
 subgradient method. The third parameter, `updatePi`, is a counter for updating
 the value of $\pi$, i.e., when `updatePi` consecutive iterations occur without
 improvement in the dual bound. Lines (1)–(5) represent the initialization of
 variables: $m$ is the main loop counter, and $\rho$ counts consecutive
 iterations without improvement in $z_{UB}$. The variables $z_{LB}$ and $z_{UB}$
-are the lower and upper bounds, respectively. The symbol $\alpha$ represents the
-vector of Lagrange multipliers, and $\theta$ is the subgradient vector. First,
-the Lagrangian primal problem is solved using the current multipliers, and this
-solution is used to obtain the subgradient. If the relaxed model returns a
-better feasible solution (lower in value), $z_{UB}$ is updated; if the solution
-is feasible for the original problem, $z_{LB}$ is updated with the value of the
-original objective function, disregarding the cost of the multipliers. The
-subgradient vector ($\theta^m$) is then calculated, and its norm ($n^m$) is used
-to compute the step size ($s^m$) in the subgradient direction. The Lagrange
-multipliers are then updated for the next iteration. Line (26) ensures
-non-negativity of the multipliers.
+are the lower and upper bounds, respectively. 
 
+The symbol $\alpha$ represents the vector of Lagrange multipliers, and $\theta$
+is the subgradient vector. First, the Lagrangian primal problem is solved using
+the current multipliers, and this solution is used to obtain the subgradient. If
+the relaxed model returns a better feasible solution (lower in value), $z_{UB}$
+is updated; if the solution is feasible for the original problem, $z_{LB}$ is
+updated with the value of the original objective function, disregarding the cost
+of the multipliers. The subgradient vector ($\theta^m$) is then calculated, and
+its norm ($n^m$) is used to compute the step size ($s^m$) in the subgradient
+direction. The Lagrange multipliers are then updated for the next iteration.
+Line (26) ensures non-negativity of the multipliers.
 
-\section{Stochastic Models}\label{sec:cbrp-stochastic-models}
+In this work, we developed three Lagrangean relaxations based on the
+Path-CBRP-MTZ model. An important detail to consider is the resolution of the
+lagrangean relaxations when the constraints~\eqref{eq:in-path},
+\eqref{eq:max-time} and \eqref{eq:max-time-compact}  are dualized, being treated
+in the \gls{lpp}, i.e., when this problem becomes a shortest path problem with
+resource constraints and a selection/Knapsack problem on $y$ variables.
 
-This stochastic version of the \gls{cbrp} computes in the
-first stage a route to nebulize the blocks in the scenario $0$ in which the
-objective is to maximize the profit considering a bonus related to the impact on
-the reduction of future cases for each scenario in the second stage. The second
-stage represents a second application route to nebulize blocks for each future scenario;
-however, the profit of each block is affected by the first stage, being $\alpha$
-a reduction factor in the number of cases of a nebulized block. For example, if
-$\alpha = 1$, then all blocks $b \in B: \{y_{b}^{0} = 1\}$ will have a $0$
-profit in the second stage. The following parameters are used in the model:
+\section{Optimization Under Uncertainty}\label{sec:optimization-under-uncertainty}
+
+This Section presents the basic concepts of Stochastic Programming and is
+strongly based on the textbook by Birge and Louveaux~\cite{birge:2011}.
+
+Two-Stage Stochastic Programming models with recourse deal with uncertain data,
+represented by random variables. A decision must be made at the present time; we
+call this the first-stage (or first-phase) decision, and at a later time, after
+its implementation, the uncertainties are revealed. Then, based on the
+first-stage decision and the revealed uncertain data, we can make a corrective
+(recourse) decision, called the second-stage (or second-phase)
+decision~\cite{birge:2011}.
+
+The uncertain data of the problem are represented by a random vector~$\xi$. We
+are interested in the case where~$\xi$ is a discrete random variable, that is,
+it can take values from a finite set $\Xi = \{\xi_{1}, \ldots, \xi_{k}\}$. We
+denote each possible random event by $\omega \in \Omega$. Alternatively, $\xi$
+can be represented as a function of $\omega \in \Omega$, with $\xi(\omega)$
+being the value taken by the random variable when event $\omega$ occurs.
+
+First-stage decision variables are represented by vector~$x$, of
+dimension~$n_{1}$, while second-stage decision variables are represented by the
+random vector~$y$, of dimension~$n_{2}$. We denote by $y(\omega)$ the
+second-stage decision variables associated with the realization of random
+event~$\omega$.
+
+A traditional two-stage stochastic programming problem, also called a \gls{rp}
+or \emph{here-and-now} problem, since a decision must be made in the present
+before the uncertainties are revealed, is formulated as:
+\begin{align}
+	\max \quad        & c^{T} x + \mathbb{E}_{\xi} \left[ \max q(\omega)^{T} y(\omega) \right] \nonumber \\
+	\text{s.t.} \quad & A x = b \nonumber                                                                \\
+	                  & T(\omega)x + W y(\omega) = h(\omega) \nonumber                                   \\
+	                  & x \geq 0 \nonumber                                                               \\
+	                  & y(\omega) \geq 0
+	\label{eq:rp}
+\end{align}
+
+The first-stage data matrices and vectors $A$, $b$, and $c$ have dimensions
+$m_{1} \times n_{1}$, $m_{1}$, and $n_{1}$, respectively. Once uncertainties are
+revealed through the realization of event $\omega \in \Omega$, $T(\omega)$,
+$h(\omega)$, and $q(\omega)$, with dimensions $m_{2} \times n_{1}$, $m_{2}$, and
+$n_{2}$, respectively, become known. To represent the problem's uncertainties as
+a single random vector, we define
+\[
+	\xi(\omega)^{T} = \left(q(\omega)^{T}, \; h(\omega)^{T}, \; T_{1\cdot}(\omega), \ldots, T_{m_{2}\cdot}(\omega) \right),
+\]
+for every $\omega \in \Omega$, where $T_{i\cdot}(\omega)$ denotes the $i$-th row
+of matrix $T(\omega)$. We are interested in the class of \emph{fixed recourse
+	problems}~\cite{birge:2011}, in which the matrix $W$, of dimension $m_{2}
+	\times n_{2}$, represents the second-stage actions and does not depend on the
+realization of the random event, and is thus known before making the first-stage
+decision.
+
+Note that the objective function in~\eqref{eq:rp} has a deterministic term
+$c^{T}x$ and the expected value of $q(\omega)^{T} y(\omega)$ over all
+realizations~$\omega$. What makes solving a two-stage stochastic program
+difficult is that, for each $\omega \in \Omega$, determining $y(\omega)$
+requires solving a \gls{lp} (or \gls{ilp}) problem. To make this more explicit,
+an alternative notation for the same problem is known as the \emph{deterministic
+	equivalent program}. For a given realization~$\omega$ and first-stage
+decision~$x$, we define:
+\[
+	Q(x, \xi(\omega)) = \max_{y} \left\{ q(\omega)^{T} y \; \middle| \; W y = h(\omega) - T(\omega) x, \; y \geq 0 \right\},
+\]
+as the second-stage value function. Then, the expected second-stage value for
+the first-stage decision~$x$ is:
+\[
+	Q(x) = \mathbb{E}_{\xi} \left[ Q(x, \xi) \right].
+\]
+With this, the deterministic equivalent program can be formulated as:
+\begin{align}
+	\max \quad        & c^{T} x + Q(x) \nonumber \\
+	\text{s.t.} \quad & A x = b \nonumber        \\
+	                  & x \geq 0.
+	\label{eq:rp_det}
+\end{align}
+
+\subsection{Expected Value of Perfect Information (EVPI)}
+
+The \gls{evpi} measures the maximum amount a decision-maker would be willing to
+pay to have perfect foresight of the future. This allows determining to what
+extent a more accurate forecast would improve the quality of the obtained
+solution. Consider:
+\begin{align}
+	\max \quad        & z(x, \xi(\omega)) = c^{T} x + Q(x, \xi(\omega)) \nonumber \\
+	\text{s.t.} \quad & A x = b \nonumber                                         \\
+	                  & x \geq 0,
+	\label{eq:scenario_problem}
+\end{align}
+which is the optimization problem for a given scenario $\xi(\omega)$. We assume
+that for every $\xi(\omega) \in \Xi$, this problem is neither infeasible nor
+unbounded.
+
+Suppose there is an efficient way to obtain an optimal solution
+$\bar{x}(\xi(\omega))$ to~\eqref{eq:scenario_problem} for
+scenario~$\xi(\omega)$, and let $z(\bar{x}(\xi(\omega)), \xi(\omega))$ be its
+objective value. The so-called \emph{wait-and-see} (WS) solution is given by:
+
+\begin{equation}
+	WS = \mathbb{E}_{\xi} \left[ z(\bar{x}(\xi), \xi) \right].
+	\label{eq:ws}
+\end{equation}
+
+That is, for each scenario $\xi(\omega)$, we solve~\eqref{eq:scenario_problem}
+to optimality and take the expected value of the objective over all $\omega \in
+	\Omega$. The \gls{rp}, defined by~\eqref{eq:rp} or~\eqref{eq:rp_det}, can be
+written as:
+
+\begin{equation}
+	RP = \max_{x} \mathbb{E}_{\xi} \left[ z(x, \xi) \right].
+	\label{eq:rp_exp}
+\end{equation}
+By definition, the \gls{evpi} is the difference between the wait-and-see and
+here-and-now solutions:
+\[
+	EVPI = WS - RP.
+\]
+
+\subsection{Value of the Stochastic Solution}
+
+A practical difficulty of the wait-and-see approach is that we must solve a
+subproblem for each scenario~$\xi(\omega)$. A simpler approach is to replace the
+random vector~$\xi$ with its expected value $\bar{\xi} = \mathbb{E}[\xi]$. This
+problem is known as the \gls{evp}, or \emph{mean value
+	problem}~\cite{birge:2011}. This corresponds to a simpler problem than the
+recourse problem, since we only solve for a single future scenario. The
+objective of the \gls{evp} is:
+
+\begin{equation}
+	EV = \max z(x, \bar{\xi}).
+	\label{eq:evp}
+\end{equation}
+
+Let $\bar{x}(\bar{\xi})$ be an optimal solution to~\eqref{eq:evp}. Given the
+stochastic nature of the problem, in general $\bar{x}(\bar{\xi})$ may not be
+close to the optimal solution of the recourse problem~\eqref{eq:rp}. However,
+this solution is useful for defining the \gls{vss}, which measures the quality
+of the solution in terms of~\eqref{eq:rp}. We define the expected value of the
+\gls{evp} solution as:
+
+\begin{equation}
+	EEV = \mathbb{E}_{\xi} \left[ z(\bar{x}(\bar{\xi}), \xi) \right].
+	\label{eq:eev}
+\end{equation}
+
+This is equivalent to solving the recourse problem while fixing the first-stage
+decision obtained from the \gls{evp}. Given the EEV, the \gls{vss} is:
+\[
+	VSS = RP - EEV,
+\]
+which indicates the loss incurred by adopting only the expected scenario
+$\bar{\xi}$ compared to the full recourse problem~\eqref{eq:rp}. This
+corresponds to the cost of ignoring uncertainty. The values $WS$~\eqref{eq:ws},
+$RP$~\eqref{eq:rp_exp}, and $EEV$~\eqref{eq:eev} satisfy:
+\[
+	EEV \leq RP \leq WS.
+\]
+Thus, for a maximization problem, EEV  and wait-and-see serve, respectively, as
+lower and upper bounds for the problem of interest, the recourse problem.
+
+\section{Stochastic Optimization Models}\label{sec:cbrp-stochastic-models}
+
+The stochastic version of the \gls{cbrp}, called in this work as \gls{scbrp},
+computes, in the first-stage, a route to nebulize the blocks in the scenario $0$
+(present), in which the objective is to maximize the profit considering a bonus
+related to the impact on the reduction of future cases for each scenario in the
+second-stage. The second-stage represents a set of independent routes that
+nebulize independent blocks in each future scenario. 
+
+In addition to the deterministic data, a set of $k$ future scenarios $\Omega =
+	\{\omega_1, \dots, \omega_k\}$, with $\xi^{\omega}$ being the probability of
+scenario $\omega \in \Omega$ to occur. The profit of block $b$ in the
+present is $p_{b}^{0}$, and the profit in each future scenario is
+$p_{b}^{\omega}$. This value represents the number of cases predicted for
+that city block in the scenario $\omega$. However, the profit of each block
+is affected by the first-stage, with a parameter $\alpha$ being a reduction
+factor in the number of cases in a block nebulized in the first-stage. For
+example, if $\alpha = 1$, then for all block $\{b \in B: y_{b}^{0} = 1\}$
+will have a $0$ profit in all second-stage scenarios.
+
+Let $\Omega' = \{0, \omega_1, \dots, \omega_k\}$ be the augmented set of
+scenarios, with $0$ representing the present scenario and $\omega_1, \dots,
+	\omega_k$ representing the $k$ future scenarios. The following binary decision
+variables are introduced for the \gls{scbrp} model:
 
 \begin{itemize}
-	\item $\rho_{b}^{s}$: number of cases in the block $b$ in the scenario $s$.
-	\item $\xi^{s}$: probability of occurrence of scenario $s$.
-	\item $\alpha$: real value between $[0, 1]$ that represents the factor that
-	      reduces the number of cases in the second stage when a block is nebulized in
-	      the scenario $s = 0$.
-\end{itemize}
-
-The following binary decision variables are introduced for the model:
-
-\begin{itemize}
-	\item $y_{b}^{s} \in \{0, 1\}$: binary variable valued as 1 if the block $b \in B$ is nebulized in the scenario $s = {0, 1, \dots, S}$ ($y_{b}^{s} = 1$) or not ($y_{b}^{s} = 0$).
-	\item $x_{a}^{s} \in \{0, 1\}$: binary variable valued as 1 if the arc $a \in A'$ is used in the route in the scenario $s = {0, 1, \dots, S}$ ($x_{a}^{s} = 1$) or not ($x_{a}^{s} = 0$).
-	\item $z_{b}^{s} \in \mathbb{R}$: real variable that represents the maximum profit of a block $b \in B$ in a scenario $s > 0$ ($z_{b}^{s} \in \mathbb{R}_{+}$).
+	\item $y_{b}^{\omega} \in \{0, 1\}$: binary variable valued as 1 if the block $b \in B$ is nebulized in the scenario $\omega \in \Omega'$ ($y_{b}^{\omega} = 1$) or not ($y_{b}^{\omega} = 0$).
+	\item $x_{a}^{\omega} \in \{0, 1\}$: binary variable valued as 1 if the arc $a \in A'$ is used in the route in the scenario $\omega \in \Omega'$ ($x_{a}^{\omega} = 1$) or not ($x_{a}^{\omega} = 0$).
+	\item $z_{b}^{\omega} \in \mathbb{R}$: real variable that represents the maximum profit of a block $b \in B$ in a scenario $\omega \in \Omega'$ ($z_{b}^{\omega} \in \mathbb{R}_{+}$).
 \end{itemize}
 
 The \gls{scbrp} formulation is defined as follows:
 
 \begin{align}
-	\text{(SCBRP)} & \max \overbrace{\sum_{b \in B} y_{b}^{0}(\rho_{b}^{0} + \alpha \sum_{s = 1}^{S} \xi^s \rho_{b}^{s})}^{\text{First Stage}} + \overbrace{\sum_{s = 1}^{S} \xi^s \sum_{b \in B} z_{b}^{s}}^{\text{Second Stage}} & \label{eq:sof}
+	\text{(Path-SCBRP)} & \max \overbrace{\sum_{b \in B} y_{b}^{0}(p_{b}^{0} + \alpha \sum_{\omega \in \Omega} \xi^{\omega} p_{b}^{\omega})}^{\text{First-Stage}} + \overbrace{\sum_{\omega \in \Omega} \xi^{\omega} \sum_{b \in B} z_{b}^{\omega}}^{\text{Second-Stage}} & \label{eq:sof}
 \end{align}
 \begin{align}
-	\nonumber \text{subject to:} &                                                                                           &                                                                            \\
-	                             & z_{b}^{s} \leq y_{b}^{s}((1 - \alpha)\rho_{b}^{s}) + (1 - y_{b}^{0})(\alpha \rho_{b}^{s}) & \forall b \in B, s = \{1, \dots, S\} \label{eq:z-value}                    \\
-	                             & z_{b}^{s} \leq y_{b}^{s}\rho_{b}^{s}                                                      & \forall b \in B, s = \{1, \dots, S\} \label{eq:z-y-value}                  \\
-	                             & \sum_{i \in V} x_{0,i}^{s} = \sum_{j \in V} x_{j,0}^{s} = 1                               & \forall s \in S \label{eq:stochastic-s-t-all}                              \\
-	                             & \sum_{i \in V} x_{i,j}^{s} - \sum_{k \in V} x_{j,k}^{s} = 0                               & \forall j \in V, s \in S \label{eq:stochastic-flow-conservation}           \\
-	                             & \sum_{j \in \delta^{-}(i)} x_{i,j}^{s} \geq y_{b}^{s}                                     & \forall s \in S, b \in B, i \in V(b) \label{eq:stochastic-in-path}         \\
-	                             & \sum_{(i, j) \in A} x_{i,j}^{s}t_{i,j} + \sum_{b \in B} y_{b}^{s}t^{'}_{b} \leq T         & \forall s \in S \label{eq:stochastic-max-time}                             \\
-	                             & \sum_{(i, j) \in A(C)} x_{i,j}^{s} \leq |V(C)| - 1                                        & \ \forall s \in S, C \subseteq V \label{eq:stochastic-subtour-elimination} \\
-	                             & x \in \mathbb{B}^{|A'| * |S|}                                                             & \label{eq:stochastic-dom-x}                                                \\
-	                             & y \in \mathbb{B}^{|B| * |S|}                                                              & \label{eq:stochastic-dom-y}                                                \\
-	                             & z \in \mathbb{R}_{+}^{|B| * |S|}                                                          & \label{eq:stochastic-dom-z}
+	\nonumber \text{subject to:} &                                                                                                         &                                                                                     \\
+	                             & z_{b}^{\omega} \leq y_{b}^{\omega}((1 - \alpha)p_{b}^{\omega}) + (1 - y_{b}^{0})(\alpha p_{b}^{\omega}) & \forall b \in B, \omega \in \Omega \label{eq:stochastic-z-value}                    \\
+	                             & z_{b}^{\omega} \leq y_{b}^{\omega}p_{b}^{\omega}                                                        & \forall b \in B, \omega \in \Omega \label{eq:stochastic-z-y-value}                  \\
+	                             & \sum_{i \in V} x_{0,i}^{\omega} = \sum_{j \in V} x_{j,0}^{\omega} = 1                                   & \forall \omega \in \Omega' \label{eq:stochastic-s-t-all}                            \\
+	                             & \sum_{i \in V} x_{i,j}^{\omega} - \sum_{k \in V} x_{j,k}^{\omega} = 0                                   & \forall j \in V, \omega \in \Omega' \label{eq:stochastic-flow-conservation}         \\
+	                             & \sum_{j \in \delta^{-}(i)} x_{i,j}^{\omega} \geq y_{b}^{\omega}                                         & \forall b \in B, i \in V(b), \omega \in \Omega' \label{eq:stochastic-in-path}       \\
+	                             & \sum_{(i, j) \in A} x_{i,j}^{\omega}t_{i,j} + \sum_{b \in B} y_{b}^{\omega}t^{'}_{b} \leq T             & \forall \omega \in \Omega' \label{eq:stochastic-max-time}                           \\
+	                             & \sum_{(i, j) \in A(C)} x_{i,j}^{\omega} \leq |V(C)| - 1                                                 & \forall C \subseteq V, \omega \in \Omega' \label{eq:stochastic-subtour-elimination} \\
+	                             & x \in \mathbb{B}^{|A'| * |\Omega'|}                                                                     & \label{eq:stochastic-dom-x}                                                         \\
+	                             & y \in \mathbb{B}^{|B| * |\Omega'|}                                                                      & \label{eq:stochastic-dom-y}                                                         \\
+	                             & z \in \mathbb{R}_{+}^{|B| * |\Omega|}                                                                   & \label{eq:stochastic-dom-z}
 \end{align}
 
-The objective function~\eqref{eq:sof} maximizes the total profit considering the first and second stage.
-Constraints~\eqref{eq:z-value} and~\eqref{eq:z-y-value} ensure that the profit of a block is at least the profit of the block in the scenario $s = 0$ and the profit of the block in the scenario $s > 0$.
-Constraints~\eqref{eq:stochastic-s-t-all}-\eqref{eq:stochastic-subtour-elimination} are the same as the constraints~\eqref{eq:s-t-all}-\eqref{eq:circuit-subtour-elimination} of the Path-CBRP formulation, but for the scenario $s$.
-Constraints~\eqref{eq:stochastic-dom-x} and~\eqref{eq:stochastic-dom-y} define the domain of the decision variables.
-Constraints~\eqref{eq:stochastic-dom-z} define the domain of the real-valued variables.
+The objective function~\eqref{eq:sof} maximizes the total profit. When a block
+is attended in the first-stage, the final value is the profit of the block in
+scenario $0$ plus $\alpha$ times the profit for all scenarios multiplied by the
+probability of the scenario $\omega$ to occur. Besides the profit associated in
+first-stage, the second-stage maximizes the profit for the residual number of
+cases (after the $\alpha$ reduction for apply the route in scenario $0$) in each
+block and for every future scenario $\omega \in \Omega$.
 
-% TODO: add model description and its change to MTZ, walk solution and etc...
+Constraints~\eqref{eq:stochastic-z-value} ensure that the profit of a block $b$
+in the scenario $\omega$ is $(1 - \alpha) p_{b}^{\omega}$, if $y_{b}^{0} = 1$ or
+$p_{b}^{\omega}$ when $y_{b}^{0} = 0$.
+Constraints~\eqref{eq:stochastic-z-y-value}  guarantee that the value of
+$z_{b}^{\omega}$ is $0$ when $y_{b}^{\omega} = 0$ and $p_{b}^{\omega}$
+otherwise. The Constraints from~\eqref{eq:stochastic-s-t-all}
+to~\eqref{eq:stochastic-subtour-elimination} are the same as the constraints
+from~\eqref{eq:s-t-all} to~\eqref{eq:circuit-subtour-elimination} of the
+Path-CBRP formulation, but for independent routes for all scenario $\omega \in
+	\Omega'$. Constraints~\eqref{eq:stochastic-dom-x}-\eqref{eq:stochastic-dom-z}
+define the domain of the decision variables.
+
+Considering the Path-SCBRP formulation, with the changes to consider the
+stochastic nature of the problem, it is also possible to adapt the deterministic
+models from Section~\ref{sec:cbrp-deterministic-models} to generate feasible
+solutions for the \gls{scbrp}, i.e., creating the $k$ routes to nebulize the
+blocks in the scenario $0$ and each future scenario. The further references for
+the \gls{scbrp} will follow the same pattern presented for the deterministic
+formulations: Path-SCBRP, Path-SCBRP-MTZ, Walk-SCBRP and Walk-SCBRP-MTZ.
 
 \section{Multi-Agent-Based Simulation}\label{sec:multi-agent-simulation}
 
-This section describes the design and implementation of a \gls{mabs} for Dengue
-virus spread. Epidemiological models aim to answer how a certain disease spreads
-in a region and how it may appear in regions not initially considered
-susceptible. Since simulation models have limitations regarding the real world,
-they commonly attempt to represent a phenomenon either at a global (macro) or
-local (micro) scale.
+Epidemiological models aim to answer how a certain disease spreads in a region
+and how it may appear in regions not initially considered susceptible. Since
+simulation models have limitations regarding the real world, they commonly
+attempt to represent a phenomenon either at a global (macro) or local (micro)
+scale.
 
 Macro-simulation is a deterministic approach that focuses on representation at a
 global level, neglecting individual characteristics such as sex, age, address,
@@ -994,9 +1220,9 @@ runs are required to achieve statistically significant results and accurately
 characterize system behavior. The complex interactions between input parameters
 and output behaviors in MABS often make it challenging to establish explicit
 relationships and formally validate models. To overcome this, researchers
-frequently employ expert validation, as seen in~\citet{amouroux:2008,
-	damien:2017}, where epidemiological experts were consulted to evaluate the
-model's realism and reliability.
+frequently employ expert validation, as seen
+in~\cite{amouroux:2008,damien:2017}, where epidemiological experts were
+consulted to evaluate the model's realism and reliability.
 
 Regardless of the scale, it is possible to use compartmental theory, where the
 main idea is to represent the states of individuals~\citep{brauer-2008}. In our
@@ -1088,7 +1314,7 @@ the R state, individuals are considered cured and immune to new infections.
 		
 	\end{tikzpicture}
 	
-	} \caption{\textbf{Diagram of a dynamic compartmental model.}}
+	} \caption{Diagram of a dynamic compartmental model.}
 	\label{fig:dynamicmodel}
 \end{figure}
 
@@ -1108,14 +1334,102 @@ states~\citep{da-silva:2020}.
 
 \section{Simheuristics}\label{sec:simheuristics}
 
-\begin{figure}
+Simulation methods are widely used to analyze complex real-life systems under
+uncertainty, which is typically modeled through probability
+distributions~\cite{lucas:2015}. These techniques are applied in diverse domains
+such as manufacturing, logistics, transportation, healthcare, finance, smart
+cities, and telecommunications. While simulation provides valuable insights into
+system performance under different scenarios, it does not inherently offer
+optimization capabilities, especially for large-scale and NP-hard
+\gls{scop}~\cite{juan:2022}. To address this, simulation is often combined with
+metaheuristics, which can efficiently explore large solution spaces and deliver
+high-quality solutions in reasonable computational times.
+
+The hybridization of simulation and optimization, known as
+simulation-optimization, encompasses various methods including mathematical
+programming, metaheuristics, and machine learning. In such approaches,
+simulation can serve multiple roles: evaluating objective functions or
+constraints in stochastic settings, generating feasible solutions, or enhancing
+analytical models~\cite{juan:2015}. Surrogate models derived from simulation
+outputs can further accelerate the optimization process. This integration
+enables a balance between modeling realism and computational tractability,
+making simulation-optimization a first-choice strategy for tackling complex
+stochastic problems~\cite{juan:2022}.
+
+Given a deterministic optimization problem, it is reasonable to assume that its
+optimal and near-optimal solutions will exhibit satisfactory performance when
+moderate levels of uncertainty are introduced~\cite{juan:2022}. Formally, for a
+solution $s$, let $\text{det}(s)$ denote its deterministic performance and
+$\text{stoch}(s)$ its stochastic performance (estimated via simulation). Under
+moderate uncertainty, these values are expected to be strongly and positively
+correlated. However, this correlation diminishes as uncertainty increases, and
+for large variances, robust or reliable solutions may be preferable to those
+merely maximizing expected performance.
+
+Another important observation concerns the use of the best deterministic
+solution $\text{det}(s^*)$. In many optimization problems, the optimal objective
+value degrades as uncertainty increases, particularly when asymmetric effects
+are present, where detrimental realizations of random variables outweigh
+beneficial ones. Let $s^*$ denote an optimal or near-optimal deterministic
+solution, and $s^{**}$ an optimal or near-optimal stochastic solution. Then, for
+minimization problems, it often holds that $\text{det}(s^*) \leq
+	\text{stoch}(s^{**}) \leq \text{stoch}(s^*)$, while for maximization problems,
+$\text{stoch}(s^*) \leq \text{stoch}(s^{**}) \leq \text{det}(s^*)$. Thus,
+deterministic optimal values provide natural lower and upper bounds for their
+stochastic counterparts~\cite{juan:2022}.
+
+\Cref{fig:logic-simheuristics} shows the default logic behind simheuristic
+concept. Given a stochastic optimization problem, its deterministic counterpart
+is considered. This can be done, for instance, by replacing all random variables
+by their expected values, which leads to a simplified version of the stochastic
+problem in which uncertainty is not considered. Then, a metaheuristic component
+is employed to efficiently search inside the solution space, thus generating
+increasingly better solutions to the deterministic version of the problem. Each
+time the metaheuristic generates a ``promising'' solution (i.e., one that is
+likely to perform well in a scenario under uncertainty), this solution is sent
+to the simulation component in order to assess its performance in the stochastic
+environment. 
+
+The simulation component returns not only estimates of statistics, such as the
+mean, variance, and percentiles associated with the proposed solution, but also
+probabilistic information that can be useful in risk or reliability analyses, as
+well as information about the status of different system variables. Since
+simulation is a time consuming procedure, it is usually a good idea to employ a
+short number of simulation runs every time a new promising solution is evaluated
+at this stage, otherwise the simulation computing time might jeopardize the time
+required by the metaheuristic to converge to near-optimal solutions.  Some
+useful recommendations to speed up these computations can be found in
+Rabe~\cite{rabe:2020}. 
+
+The feedback provided by the simulation can then be processed by a machine
+learning component and then used to: (i) update and adjust the metaheuristic
+parameters to better explore the solution space and increase the chances of
+obtaining new solutions with a high stochastic performance; (ii) build a
+classification or prediction model able to identify new promising solutions with
+a high accuracy, thus avoiding wasting time in simulating solutions that will
+offer sub-optimal values under uncertainty conditions; and (iii) develop a
+surrogate model that, at least partially, substitutes time-consuming simulations
+when estimating the value of the stochastic objective function or probabilistic
+constraints associated with a new promising solution proposed by the
+metaheuristic component
+
+As a result of this first stage, a reduced list of ``elite'' solutions is
+obtained. According to our initial estimates, each of these solutions show a
+high performance in a scenario under uncertainty. Now, in order to increase the
+accuracy of our estimates, a more intensive simulation is executed on each of
+the elite solutions. Of course, variance reduction techniques, such as the use
+of common random numbers, can be employed here to speed up these simulations,
+which can also be run in parallel processors. As a final stage, the simulation
+outcomes might be employed to perform a risk or reliability analysis on each of
+these elite solutions. This analysis might enrich the decision-making process
+with detailed probabilistic information describing the stochastic behavior of
+each elite solution.
+
+\begin{figure}[h!]
+	\centering
 	\begin{tikzpicture}
 		[
-			% > = stealth, % arrow head style
-			% %shorten > = 0.7pt, % don't touch arrow head to node
-			% auto,
-			node distance=2cm, % distance between nodes
-			% semithick, % line style
+			node distance=1.9cm, % distance between nodes
 			font=\tiny,
 			align=center
 		]
@@ -1125,22 +1439,22 @@ states~\citep{da-silva:2020}.
 		
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		
-		\tikzstyle{io} = [ellipse, minimum width=2cm, text width=2cm, minimum height=1cm, text centered, draw=black, fill=gray!30!white]
+		\tikzstyle{io} = [ellipse, minimum width=2cm, text width=2cm, minimum height=1cm, text centered, draw=black, fill=gray!30!white, font=\bf\tiny]
 		
-		\tikzstyle{process} = [tape, minimum width=1cm, text width=2cm, minimum height=1cm, text centered, draw=black, fill=green!30!white]
+		\tikzstyle{process} = [tape, minimum width=1.5cm, text width=2cm, minimum height=1cm, text centered, draw=black, fill=green!30!white, font=\bf\tiny]
 		
-		\tikzstyle{decision} = [diamond, text width=1cm, aspect=2, text height=1, text centered, draw=black, fill=yellow!30!white]
+		\tikzstyle{decision} = [diamond, text width=1.5cm, aspect=2, text height=1, text centered, draw=black, fill=yellow!30!white, font=\bf\tiny]
 		
-		\tikzstyle{stage} = [rectangle, minimum width=1cm, text width=1cm, minimum height=1cm, draw=black]
+		\tikzstyle{stage} = [rectangle, minimum width=1cm, text width=1cm, minimum height=1cm, draw=black, font=\bf\tiny]
 		
-		\tikzstyle{artificial} = [rectangle, draw=white, font=\bf]
+		\tikzstyle{artificial} = [rectangle, draw=white, font=\bf\tiny]
 		
 		\tikzstyle{arrow} = [thick,->,>=stealth]
 		
 		% Create states
-		\node (start) [startstop] {Stochastic\\Optimization\\Problem};
+		\node (start) [startstop] at (0, 0) {Stochastic\\Optimization\\Problem};
 		
-		\node (deterministic) [startstop, right of=start, xshift=9cm] {Deterministic\\Optimization\\Problem};
+		\node (deterministic) [startstop, right of=start, xshift=7cm] {Deterministic\\Optimization\\Problem};
 		
 		% Links
 		\draw [arrow] (start) -- node[text width=3cm, fill=white, align=center] {Replacement of Random Elements} (deterministic);
@@ -1153,14 +1467,14 @@ states~\citep{da-silva:2020}.
 		\node (ml-component) [process, below of=deterministic-sol] {Machine Learning Component};
 		\node (fast-sim-component) [process, below of=ml-component] {Fast Simulation Component};
 		
-		\node (promissing-sol) [decision, xshift=-2cm, left of=ml-component] {Promissing\\Solution?};
-		\node (surrogate-sol) [decision, xshift=-2cm, left of=fast-sim-component] {Surrogate\\Model\\Available?};
+		\node (promissing-sol) [decision, xshift=-2.5cm, left of=ml-component] {Promissing\\Solution?};
+		\node (surrogate-sol) [decision, xshift=-2.5cm, left of=fast-sim-component] {Surrogate\\Model\\Available?};
 		
 		\node (surrogate-component) [process, below of=surrogate-sol] {Surrogate Model};
 		
 		\node (update-sol-list) [io, below of=surrogate-component] {Update Solution List};
 		
-		\node (available-time) [decision, xshift=-2cm, left of=update-sol-list] {Available\\Computation\\Time?};
+		\node (available-time) [decision, xshift=-2.5cm, left of=update-sol-list] {Available\\Computation\\Time?};
 		
 		% Links
 		\draw [arrow] (deterministic) -- (metaheuristic);
@@ -1180,19 +1494,19 @@ states~\citep{da-silva:2020}.
 		\draw [arrow] (update-sol-list) -- (available-time);
 		
 		% 
-		\draw [arrow] (available-time.west) |- node[anchor=east, yshift=-9.5cm] {yes} (metaheuristic);
+		\draw [arrow] (available-time.west) |- node[anchor=west, yshift=-8.5cm] {yes} (metaheuristic);
 		
 		% Feedback
 		\node (art1) [artificial, right of=metaheuristic, xshift=0.5cm] {};
 		
 		\draw [arrow,dashed,-] (metaheuristic) -- (art1.center);
-		\draw [arrow,dashed] (art1.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=-2cm] {Feedback} (ml-component.north east);
+		\draw [arrow,dashed] (art1.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=-1.8cm] {Feedback} (ml-component.north east);
 		
 		% 
 		\node (art2) [artificial, right of=ml-component, xshift=0.5cm] {};
 		
 		\draw [arrow,dashed,-] (ml-component.east) -- (art2.center);
-		\draw [arrow,dashed] (art2.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=-2cm] {Feedback} (surrogate-component);
+		\draw [arrow,dashed] (art2.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=-1.9cm] {Feedback} (surrogate-component);
 		
 		% 
 		\node (art3) [artificial, right of=fast-sim-component] {};
@@ -1201,7 +1515,7 @@ states~\citep{da-silva:2020}.
 		\draw [arrow,dashed] (art3.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=0.8cm] {Feedback} (ml-component.south east);
 		
 		\node (stage1) [stage, fit=(art1.east) (update-sol-list) (available-time) (deterministic-sol) (start.south west), yshift=-0.5cm] {};
-		\node (art4) [artificial, left of=stage1, rotate=90, yshift=6.5cm] {Stage 1};
+		\node (art4) [artificial, left of=stage1, rotate=90, yshift=5.5cm] {Stage 1};
 		
 		% Second Stage
 		\node (elite-sol) [io, below of=available-time, yshift=-0.75cm] {Elite Stochastic Solutions};
@@ -1210,27 +1524,27 @@ states~\citep{da-silva:2020}.
 		\draw [arrow] (available-time) -- node[anchor=east, yshift=0.5cm] {no} (elite-sol);
 		\draw [arrow] (elite-sol) -- (intensive-sim-component);
 		
-		\node (art5) [artificial, left of=elite-sol, below of=available-time, xshift=-2.5cm] {};
-		\node (art6) [artificial, right of=intensive-sim-component, below of=intensive-sim-component, yshift=1.25cm, xshift=4.5cm] {};
+		\node (art5) [artificial, left of=elite-sol, below of=available-time, xshift=0.3cm] {};
+		\node (art6) [artificial, right of=intensive-sim-component, below of=intensive-sim-component, yshift=1.25cm, xshift=4.9cm] {};
 		
 		\node (stage2) [stage, fit=(art5) (art6)] {};
-		\node (art7) [artificial, left of=stage2, rotate=90, yshift=6.5cm] {Stage 2};
+		\node (art7) [artificial, left of=stage2, rotate=90, yshift=5.5cm] {Stage 2};
 		
 		% Third stage
 		\node (risk-component) [process, below of=intensive-sim-component, yshift=-0.25cm] {Risk/Reliability\\Component};
 		\draw [arrow] (intensive-sim-component) -- (risk-component);
 		
-		\node (art8) [artificial, left of=risk-component, below of=elite-sol, xshift=-2.5cm, yshift=0.35cm] {};
-		\node (art9) [artificial, right of=risk-component, below of=risk-component, yshift=1.25cm, xshift=4.5cm] {};
+		\node (art8) [artificial, left of=risk-component, below of=elite-sol, xshift=0.3cm, yshift=0.55cm] {};
+		\node (art9) [artificial, right of=risk-component, below of=risk-component, yshift=1.25cm, xshift=4.9cm] {};
 		
 		\node (stage3) [stage, fit=(art8) (art9)] {};
-		\node (art10) [artificial, left of=stage3, rotate=90, yshift=6.5cm] {Stage 3};
+		\node (art10) [artificial, left of=stage3, rotate=90, yshift=5.5cm] {Stage 3};
 		
 		% Final
 		\node (elite-stochastic-sol) [io, below of=risk-component, yshift=-0.5cm] {Elite Stochastic\\Solutions with Probabilistic Information};
 		
 		\draw [arrow] (risk-component) -- (elite-stochastic-sol);
 	\end{tikzpicture}
-	\caption{Caption}
-	\label{fig:my_label}
+	\caption{Logic Behind Simheuristics \cite{juan:2022}.}
+	\label{fig:logic-simheuristics}
 \end{figure}
