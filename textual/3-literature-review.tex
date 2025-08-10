@@ -8,6 +8,118 @@ considered in this paper. The focus is on methodologies that simulated the
 spread and impact of Dengue and other arboviral diseases, along with
 computational methodologies for support decisions in vector control.
 
+\section{Operations Research}\label{sec:operations-research}
+
+An extensive number  of works in the  literature use \gls{ml} in  the context of
+Dengue~\citep{shakurat:2015,shakil:2015,hair:2019,sarma:2020,appice:2020}.  Some
+of  the main  problems addressed  are generating  Dengue diagnoses  based on
+the patient's symptoms and clinical patterns, distinguishing Dengue and its
+types in the early stage of disease progression  and, Dengue fever predictions
+in certain regions  based on  a  set of  factors, such  as  precipitation, rain,
+humidity, temperature, and others.
+
+Lowe et al. \cite{lowe:2015}  presented a  modeling procedure  to quantify  the
+benefits  of including  climate  information in  a  Dengue  model  for  the 76
+provinces  of Thailand, from  1982-2013. The authors considered  a set of
+factors  that have a statistically  significant contribution  to  the relative
+risk  of Dengue.  The system provided  an advanced warning  that enabled  the
+implementation of a more effective surveillance system. According to  the
+authors, the proposed framework was flexible to be applied in any geographical
+setting, generating a more global approach to  assessing the impact of  climate
+variability and climate  change on Dengue risk.
+
+Handam and Kilicman \cite{hamdan:2021} developed a mathematical model of Dengue
+transmission considering the effect of the temperature on the transmission
+dynamics. The work computes a primary reproduction number ($R_0$) considering
+the known aspects of the \textit{Aedes} mosquito population and the experimental
+data of the Dengue transmission in Malaysia. Ultimately, the authors provide
+numerical evidence that the Dengue virus can spread in temperate areas that are
+no longer limited to tropical and subtropical regions.
+
+Maneerat and Daudé \cite{maneerat:2016} presented the Model of Mosquito Aedes
+(MOMA), a spatial agent-based simulation model of the Aedes female mosquito.
+This model aims to produce statistical data on mosquito behaviors and population
+dynamics that are difficult to obtain through field surveys, such as population
+densities in various geographical and climatic conditions. The paper gives a
+detailed description of the multiple components of the model and the approach to
+calibrate and validate it. The data in the model represent a developing
+neighborhood in Delhi, India, processed using a Geographical Information System
+(GIS). The results indicate a significant relationship between urban topology,
+human densities, and adult mosquito flight.
+
+Some previous works have reported multi-agent system approaches in endemics. For
+example, in  \cite{amouroux:2008}, the author created a module able to trace a
+relationship between the spread of the Dengue virus and commercial routes in
+Asia. Likewise, Damien et al.  \cite{damien:2017} presented a model that
+encapsulated the characteristics of the north of Vietnam to describe the spread
+of the H1N5 virus. Hence, it seems reasonable to use the same approach for the
+study in Brazil, as in \cite{da-silva:2020}, that developed a \gls{mabs} and a
+classical model based on ordinary differential equations to simulate the Dengue
+virus propagation adopting some simplifying assumptions.
+
+% Bannwart et al. \cite{bannwart-sbpo:2013,bannwart:2013}  proposed  numeric
+% techniques  using  a genetic algorithm to solve the control model applied to
+% Dengue prevention. Their model  considered two  kinds  of  measures: the  cost
+% of  the chemical  control (insecticide) and  genetic (releasing sterile  males
+% in the  environment). These works assume  that the mortality rate  of the
+% mosquitoes is  strongly related to the investment in  control approaches. The
+% experiments considered a  time of 120 days and  the results  indicated that  the
+% amount of  insecticide used  was high considering the  other approaches cited
+% in the  work. The authors  presented an analysis considering each control and
+% its impact on the rate of reduction of the mosquito population.
+
+Cantane et al. \cite{cantane:2015}  presented a  mathematical  model to
+estimate  the rate  of population growth  of mosquitoes. The  authors observed
+that, without  a control action, the  population of mosquitoes  could rapidly
+increase in  short periods. The  results of  the experiments  provide  estimates
+of  the life  cycle of  the mosquitoes are in perfect condition in nature and
+the model allows to measure an approximate number of mosquitoes for each
+scenario.
+
+The authors of \cite{dosreis:2018},   \cite{florentino:2018},    and
+\cite{florentino-b:2018} presented methodologies  for Dengue control, including
+mathematical models that describe the population dynamics of the  Aedes aegypti.
+A Genetic Algorithm (GA) was developed  to obtain  optimal strategies using  an
+integration  of different types  of control.  A Variable  Neighborhood Search
+(VNS) determines  optimized control strategies for the aquatic phase, which is
+when the mosquitoes are larva and pupa.  The authors argue that  the control
+during the  aquatic phase reduces the environmental  impact and the  use of
+chemical  control on large  scale. The authors indicated that the presented
+methodologies  have the potential as a tool for supporting decision-makers
+against arboviruses.
+
+The works of Negreiros et al.
+\cite{negreiros:2008,negreiros:2011,negreiros-2020}, to the best of our
+knowledge, are the first papers that apply optimization techniques for solving
+routing problems  in the context of mosquito control.  These works focus on the
+computational tool called Web Dengue, aimed at helping the Dengue control
+managers  by  providing  a  better visualization  and  coordination  of  control
+procedures.  Among  the  methodologies,   the  authors  developed  an  \gls{ilp}
+formulation to  compute a periodical  scheduling of vehicles. A  GRASP heuristic
+was also developed  to solve a real-life instance corresponding  to the location
+of Praia de Iracema, Fortaleza.
+
+To the best of our knowledge, Andrade et al. \cite{andrade:2021} are one of the
+first to present routes for spraying vehicles in Dengue control. The work
+developed an \gls{ip} formulation based on the rural postman problem, that is a
+routing problem that consider mandatory visit to a set of arcs. The instance set
+is based on Dengue outbreak locations reported for the city of Campinas, São
+Paulo, and the set of required arcs consider a complete region. The results show
+that the methodology is effective to obtain optimal routes for instances with
+more than 2500 vertices and 5500 arcs in less than one hour of computational
+time.
+
+The work of \cite{araujo:2022} (accepted for publication),
+proposed the Dengue Prize-collection Arc Routing Problem (Dengue-PARP), where
+the focus is to generate routes for spraying vehicles. In Dengue-PARP, each arc
+of a street block has a prize value related to the number of dengue cases. The
+Dengue-PARP objective is to maximize the prize collected to create a route that
+covers a subset of blocks respecting a limited amount of resources. The work
+presented an \gls{ip} formulation and a set of 39 real-world instances based on
+the cities of Alto Santo and Limoeiro do Norte, Ceará. The methodology achieved
+fast optimal results for 31 instances containing up to 1212 nodes and feasible
+solutions for the other 8.
+
 \section{Dengue Spread Simulation}\label{sec:dengue-spread-simulation}
 
 In~\cite{Borges2015}, the authors propose a \gls{mabs} to assess the pupal
