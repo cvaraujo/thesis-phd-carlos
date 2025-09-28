@@ -6,10 +6,35 @@ and for the statistical analysis of the results.
 
 \section{Lagrangean Relaxation}\label{sec:lagrangean-relaxation}
 
+
+
+\newcommand{\mult}[2]{\ensuremath{\phi^{#1}_{#2}}}
+
 This section presents the \gls{lr} obtained from the formulation Walk-CBRP, presented in
-Section~\ref{sec:cbrp-walk-based-formulation}.
+Section~\ref{sec:cbrp-walk-based-formulation}. The Lagrange multipliers
+are   represented    by   $\phi$'s,    so   that~\mult{\ref{eq:rel-f-y-term}}{},
+\mult{\ref{eq:mod-lim-delay}}{},       \mult{\ref{eq:mod-lim-jitter}}{}      and
+\mult{\ref{eq:mod-var-delay}}{} are  the non-negative variables  associated with
+the      constraints     \eqref{eq:rel-f-y-term},      \eqref{eq:mod-lim-delay},
+\eqref{eq:mod-lim-jitter}  and \eqref{eq:mod-var-delay},  respectively. All  the
+relaxations have as their \gls{ppl}, the \gls{sp} or the \gls{sprc} subproblems.
+The nomenclature used for each relaxation  follows the LR-X pattern, where ``X''
+represents the most difficult subproblem of the \gls{ppl} being solved.
 
-
+The   \gls{rl}    resulting   from   the   dualization    of   the   constraints
+\eqref{eq:rel-f-y-term} and \eqref{eq:mod-lim-delay}-\eqref{eq:mod-var-delay} is
+very close to  the problem of compute \gls{sp}s and  is therefore called {\rlu}.
+The constraints~\eqref{eq:fluxo-raiz}-\eqref{eq:fluxo-terminal}  model a problem
+similar to create paths  from the root $s$ for the other  graph nodes, using the
+variables  $f_{ij}^{k}$ for  all $k  \in D  \cup S$.  Considering the  variables
+$y_{ij}$, their  associated subproblem consists  in selecting the arc  $(s, s')$
+along with  ($|V|-1$) arcs of  smallest coefficient according to  the lagrangian
+costs. As  the \gls{ppl} contains no  constraint that apply to  variables $z_k$,
+the subproblem  associated with  these variables consists  of not  attending the
+terminal  ($z_k =  1$) if  its  associated lagrangian  cost is  less than  zero,
+otherwise  $z_k   =  0$.   When  the  constraints   \eqref{eq:rel-f-y-term}  and
+\eqref{eq:mod-lim-delay}-\eqref{eq:mod-var-delay}  are  dualized, the  resulting
+\gls{ppl} is:
 
 
 \section{Deterministic Heuristics}\label{sec:deterministic-heuristics}
