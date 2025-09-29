@@ -1,46 +1,436 @@
 \chapter{Methodologies}\label{chap:methodologies}
 
-This section presents the methodologies applied to solve the \gls{cbrp} in its deterministic and stochastic versions (\gls{scbrp}),
+This section presents the methodologies applied to solve the \gls{cbrp} in its deterministic
+and stochastic versions (\gls{scbrp}),
 to simulate the spread of the Dengue virus, to develop a simulation-optimization framework
 and for the statistical analysis of the results.
 
-\section{Lagrangean Relaxation}\label{sec:lagrangean-relaxation}
+\section{Lagrangean Relaxations}\label{sec:lagrangean-relaxations}
 
-
-
-\newcommand{\mult}[2]{\ensuremath{\phi^{#1}_{#2}}}
+\newcommand{\mult}[2]{\ensuremath{\lambda^{#1}_{#2}}}
+\newcommand{\lrsp}{\textit{LR-SP}}
+\newcommand{\lrkn}{\textit{LR-KN}}
+\newcommand{\lrcsp}{\textit{LR-RCSP}}
+\newcommand{\lrcspkn}{\textit{LR-RCSP-KN}}
 
 This section presents the \gls{lr} obtained from the formulation Walk-CBRP, presented in
-Section~\ref{sec:cbrp-walk-based-formulation}. The Lagrange multipliers
-are   represented    by   $\phi$'s,    so   that~\mult{\ref{eq:rel-f-y-term}}{},
-\mult{\ref{eq:mod-lim-delay}}{},       \mult{\ref{eq:mod-lim-jitter}}{}      and
-\mult{\ref{eq:mod-var-delay}}{} are  the non-negative variables  associated with
-the      constraints     \eqref{eq:rel-f-y-term},      \eqref{eq:mod-lim-delay},
-\eqref{eq:mod-lim-jitter}  and \eqref{eq:mod-var-delay},  respectively. All  the
-relaxations have as their \gls{ppl}, the \gls{sp} or the \gls{sprc} subproblems.
-The nomenclature used for each relaxation  follows the LR-X pattern, where ``X''
-represents the most difficult subproblem of the \gls{ppl} being solved.
+Section~\ref{sec:cbrp-walk-based-formulation}.
+The Lagrange multipliers are represented by $\lambda$'s,
+then~\mult{\ref{eq:walk-in-path}}{} and
+\mult{\ref{eq:walk-max-time}}{} are
+the non-negative variables  associated with the constraints~\eqref{eq:walk-in-path},
+\eqref{eq:walk-max-time}, respectively. All  the relaxations have as their
+\gls{lpp}, the \gls{kn}, \gls{sp} or the \gls{rcsp} subproblems.
+The nomenclature used for each relaxation  follows the \gls{lr}-X pattern, where ``X''
+represents one of the most difficult subproblems of the \gls{lpp} being solved.
 
-The   \gls{rl}    resulting   from   the   dualization    of   the   constraints
-\eqref{eq:rel-f-y-term} and \eqref{eq:mod-lim-delay}-\eqref{eq:mod-var-delay} is
-very close to  the problem of compute \gls{sp}s and  is therefore called {\rlu}.
-The constraints~\eqref{eq:fluxo-raiz}-\eqref{eq:fluxo-terminal}  model a problem
-similar to create paths  from the root $s$ for the other  graph nodes, using the
-variables  $f_{ij}^{k}$ for  all $k  \in D  \cup S$.  Considering the  variables
-$y_{ij}$, their  associated subproblem consists  in selecting the arc  $(s, s')$
-along with  ($|V|-1$) arcs of  smallest coefficient according to  the lagrangian
-costs. As  the \gls{ppl} contains no  constraint that apply to  variables $z_k$,
-the subproblem  associated with  these variables consists  of not  attending the
-terminal  ($z_k =  1$) if  its  associated lagrangian  cost is  less than  zero,
-otherwise  $z_k   =  0$.   When  the  constraints   \eqref{eq:rel-f-y-term}  and
-\eqref{eq:mod-lim-delay}-\eqref{eq:mod-var-delay}  are  dualized, the  resulting
-\gls{ppl} is:
+\subsection{Lagrangean Relaxation with Shortest Path}\label{sec:lr-sp}
 
+The \gls{lr} resulting from the dualization of the constraints~\eqref{eq:walk-in-path}
+and~\eqref{eq:walk-max-time}
+is very close to the problem of computing \gls{sp}s and is therefore called {\lrsp}.
+The constraints~\eqref{eq:walk-s-t-all}-\eqref{eq:walk-flow-conservation}
+and~\eqref{eq:walk-subtour-elimination}-\eqref{eq:walk-dom-y} model a problem similar
+to create a path going from the depot $s = 0$ through the nodes of $V$ and going back to $s$,
+using the variables $x_{ij}$ for all $i, j \in V, i \neq j$. As the \gls{lpp} contains no
+constraint that apply to the variables $y_{b}$, the subproblem associated with these variables
+consists in selecting the blocks $b \in B$ with the highest value  according to the lagrangian costs.
+When the constraints~\eqref{eq:walk-in-path} and~\eqref{eq:walk-max-time}
+are dualized, the resulting \gls{lpp} is:
+
+\begin{align}
+	\text{(LR-SP)}                                                                                                                                                \max \sum_{b \in B} p_{b} y_{b} + \mult{\ref{eq:walk-max-time}}{}
+	(T - (\sum_{a \in A} x_{i,j}t_{i,j} + \sum_{b \in B} y_b t_b))                                                                                                & \label{eq:lrsp-of}   \\
+	\nonumber                                                                                                                                                     + \sum_{b \in B} \mult{\ref{eq:walk-in-path}}{b}
+	(\sum_{i \in V(b)} \sum_{a \in \delta^{-}(i)}x_{i,j} - y_b)                                                                                                   &                    & \\
+	\nonumber \text{subject to: } \eqref{eq:walk-s-t-all}-\eqref{eq:walk-flow-conservation}\text{ and } \eqref{eq:walk-subtour-elimination}-\eqref{eq:walk-dom-y} &                    &
+\end{align}
+
+
+Thus, rearranging the terms, splitting into variables and inverting the signal in the X
+term we have to solve the following optimization problems:
+\begin{align}
+	\text{(Y)}         & \max \sum_{b \in B} y_{b} (p_b - \mult{\ref{eq:walk-in-path}}{b} - \mult{\ref{eq:walk-max-time}}{} t_b) +                                                            \\
+	\text{(X)}         & \max \sum_{(i,j) \in A} x_{i,j} \mult{\ref{eq:walk-max-time}}{} t_{i,j} - \sum_{b \in B} \sum_{(i,j) \in \delta^{+}(V(b))} x_{i,j} \mult{\ref{eq:walk-in-path}}{b} + \\
+	\text{(constants)} & \mult{\ref{eq:walk-max-time}}{} T
+\end{align}
+
+Two approaches were used to solve {\lrsp}:  the first solution strategy is to use
+an \gls{ilp}  solver to obtain  solutions in  each iteration of  the subgradient
+method;  the  second  approach  is  to solve  the  \gls{lpp}  subproblems  using
+combinatorial  algorithms.  A factor  that  influences  the complexity  of
+solving  the  \gls{sp}  problem  is  related  to  the  possibility  of  negative
+coefficients associated  with the variables  $x_{i,j}$ as consequence  of the
+dualization of constraint~\eqref{eq:walk-max-time}.  Indeed, when  computing a
+\gls{sp} the returned  solution may contain negative cycles, and  to avoid these
+situations we define other variations of {\lrsp} by increasing the difficulty
+of the subproblem adding time constraints.
+
+\subsection{Lagrangean Relaxations with Time Constraints}\label{sec:lr-time-constraints}
+
+Since the time constraint \eqref{eq:walk-max-time} is dualized and the resulting
+\gls{lpp} is a \gls{sp} problem for variables $x_{i,j}$ and a selection problem for variables $y_b$,
+we can define other variations of {\lrsp} by increasing the difficulty of the subproblem.
+Thus, we increase the formulation Walk-CBRP by adding two new constraints that are redundant:
+\begin{align}
+	\sum_{(i,j) \in A} x_{i,j}t_{i,j} \leq T & \label{eq:arc-time-constraints}   \\
+	\sum_{b \in B} y_b t_b \leq T            & \label{eq:block-time-constraints}
+\end{align}
+
+Thus, the resulting \gls{lpp}, referred as {\lrcsp}, is the variation of {\lrsp} with the addition of
+Constraint~\eqref{eq:arc-time-constraints}.
+The most difficult subproblem in the \gls{lpp} passes from a \gls{sp} problem to a
+\gls{sp} problem with resource constraints, known as \gls{rcsp}. Since the amount
+of time spent on the arcs is limited, the presence of negative costs not generate
+a negative cycle that makes the subproblem infeasible. Computing  \gls{rcsp} is NP-hard,
+however there are  exact algorithms that are efficient to  solve this problem in
+practice~\cite{irnich:2006}. Our  implementations use  the labeling  algorithm
+available  in   the  Boost  C++  Library~\cite{boost:2020}.
+
+If the constraint~\eqref{eq:arc-time-constraints} is replaced by
+the constraint~\eqref{eq:block-time-constraints}, the resulting \gls{lpp} will be referred as {\lrkn}.
+The difficult subproblem in the \gls{lpp} now is associated with the variables $y_b$, that changes
+from a selection problem to a \gls{kn} problem~\cite{karp:1972}. Computing a solution for the \gls{kn} problem
+is NP-hard~\cite{korte:2008}, however there are exact algorithms based on dynamic programming that are
+efficient to solve this problem in practice.
+
+The most difficult version of this set of \gls{lrs} is {\lrcspkn}, tha uses both
+constraints~\eqref{eq:arc-time-constraints} and~\eqref{eq:block-time-constraints}.
+The resulting subproblems in the \gls{lpp} are \gls{kn} and \gls{rcsp} problems.
+This relaxation is the expensive one in terms of computational demand.
 
 \section{Deterministic Heuristics}\label{sec:deterministic-heuristics}
 
+\newcommand{\Call}[2]{\textit{#1}(#2)}
+
+\section{Greedy Heuristic Algorithm for Capacitated Block Routing Problem}
+
+The Greedy Heuristic algorithm solves the \gls{cbrp}.
+The algorithm combines a binary search strategy to determine the optimal time allocation with a
+knapsack-based block selection and a heuristic routing method.
+
+The algorithm operates in two main stages:
+\begin{enumerate}
+	\item \textbf{First Stage}: Selects blocks to attend based on deterministic case counts and expected second-stage profits
+	\item \textbf{Second Stage}: For each scenario, selects additional blocks considering the blocks already chosen in the first stage
+\end{enumerate}
+
+The core of the algorithm uses a binary search to find the optimal time allocation between block
+attendance time and routing time, ensuring the total time constraint is satisfied.
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\KwData{Input instance $I$ with graph $G$, time limit $T$}
+	\KwResult{Solution with objective value $OF$ and block selections $y$}
+
+	\tcp{Initialization}
+	$B \leftarrow$ number of blocks\;
+	$S \leftarrow$ number of scenarios\;
+	$y \leftarrow$ empty vector of vectors\;
+	$OF \leftarrow 0$\;
+
+	\tcp{Block Selection}
+	\For{$i = 1$ \textbf{to} $B$}{
+		$blocks[i] \leftarrow i$\;
+		$time[i] \leftarrow$ time to attend block $i$\;
+		$cases[i] \leftarrow$ profit of block $i$\;
+	}
+
+	$OF \leftarrow$ \Call{SolveScenario}{$cases$, $time$, $T$, $y$}\;
+
+	\Return{$(OF, y, x, I)$}\;
+	\caption{Greedy Heuristic Algorithm}
+\end{algorithm}
+
+The main algorithm implements a two-stage stochastic programming approach for the \gls{cbrp}.
+In the initialization phase, the algorithm sets up the necessary data structures including the
+number of blocks $B$, and initializes the solution vector $y$ and objective function value $OF$ to zero.
+
+The first stage focuses on deterministic block selection.
+For each block $i$, the algorithm initializes the block identifier,
+calculates the time required to attend the block, and computes the total cases by adding the
+deterministic case count to the expected second-stage profit. The SolveScenario
+subroutine is then called to determine the optimal block selection for the first stage.
+
+The second stage handles scenario-specific block selection.
+The algorithm first marks which blocks were selected in the first stage
+using the boolean array $in\_first\_stage$. For each scenario $s$, it updates
+the case counts based on the scenario-specific data. If a block was already selected
+in the first stage, its case count is reduced by a factor of $(1-\alpha)$ to account
+for the cases already addressed. The algorithm then checks if there are any remaining
+cases to address in the scenario, and if so, calls SolveScenario to select additional
+blocks, weighted by the scenario probability $\pi_s$.
+
+\subsection{Scenario Solving Subroutine}
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\KwData{Case counts $cases$, time requirements $time$, time limit $T$}
+	\KwResult{Objective value $OF$ and selected blocks $y$}
+
+	\tcp{Binary Search for Time Allocation}
+	$lb \leftarrow 0.5$, $ub \leftarrow 1.0$, $mid \leftarrow 0.0$\;
+	$OF \leftarrow 0$, $temp\_OF \leftarrow 0$\;
+
+	\tcp{Try optimal solution}
+	$available\_time \leftarrow T$\;
+	$temp\_OF \leftarrow$ \Call{BinarySolve}{$cases$, $time$, $available\_time$, $T$, $y$}\;
+	\If{$temp\_OF \neq -1$}{
+		\Return{$temp\_OF$}\;
+	}
+
+	\tcp{Try lower bound solution}
+	$available\_time \leftarrow \lfloor 0.5 \times T \rfloor$\;
+	$temp\_OF \leftarrow$ \Call{BinarySolve}{$cases$, $time$, $available\_time$, $T$, $y$}\;
+	\If{$temp\_OF = -1$}{
+		$ub \leftarrow lb$, $lb \leftarrow 0.0$\;
+	}\Else{
+		$OF \leftarrow temp\_OF$\;
+	}
+	$mid \leftarrow \frac{(lb + ub)}{2.0}$\;
+
+	\tcp{Binary search loop}
+	\While{$ub - lb > 0.001$}{
+		$available\_time \leftarrow \lfloor mid \times T \rfloor$\;
+		$temp\_OF \leftarrow$ \Call{BinarySolve}{$cases$, $time$, $available\_time$, $T$, $y$}\;
+		\If{$temp\_OF = -1$}{
+			$ub \leftarrow mid$\;
+		}\Else{
+			$OF \leftarrow temp\_OF$, $y \leftarrow temp\_y$, $lb \leftarrow mid$\;
+		}
+		$mid \leftarrow \frac{(lb + ub)}{2.0}$\;
+	}
+
+	\Return{$OF$}\;
+	\caption{SolveScenario}
+\end{algorithm}
+
+The SolveScenario subroutine implements a binary search strategy to find the optimal
+allocation of time between block attendance and routing. The algorithm starts by initializing
+the binary search bounds, with the lower bound $lb$ set to 0.5 and upper bound $ub$
+set to 1.0, representing the fraction of total time $T$ that can be allocated to block attendance.
+
+The algorithm first attempts to find a solution using the full time budget $T$ by calling
+BinarySolve with $available\_time = T$. If this succeeds (returning a non-negative objective value),
+the algorithm immediately returns this optimal solution.
+
+If the full time allocation is infeasible, the algorithm tries a more conservative approach
+by allocating only 50\% of the total time to block attendance. If this also fails, it adjusts
+the search bounds by setting the upper bound to the current lower bound and the lower bound
+to 0.0, effectively searching in the range [0.0, 0.5]. If the 50\% allocation succeeds, it
+becomes the current best solution and the search continues in the range [0.5, 1.0].
+
+The binary search loop continues until the search interval becomes sufficiently small (less than 0.001).
+In each iteration, the algorithm calculates the midpoint of the current search interval and
+attempts to solve the problem with that time allocation. If the solution is infeasible
+(BinarySolve returns -1), the upper bound is reduced to the current midpoint. If feasible,
+the solution becomes the new best solution and the lower bound is increased to the current
+midpoint. This process efficiently narrows down to the optimal time allocation.
+
+\subsection{Binary Solve Subroutine}
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\KwData{Case counts $cases$, time requirements $time$, reserved time $reserved\_time$, total time $T$}
+	\KwResult{Objective value $OF$ and selected blocks $y$}
+
+	\tcp{Knapsack-based Block Selection}
+	$OF \leftarrow$ \Call{KnapsackSolve}{$y$, $cases$, $time$, $reserved\_time$}\;
+	\If{$y$ is empty}{
+		\Return{$-1$}\;
+	}
+
+	\tcp{Calculate total attendance time}
+	$block\_attended\_time \leftarrow 0$\;
+	\For{each block $b$ in $y$}{
+		$block\_attended\_time \leftarrow block\_attended\_time +$ time to attend block $b$\;
+	}
+
+	\tcp{Calculate routing cost}
+	$key \leftarrow$ generate string key from $y$\;
+	\If{key exists in cache}{
+		$connection\_cost \leftarrow$ cached routing cost\;
+	}\Else{
+		$connection\_cost \leftarrow$ \Call{HeuristicBlockConnection}{$G$, $SP$, $y$, $key$}\;
+	}
+
+	\tcp{Feasibility check}
+	\If{$block\_attended\_time + connection\_cost \leq T$}{
+		\Return{$OF$}\;
+	}\Else{
+		\Return{$-1$}\;
+	}
+	\caption{BinarySolve}
+\end{algorithm}
+
+The BinarySolve subroutine combines knapsack optimization with
+routing feasibility checking to determine the optimal block selection for a given time allocation.
+The algorithm first solves a knapsack problem where the objective is to maximize the total cases
+addressed (profit) while respecting the time constraint for block attendance.
+
+The knapsack solution selects blocks that maximize the total case count within the allocated attendance
+time. If no blocks can be selected (empty solution), the algorithm returns -1 indicating infeasibility.
+
+After obtaining the knapsack solution, the algorithm calculates the total time required to attend
+all selected blocks. This includes the time spent at each block location performing the required activities.
+
+The routing cost calculation uses a caching mechanism to avoid redundant computations. A unique
+key is generated from the selected blocks, and if this combination has been previously solved,
+the cached routing cost is retrieved. Otherwise, the HeuristicBlockConnection subroutine is called
+to compute the minimum routing cost for visiting all selected blocks in an optimal sequence.
+
+Finally, the algorithm performs a feasibility check by verifying that the sum of block attendance
+time and routing cost does not exceed the total time limit $T$. If feasible, it returns the
+objective value; otherwise, it returns -1 indicating that the current time allocation is insufficient.
+
+\subsection{Knapsack Solver}
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\KwData{Selected blocks $y$, case counts $cases$, time requirements $time$, maximum time $MT$}
+	\KwResult{Maximum objective value $OF$}
+
+	\tcp{Dynamic Programming Table}
+	$n \leftarrow$ number of blocks\;
+	Initialize $dp[n+1][MT+1]$ with zeros\;
+
+	\tcp{Fill DP table}
+	\For{$i = 1$ \textbf{to} $n$}{
+		\For{$w = 1$ \textbf{to} $MT$}{
+			\If{$time[i-1] \leq w$}{
+				$dp[i][w] \leftarrow \max(dp[i-1][w], dp[i-1][w-time[i-1]] + cases[i-1])$\;
+			}\Else{
+				$dp[i][w] \leftarrow dp[i-1][w]$\;
+			}
+		}
+	}
+
+	\tcp{Backtrack to find selected blocks}
+	$w \leftarrow MT$\;
+	\For{$i = n$ \textbf{downto} $1$}{
+		\If{$dp[i][w] \neq dp[i-1][w]$}{
+			Add block $i-1$ to $y$\;
+			$w \leftarrow w - time[i-1]$\;
+		}
+	}
+
+	\Return{$dp[n][MT]$}\;
+	\caption{KnapsackSolve}
+\end{algorithm}
+
+The KnapsackSolve subroutine implements the classic 0-1 knapsack problem using dynamic programming.
+The problem is formulated as selecting a subset of blocks that maximizes the total cases addressed
+while respecting the time constraint.
+
+The algorithm initializes a two-dimensional DP table $dp[n+1][MT+1]$ where $dp[i][w]$ represents the
+maximum cases that can be addressed using the first $i$ blocks with a time capacity of $w$. The table
+is initialized with zeros, representing the base case where no blocks are selected.
+
+The DP table is filled using the standard knapsack recurrence relation. For each block $i$ and time
+capacity $w$, the algorithm considers two options: either include block $i$ (if its time requirement
+fits within the remaining capacity) or exclude it. The optimal choice is the one that maximizes the
+total cases addressed.
+
+The recurrence relation is: $dp[i][w] = \max(dp[i-1][w], dp[i-1][w-time[i-1]] + cases[i-1])$ if $time[i-1] \leq w$,
+otherwise $dp[i][w] = dp[i-1][w]$. This ensures that each block is considered at most once and the
+time constraint is respected.
+
+After filling the DP table, the algorithm backtracks to reconstruct the actual solution. Starting from
+the maximum time capacity $MT$ and the last block $n$, it checks if including block $i$ contributed to
+the optimal solution by comparing $dp[i][w]$ with $dp[i-1][w]$. If they differ, block $i-1$ is added to
+the solution and the remaining capacity is reduced accordingly.
+
+\subsection{Heuristic Block Connection}
+
+\begin{algorithm}[H]
+	\SetAlgoLined
+	\KwData{Graph $G$, shortest path calculator $SP$, selected blocks $blocks$, solution key $key$}
+	\KwResult{Routing cost for visiting all blocks}
+
+	\tcp{Special case - single block}
+	\If{$|blocks| = 1$}{
+		Cache cost as 0\;
+		\Return{$0$}\;
+	}
+
+	\tcp{Heuristic routing}
+	$best\_cost \leftarrow \infty$\;
+	$best\_path \leftarrow$ empty\;
+
+	\tcp{Try different block orderings}
+	\For{$block\_seq = 0$ \textbf{to} $1$}{
+		\For{$sort\_opt = 0$ \textbf{to} $3$}{
+			$ordered\_blocks \leftarrow$ sort blocks according to $sort\_opt$\;
+			$path \leftarrow$ \Call{FindShortestPath}{$G$, $SP$, $ordered\_blocks$}\;
+			$cost \leftarrow$ calculate total routing cost\;
+			\If{$cost < best\_cost$}{
+				$best\_cost \leftarrow cost$\;
+				$best\_path \leftarrow path$\;
+			}
+		}
+	}
+
+	\tcp{Cache best cost and path}
+	Cache $best\_cost$ and $best\_path$ with key\;
+	\Return{$best\_cost$}\;
+	\caption{HeuristicBlockConnection}
+\end{algorithm}
+
+The HeuristicBlockConnection subroutine solves the routing problem
+for visiting all selected blocks using a heuristic approach. This
+is essentially a variant of the Traveling Salesman Problem (TSP)
+where the goal is to find the minimum cost route that visits all
+selected blocks.
+
+The algorithm first handles the trivial case where only one block is selected.
+In this case, no routing is needed, so the cost is zero and the path simply
+goes from the depot to the block and back to the depot.
+
+For multiple blocks, the algorithm uses a heuristic approach that tries
+different block orderings to find a good solution. The heuristic considers
+two different block sequence strategies ($block\_seq = 0$ and $block\_seq = 1$)
+and four different sorting options ($sort\_opt = 0$ to $3$) for each strategy.
+
+The sorting options typically include different criteria such as:
+\begin{itemize}
+	\item Distance from depot
+	\item Case density (cases per unit time)
+	\item Geographic proximity
+	\item Time-based ordering
+\end{itemize}
+
+For each combination of block sequence and sorting option, the algorithm:
+\begin{enumerate}
+	\item Orders the blocks according to the selected sorting criterion
+	\item Uses the shortest path calculator to find the optimal route visiting blocks in the determined order
+	\item Calculates the total routing cost for this ordering
+	\item Updates the best solution if a better cost is found
+\end{enumerate}
+
+The algorithm maintains the best solution found across all combinations and
+caches the result using the solution key to avoid redundant computations for
+the same block combination in future calls.
+
+\subsection{Complexity Analysis}
+
+The Greedy Heuristic algorithm has the following time complexity:
+\begin{itemize}
+	\item \textbf{First Stage}: $O(B \log T + B \cdot MT)$ where $B$ is the number of blocks and $MT$ is the maximum time.
+	\item \textbf{Second Stage}: $O(S \cdot (B \log T + B \cdot MT))$ where $S$ is the number of scenarios.
+	\item \textbf{Overall}: $O(S \cdot B \cdot MT)$.
+\end{itemize}
+
+The space complexity is $O(B \cdot MT + S \cdot B)$ for storing the DP tables and solution vectors.
+
+The binary search in SolveScenario runs in $O(\log T)$ time, and each BinarySolve call
+requires $O(B \cdot MT)$ time for the knapsack DP and $O(B^2)$ for the heuristic routing.
+The first stage runs once, while the second stage runs $S$ times, leading to the overall
+complexity of $O(S \cdot B \cdot MT)$. The space complexity accounts for the DP table
+storage and the solution vectors for each scenario.
+
+
 \section{Stochastic Heuristics}\label{sec:stochastic-heuristics}
-% TODO: revise with the paper
+
 \section{Dengue Virus Spread Simulation}\label{sec:dengue-virus-spread-simulation}
 
 This section presents the design and implementation of the proposed \gls{mabs}
@@ -63,7 +453,7 @@ Section~\ref{sec:computational-experiments}.
 	\centering
 	\caption{\label{tab:parameters-mabs} Static parameters used in the proposed
 		\gls{mabs}.} \small{%
-		\begin{tabular}{c|l|r}
+		\begin{tabular}{clr}
 			\toprule
 			\textbf{Parameter} & \textbf{Description}                                  & \textbf{Value} \\ \midrule
 			$\gamma_H$         & Human recovery rate per day                           & 0.146          \\ \hline
