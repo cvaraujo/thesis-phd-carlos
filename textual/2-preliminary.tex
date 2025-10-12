@@ -25,7 +25,7 @@ set of $m$ arcs, and $B = \{b : b \subseteq V\}$ is the set of blocks. In
 each arc, the first vertex is the source and also the predecessor of the
 second vertex in the ordered pair, which is known as the destination. Each
 block $b$ has an associated set of arcs $B(i, j) \subseteq A$ that can be
-serviced by a vehicle. 
+serviced by a vehicle.
 
 We now present a formal definition of the \gls{cbrp}. Let a Plannar Graph,
 extracted from a real citymap, be represented as a weighted directed graph $G$.
@@ -101,42 +101,42 @@ of the block's perimeter.
 				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
-			
+
 			\tikzstyle{every state}=[
 			draw = black,
 			thick,
 			fill = white,
 			minimum size = 9mm
 			]
-			
+
 			\node[state] (a) at (0,0) {$1$};
 			\node[state, right of = a] (b) {$2$};
 			\node[state, above of = a] (c) {$3$};
 			\node[state, above of = b] (d) {$4$};
-			
+
 			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
 			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
-			
+
 			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
 			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
 			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
-			
-			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
-			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (d); 
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (d);
 			\path[->, draw = gray, opacity = 0.2] (d) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
 			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
 			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (g);
 			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (j);
 			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (k);
 			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (i);
-			
+
 			\path[->, draw = gray, opacity = 0.2, dashed] (j) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2, dashed] (b) edge node {} (e);
 		\end{tikzpicture}
@@ -151,42 +151,42 @@ of the block's perimeter.
 				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
-			
+
 			\tikzstyle{every state}=[
 			draw = black,
 			thick,
 			fill = white,
 			minimum size = 9mm
 			]
-			
+
 			\node[state] (a) at (0,0) {$1$};
 			\node[state, right of = a] (b) {$2$};
 			\node[state, above of = a] (c) {$3$};
 			\node[state, above of = b] (d) {$4$};
-			
+
 			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
 			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
-			
+
 			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
 			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
 			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
-			
-			\path[->, draw = gray, opacity = 1.0] (a) edge node {} (c); 
-			\path[->, draw = gray, opacity = 1.0] (c) edge node {} (d); 
+
+			\path[->, draw = gray, opacity = 1.0] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 1.0] (c) edge node {} (d);
 			\path[->, draw = gray, opacity = 1.0] (d) edge node {} (b);
 			\path[->, draw = gray, opacity = 1.0] (b) edge node {} (a);
-			
+
 			\path[->, draw = gray, opacity = 1.0] (e) edge node {} (f);
 			\path[->, draw = gray, opacity = 1.0] (f) edge node {} (h);
 			\path[->, draw = gray, opacity = 1.0] (h) edge node {} (g);
 			\path[->, draw = gray, opacity = 1.0] (g) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 1.0] (i) edge node {} (j);
 			\path[->, draw = gray, opacity = 1.0] (j) edge node {} (k);
 			\path[->, draw = gray, opacity = 1.0] (k) edge node {} (i);
-			
+
 			\path[->, draw = gray, opacity = 1.0, dashed] (j) edge node {} (b);
 			\path[->, draw = gray, opacity = 1.0, dashed] (b) edge node {} (e);
 		\end{tikzpicture}
@@ -201,42 +201,42 @@ of the block's perimeter.
 				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
-			
+
 			\tikzstyle{every state}=[
 			draw = black,
 			thick,
 			fill = white,
 			minimum size = 9mm
 			]
-			
+
 			\node[state] (a) at (0,0) {$1$};
 			\node[state, right of = a] (b) {$2$};
 			\node[state, above of = a] (c) {$3$};
 			\node[state, above of = b] (d) {$4$};
-			
+
 			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
 			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
-			
+
 			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
 			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
 			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
-			
-			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
-			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (d); 
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (d);
 			\path[->, draw = gray, opacity = 0.2] (d) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
 			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
 			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (g);
 			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (j);
 			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (k);
 			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (i);
-			
+
 			\path[->, draw = gray, opacity = 1.0, dashed] (j) edge node {} (b);
 			\path[->, draw = gray, opacity = 1.0, dashed] (b) edge node {} (e);
 		\end{tikzpicture}
@@ -289,7 +289,7 @@ A Path-CBRP formulation is defined as follows:
 	                             & \sum_{j \in \delta^{-}(i)} x_{i,j} \geq y_{ib}                                            & \ \forall b \in B, i \in V(b) \label{eq:in-path}               \\
 	%
 	                             & \sum_{(i, j) \in A} x_{i,j}t_{i,j} + \sum_{i \in V} \sum_{b \in B} y_{ib}t^{'}_{b} \leq T & \label{eq:max-time}                                            \\
-	                             & \sum_{(i, j) \in A(S)} x_{i,j} \leq |V(S)| - 1                                            & \ \forall S \subseteq V \label{eq:circuit-subtour-elimination} \\	
+	                             & \sum_{(i, j) \in A(S)} x_{i,j} \leq |V(S)| - 1                                            & \ \forall S \subseteq V \label{eq:circuit-subtour-elimination} \\
 	                             & x \in \mathbb{B}^{|A'|}                                                                   & \label{eq:dom-x}                                               \\
 	                             & y \in \mathbb{B}^{|V'| \times |B|}.                                                       & \label{eq:dom-y}
 \end{align}
@@ -325,7 +325,7 @@ formulation.
 % from the Lemon Library~\citep{lemon:2011} is used.
 
 To implement the \gls{mtz} approach, we introduce the following additional
-variable: 
+variable:
 
 \begin{itemize}
 	\item $w_{a} \in \mathbb{R}$ is a real-valued variable representing the accumulated
@@ -371,56 +371,56 @@ and depot.
 				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
-			
+
 			\tikzstyle{every state}=[
 			draw = black,
 			thick,
 			fill = white,
 			minimum size = 9mm
 			]
-			
+
 			\node[state] (a) at (0,0) {$1$};
 			\node[state, right of = a] (b) {$2$};
 			\node[state, above of = a] (c) {$3$};
 			% \node[state, above of = b] (d) {$4$};
-			
+
 			\node[state, right of = b, xshift=0.8cm] (e) {$5$};
 			\node[state, right of = d, xshift=0.8cm] (f) {$6$};
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
-			
+
 			\node[state, below of = b, yshift=-0.1cm] (i) {$9$};
 			\node[state, below of = e, yshift=-0.1cm] (j) {$10$};
 			\node[state, below of = i, left of = j, xshift=0.4cm] (k) {$11$};
-			
+
 			\node[state, above of = d, yshift=0.1cm] (l) {$12$};
 			\node[state, above of = f, yshift=0.1cm] (m) {$13$};
 			\node[state, above of = l, left of = m, xshift=0.4cm] (n) {$14$};
-			
-			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
-			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
 			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
 			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (g);
 			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (j);
 			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (k);
 			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (i);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (l) edge node {} (n);
 			\path[->, draw = gray, opacity = 0.2] (n) edge node {} (m);
 			\path[->, draw = gray, opacity = 0.2] (m) edge node {} (l);
-			
+
 			\path[->, draw = gray, opacity = 0.2, dashed] (b) edge node {} (m);
 			\path[->, draw = gray, opacity = 0.2, dashed] (m) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2, dashed] (b) edge node {} (e);
 			\path[->, draw = gray, opacity = 0.2, dashed] (e) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2, dashed] (b) edge node {} (j);
 			\path[->, draw = gray, opacity = 0.2, dashed] (j) edge node {} (b);
-			
+
 		\end{tikzpicture}
 		\subcaption{Instance Example.}
 	\end{minipage}
@@ -433,51 +433,51 @@ and depot.
 				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
-			
+
 			\tikzstyle{every state}=[
 			draw = black,
 			thick,
 			fill = white,
 			minimum size = 9mm
 			]
-			
+
 			\node[state] (a) at (0,0) {$1$};
 			\node[state, rectangle, double, right of = a] (b) {$2$};
 			\node[state, above of = a] (c) {$3$};
-			
+
 			\node[state, rectangle, double, right of = b, xshift=0.8cm] (e) {$5$};
 			\node[state, right of = d, xshift=0.8cm] (f) {$6$};
 			\node[state, right of = e] (g) {$7$};
 			\node[state, right of = f] (h) {$8$};
-			
+
 			\node[state, below of = b, yshift=-0.1cm] (i) {$9$};
 			\node[state, rectangle, double, below of = e, yshift=-0.1cm] (j) {$10$};
 			\node[state, below of = i, left of = j, xshift=0.4cm] (k) {$11$};
-			
+
 			\node[state, above of = d, yshift=0.1cm] (l) {$12$};
 			\node[state, rectangle, double, above of = f, yshift=0.1cm] (m) {$13$};
 			\node[state, above of = l, left of = m, xshift=0.4cm] (n) {$14$};
-			
+
 			\node[state, double, below of = a, left of = i] (s) {$s$};
 			\node[state, double, above of = h, right of = m] (t) {$t$};
-			
-			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
-			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
 			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
 			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (g);
 			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (j);
 			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (k);
 			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (i);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (l) edge node {} (n);
 			\path[->, draw = gray, opacity = 0.2] (n) edge node {} (m);
 			\path[->, draw = gray, opacity = 0.2] (m) edge node {} (l);
-			
+
 			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (m);
 			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (b) edge node {} (e);
 			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (e) edge node {} (b);
@@ -486,7 +486,7 @@ and depot.
 			% depot
 			\path[->, draw = black, opacity = 1.0, dashed] (s) edge node {} (b);
 			\path[->, draw = black, opacity = 1.0, dashed] (m) edge node {} (t);
-			
+
 		\end{tikzpicture}
 		\subcaption{Walk Solution.}
 	\end{minipage}
@@ -515,7 +515,7 @@ A Walk-CBRP formulation is defined as follows:
 	                             & \sum_{i \in V(b)} \sum_{j \in \delta^{-}(i)} x_{i,j} \geq y_{b}           & \ \forall b \in B \label{eq:walk-in-path}                                                          \\
 	%
 	                             & \sum_{(i, j) \in A} x_{i,j}t_{i,j} + \sum_{b \in B} y_{b}t^{'}_{b} \leq T & \label{eq:walk-max-time}                                                                           \\
-	                             & \sum_{(i, j) \in \delta^{+}(S)} x_{i,j} \geq x_{k,l} + x_{p,q} - 1        & \forall S \subseteq V, (k, l) \subseteq S, (p, q) \nsubseteq S \label{eq:walk-subtour-elimination} \\	
+	                             & \sum_{(i, j) \in \delta^{+}(S)} x_{i,j} \geq x_{k,l} + x_{p,q} - 1        & \forall S \subseteq V, (k, l) \subseteq S, (p, q) \nsubseteq S \label{eq:walk-subtour-elimination} \\
 	                             & x \in \mathbb{Z}^{|A'|}                                                   & \label{eq:walk-dom-x}                                                                              \\
 	                             & y \in \mathbb{B}^{|B|}.                                                   & \label{eq:walk-dom-y}
 \end{align}
@@ -587,45 +587,45 @@ represents the same solution mapped onto the transformed graph structure.
 				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
-			
+
 			\tikzstyle{every state}=[
 			draw = black,
 			thick,
 			fill = white,
 			minimum size = 8mm
 			]
-			
+
 			\node[state] (a) at (0,0) {$1$};
 			\node[state, right of = a] (b) {$2$};
 			\node[state, above of = a] (c) {$3$};
-			
+
 			\node[state, right of = b, xshift=0.1cm] (d) {$4$};
-			
+
 			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
 			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, above of = e] (g) {$7$};
-			
+
 			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
 			\node[state, above of = h] (i) {$9$};
 			\node[state, left of = i] (j) {$10$};
 			\node[state, below of = j] (k) {$11$};
-			
-			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
-			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (d);
 			\path[->, draw = gray, opacity = 0.2] (d) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
 			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
 			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
 			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
 			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
 			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
 		\end{tikzpicture}
 		\subcaption{\label{subfig:CBRP_instance_digraph} Instance Example.}
@@ -639,45 +639,45 @@ represents the same solution mapped onto the transformed graph structure.
 				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
-			
+
 			\tikzstyle{every state}=[
 			draw = black,
 			thick,
 			fill = white,
 			minimum size = 8mm
 			]
-			
+
 			\node[state] (a) at (0,0) {$1$};
 			\node[state, right of = a] (b) {$2$};
 			\node[state, above of = a] (c) {$3$};
-			
+
 			\node[state, right of = b, xshift=0.1cm] (d) {$4$};
-			
+
 			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
 			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, above of = e] (g) {$7$};
-			
+
 			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
 			\node[state, above of = h] (i) {$9$};
 			\node[state, left of = i] (j) {$10$};
 			\node[state, below of = j] (k) {$11$};
-			
-			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
-			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
-			
+
 			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (d);
 			\path[->, draw = black, opacity = 1.0, dashed] (d) edge node {} (e);
-			
+
 			\path[->, draw = black, opacity = 1.0, dashed] (e) edge node {} (f);
 			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
 			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
 			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
 			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
 			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
-			
+
 			\path[->, draw = black, opacity = 1.0, dashed] (f) edge node {} (h);
 		\end{tikzpicture}
 		\subcaption{\label{subfig:CBRP_solution_graph_G} Solution on Graph $G$.}
@@ -691,44 +691,44 @@ represents the same solution mapped onto the transformed graph structure.
 				node distance = 1.3cm, % distance between nodes
 				semithick % line style
 			]
-			
+
 			\tikzstyle{every state}=[
 			draw = black,
 			thick,
 			fill = white,
 			minimum size = 8mm
 			]
-			
+
 			\node[state] (a) at (0,0) {$1$};
 			\node[state, right of = a] (b) {$2$};
 			\node[state, above of = a] (c) {$3$};
-			
+
 			% \node[state, right of = b, xshift=0.2cm] (d) {$4$};
-			
+
 			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
 			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
 			\node[state, above of = e] (g) {$7$};
-			
+
 			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
 			\node[state, above of = h] (i) {$9$};
 			\node[state, left of = i] (j) {$10$};
 			\node[state, below of = j] (k) {$11$};
-			
-			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c); 
-			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b); 
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
 			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
-			
+
 			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (f);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
 			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
 			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
-			
+
 			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
 			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
 			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
 			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
-			
+
 			\path[->, draw = black, opacity = 1.0, dashed] (f) edge node {} (h);
 		\end{tikzpicture}
 		\subcaption{\label{subfig:CBRP_solution_graph_G_B} Solution on Graph $G_B$.}
@@ -778,10 +778,10 @@ complicating constraints, can be efficiently solved. For instance, consider the
 following \gls{ilp} model:
 
 \begin{align*}
-	\text{(IP) } &              &  & z = \min cx           &  &  &  &  &  &  &  &   \\
-	             & \text{s.t. } &  & Ax \geq b,            &  &  &  &  &  &  &  &   \\
-	             &              &  & Dx \geq d,            &  &  &  &  &  &  &  &   \\
-	             &              &  & x \in \mathbb{Z}^n_+. &  &  &  &  &  &  &  & 
+	\text{(IP) } &              &  & z = \min cx           &  &  &  &  &  &  &  & \\
+	             & \text{s.t. } &  & Ax \geq b,            &  &  &  &  &  &  &  & \\
+	             &              &  & Dx \geq d,            &  &  &  &  &  &  &  & \\
+	             &              &  & x \in \mathbb{Z}^n_+. &  &  &  &  &  &  &  &
 \end{align*}
 
 Assuming $Dx \geq d$ is the set of complicating constraints, removing it yields
@@ -796,9 +796,9 @@ using a vector $u \in \mathbb{R}^{m}_+$. This results in the Lagrangian
 relaxation problem (\gls{lpp}), which can be written as:
 
 \begin{align*}
-	\text{LR($u$) } &              &  & z(u) = \min cx + u(d - Dx) &  &  &  &  &  &  &   \\
-	                & \text{s.t. } &  & x \in X,                   &  &  &  &  &  &  &   \\
-	                &              &  & u \in \mathbb{R}^m_+.      &  &  &  &  &  &  & 
+	\text{LR($u$) } &              &  & z(u) = \min cx + u(d - Dx) &  &  &  &  &  &  & \\
+	                & \text{s.t. } &  & x \in X,                   &  &  &  &  &  &  & \\
+	                &              &  & u \in \mathbb{R}^m_+.      &  &  &  &  &  &  &
 \end{align*}
 
 The following proposition establishes the relationship between $z(u)$ and $z$.
@@ -814,7 +814,7 @@ bound $z(u)$. To find these values, we must solve the Lagrangian dual problem
 (\gls{ldp}), described as:
 
 \begin{align*}
-	\text{LD } &  &  & w = \max \{z(u) : u \geq 0\}. &  &  &  &  & 
+	\text{LD } &  &  & w = \max \{z(u) : u \geq 0\}. &  &  &  &  &
 \end{align*}
 
 The Lagrangian dual can be solved using the subgradient optimization method,
@@ -872,13 +872,14 @@ is presented in Algorithm~\ref{code:subgradient}.
 
 \begin{algorithm}[!ht]
 	\caption{\label{code:subgradient} Subgradient Method (Minimization Problem)}
-	\Input{threshold, maxIter, updatePi}
-	\Output{$z_{LB}$, $z_{UB}$}
+	\SetAlgoLined
+	\KwData{threshold, maxIter, updatePi}
+	\KwResult{$z_{LB}$, $z_{UB}$}
 	$m \leftarrow \rho \leftarrow 0$\;
 	$z_{LB} \leftarrow 0$\;
 	$z_{UB} \leftarrow$ cost of a feasible solution\;
 	$\alpha^{0} \leftarrow \theta^{0} \leftarrow 0$\; $\pi^{0} \leftarrow 2$\;
-	
+
 	\While{$(\frac{z_{UB} - z_{LB}}{Z_{UB}}) \leq \ threshold$  or $m \ < \ maxIter$}{
 		$x \leftarrow$ solution of $LR(\alpha^{m})$\;
 		$z^{m} \leftarrow$ cost of the objective function of $x$ \;
@@ -892,18 +893,18 @@ is presented in Algorithm~\ref{code:subgradient}.
 		} \Else {
 			$\rho \leftarrow \rho + 1$\;
 		}
-		
+
 		\If{$\rho \ = \ updatePi$}{
 			$\pi \leftarrow \pi/2$\;
 			$\rho \leftarrow 0$\;
 		}
-		
+
 		$\theta^{m} \leftarrow$ subgradient($x$)\;
 		$n^{m} \leftarrow $ norm($\theta^{m}$)\;
 		$s^{m} \leftarrow \pi^{m} \frac{(z_{UB} - z^{m})}{(n^{m})^{2}}$\;
-		
+
 		$\alpha^{m+1} \leftarrow \max(0, \alpha^{m} + s^{m}\theta^{m})$\;
-		
+
 		$m \leftarrow m + 1$\;
 	}
 \end{algorithm}
@@ -917,7 +918,7 @@ the value of $\pi$, i.e., when `updatePi` consecutive iterations occur without
 improvement in the dual bound. Lines (1)–(5) represent the initialization of
 variables: $m$ is the main loop counter, and $\rho$ counts consecutive
 iterations without improvement in $z_{UB}$. The variables $z_{LB}$ and $z_{UB}$
-are the lower and upper bounds, respectively. 
+are the lower and upper bounds, respectively.
 
 The symbol $\alpha$ represents the vector of Lagrange multipliers, and $\theta$
 is the subgradient vector. First, the Lagrangian primal problem is solved using
@@ -1105,7 +1106,7 @@ computes, in the first-stage, a route to nebulize the blocks in the scenario $0$
 (present), in which the objective is to maximize the profit considering a bonus
 related to the impact on the reduction of future cases for each scenario in the
 second-stage. The second-stage represents a set of independent routes that
-nebulize independent blocks in each future scenario. 
+nebulize independent blocks in each future scenario.
 
 In addition to the deterministic data, a set of $k$ future scenarios $\Omega =
 	\{\omega_1, \dots, \omega_k\}$, with $\xi^{\omega}$ being the probability of
@@ -1236,14 +1237,14 @@ the R state, individuals are considered cured and immune to new infections.
 
 \begin{figure}[!ht]
 	\centering
-	
+
 	\resizebox{0.75\columnwidth}{!}{
 		\tikzset{every picture/.style={line width=0.75pt}} %set default line width to
-	
+
 	\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
 		%uncomment if require: \path (0,300); %set diagram left start at 0, and has
 		%height of 300
-		
+
 		%Rounded Rect [id:dp9217887491174969] 
 		\draw  [color={rgb, 255:red, 99; green, 171; blue, 21 }  ,draw opacity=1 ]
 		(62.33,41.47) .. controls (62.33,37.34) and (65.68,34) .. (69.8,34) --
@@ -1287,8 +1288,8 @@ the R state, individuals are considered cured and immune to new infections.
 			180.59] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]
 		(10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls
 		(3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
-		
-		
+
+
 		% Text Node
 		\draw (68.33,43.33) node [anchor=north west][inner sep=0.75pt]   [align=left]
 		{{\small Susceptible}};
@@ -1310,10 +1311,10 @@ the R state, individuals are considered cured and immune to new infections.
 		% Text Node
 		\draw (20.67,44.33) node [anchor=north west][inner sep=0.75pt]   [align=left]
 		{SEIR};
-		
-		
+
+
 	\end{tikzpicture}
-	
+
 	} \caption{Diagram of a dynamic compartmental model.}
 	\label{fig:dynamicmodel}
 \end{figure}
@@ -1388,7 +1389,7 @@ increasingly better solutions to the deterministic version of the problem. Each
 time the metaheuristic generates a ``promising'' solution (i.e., one that is
 likely to perform well in a scenario under uncertainty), this solution is sent
 to the simulation component in order to assess its performance in the stochastic
-environment. 
+environment.
 
 The simulation component returns not only estimates of statistics, such as the
 mean, variance, and percentiles associated with the proposed solution, but also
@@ -1399,7 +1400,7 @@ short number of simulation runs every time a new promising solution is evaluated
 at this stage, otherwise the simulation computing time might jeopardize the time
 required by the metaheuristic to converge to near-optimal solutions.  Some
 useful recommendations to speed up these computations can be found in
-Rabe~\cite{rabe:2020}. 
+Rabe~\cite{rabe:2020}.
 
 The feedback provided by the simulation can then be processed by a machine
 learning component and then used to: (i) update and adjust the metaheuristic
@@ -1433,116 +1434,116 @@ each elite solution.
 			font=\tiny,
 			align=center
 		]
-		
+
 		% Defining styles
 		\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, text width=3cm, fill=blue!30!white]
-		
+
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-		
+
 		\tikzstyle{io} = [ellipse, minimum width=2cm, text width=2cm, minimum height=1cm, text centered, draw=black, fill=gray!30!white, font=\bf\tiny]
-		
+
 		\tikzstyle{process} = [tape, minimum width=1.5cm, text width=2cm, minimum height=1cm, text centered, draw=black, fill=green!30!white, font=\bf\tiny]
-		
+
 		\tikzstyle{decision} = [diamond, text width=1.5cm, aspect=2, text height=1, text centered, draw=black, fill=yellow!30!white, font=\bf\tiny]
-		
+
 		\tikzstyle{stage} = [rectangle, minimum width=1cm, text width=1cm, minimum height=1cm, draw=black, font=\bf\tiny]
-		
+
 		\tikzstyle{artificial} = [rectangle, draw=white, font=\bf\tiny]
-		
+
 		\tikzstyle{arrow} = [thick,->,>=stealth]
-		
+
 		% Create states
 		\node (start) [startstop] at (0, 0) {Stochastic\\Optimization\\Problem};
-		
+
 		\node (deterministic) [startstop, right of=start, xshift=7cm] {Deterministic\\Optimization\\Problem};
-		
+
 		% Links
 		\draw [arrow] (start) -- node[text width=3cm, fill=white, align=center] {Replacement of Random Elements} (deterministic);
-		
+
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Stage 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 		\node (metaheuristic) [process, below of=deterministic] {Metaheuristic Algorithm};
-		
+
 		\node (deterministic-sol) [io, below of=metaheuristic] {New Deterministic Solution};
 		\node (ml-component) [process, below of=deterministic-sol] {Machine Learning Component};
 		\node (fast-sim-component) [process, below of=ml-component] {Fast Simulation Component};
-		
+
 		\node (promissing-sol) [decision, xshift=-2.5cm, left of=ml-component] {Promissing\\Solution?};
 		\node (surrogate-sol) [decision, xshift=-2.5cm, left of=fast-sim-component] {Surrogate\\Model\\Available?};
-		
+
 		\node (surrogate-component) [process, below of=surrogate-sol] {Surrogate Model};
-		
+
 		\node (update-sol-list) [io, below of=surrogate-component] {Update Solution List};
-		
+
 		\node (available-time) [decision, xshift=-2.5cm, left of=update-sol-list] {Available\\Computation\\Time?};
-		
+
 		% Links
 		\draw [arrow] (deterministic) -- (metaheuristic);
 		\draw [arrow] (metaheuristic) -- (deterministic-sol);
 		\draw [arrow] (deterministic-sol) -- (ml-component);
-		
+
 		\draw [arrow] (ml-component) -- (promissing-sol);
 		\draw [arrow] (promissing-sol) -- node[anchor=east] {yes} (surrogate-sol);
 		\draw [arrow] (promissing-sol) -| node[anchor=south,xshift=2.5cm] {no} (available-time);
-		
+
 		%
 		\draw [arrow] (surrogate-sol) -- node[anchor=east] {yes} (surrogate-component);
 		\draw [arrow] (surrogate-sol) -- node[anchor=north] {no} (fast-sim-component);
-		
+
 		%
 		\draw [arrow] (surrogate-component) -- (update-sol-list);
 		\draw [arrow] (update-sol-list) -- (available-time);
-		
+
 		% 
 		\draw [arrow] (available-time.west) |- node[anchor=west, yshift=-8.5cm] {yes} (metaheuristic);
-		
+
 		% Feedback
 		\node (art1) [artificial, right of=metaheuristic, xshift=0.5cm] {};
-		
+
 		\draw [arrow,dashed,-] (metaheuristic) -- (art1.center);
 		\draw [arrow,dashed] (art1.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=-1.8cm] {Feedback} (ml-component.north east);
-		
+
 		% 
 		\node (art2) [artificial, right of=ml-component, xshift=0.5cm] {};
-		
+
 		\draw [arrow,dashed,-] (ml-component.east) -- (art2.center);
 		\draw [arrow,dashed] (art2.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=-1.9cm] {Feedback} (surrogate-component);
-		
+
 		% 
 		\node (art3) [artificial, right of=fast-sim-component] {};
-		
+
 		\draw [arrow,dashed,-] (fast-sim-component.east) -- (art3.center);
 		\draw [arrow,dashed] (art3.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=0.8cm] {Feedback} (ml-component.south east);
-		
+
 		\node (stage1) [stage, fit=(art1.east) (update-sol-list) (available-time) (deterministic-sol) (start.south west), yshift=-0.5cm] {};
 		\node (art4) [artificial, left of=stage1, rotate=90, yshift=5.5cm] {Stage 1};
-		
+
 		% Second Stage
 		\node (elite-sol) [io, below of=available-time, yshift=-0.75cm] {Elite Stochastic Solutions};
 		\node (intensive-sim-component) [process, below of=update-sol-list, yshift=-0.75cm] {Intensive Simulation Component};
-		
+
 		\draw [arrow] (available-time) -- node[anchor=east, yshift=0.5cm] {no} (elite-sol);
 		\draw [arrow] (elite-sol) -- (intensive-sim-component);
-		
+
 		\node (art5) [artificial, left of=elite-sol, below of=available-time, xshift=0.3cm] {};
 		\node (art6) [artificial, right of=intensive-sim-component, below of=intensive-sim-component, yshift=1.25cm, xshift=4.9cm] {};
-		
+
 		\node (stage2) [stage, fit=(art5) (art6)] {};
 		\node (art7) [artificial, left of=stage2, rotate=90, yshift=5.5cm] {Stage 2};
-		
+
 		% Third stage
 		\node (risk-component) [process, below of=intensive-sim-component, yshift=-0.25cm] {Risk/Reliability\\Component};
 		\draw [arrow] (intensive-sim-component) -- (risk-component);
-		
+
 		\node (art8) [artificial, left of=risk-component, below of=elite-sol, xshift=0.3cm, yshift=0.55cm] {};
 		\node (art9) [artificial, right of=risk-component, below of=risk-component, yshift=1.25cm, xshift=4.9cm] {};
-		
+
 		\node (stage3) [stage, fit=(art8) (art9)] {};
 		\node (art10) [artificial, left of=stage3, rotate=90, yshift=5.5cm] {Stage 3};
-		
+
 		% Final
 		\node (elite-stochastic-sol) [io, below of=risk-component, yshift=-0.5cm] {Elite Stochastic\\Solutions with Probabilistic Information};
-		
+
 		\draw [arrow] (risk-component) -- (elite-stochastic-sol);
 	\end{tikzpicture}
 	\caption{Logic Behind Simheuristics \cite{juan:2022}.}
