@@ -105,12 +105,10 @@ This relaxation is the expensive one in terms of computational demand.
 
 \section{Greedy Heuristic Algorithm for the \gls{cbrp}}\label{sec:greedy-heuristic-algorithm-for-the-cbrp}
 
-The Greedy Heuristic algorithm combines a binary search strategy to determine a high-quality time allocation with a
-knapsack-based block selection and a heuristic routing method. The algorithm operates in two main steps,
-the first step selects blocks to attend based on the number of cases and the second step that tries to
-connect the blocks in an feasible way, ensuring that the total time constraint is satisfied.
+The Greedy Heuristic algorithm combines a binary search strategy to determine a high-quality time allocation with a knapsack-based block selection and a heuristic routing method. The algorithm operates in two main steps, the first step selects blocks to attend based on the number of cases and the second step that tries to connect the blocks in an feasible way, ensuring that the total time constraint is satisfied.
 
-\begin{algorithm}[H]
+\begin{algorithm}[h!]
+	\caption{Greedy Heuristic Algorithm}
 	\SetAlgoLined
 	\KwData{Input instance $I$ with graph $G$, time limit $T$}
 	\KwResult{Solution with objective value $OF$ and block selections $y$}
@@ -130,54 +128,28 @@ connect the blocks in an feasible way, ensuring that the total time constraint i
 	$OF \leftarrow$ \Call{SolveScenario}{$cases$, $time$, $T$, $y$}\;
 
 	\Return{$(OF, y, x, I)$}\;
-	\caption{Greedy Heuristic Algorithm}
 \end{algorithm}
 
 \begin{property}[Optimality of Knapsack Block Selection with Full Time Allocation]
-	When the knapsack problem is used to select blocks with the total time budget $T$,
-	and if the selected blocks can be connected by any feasible route respecting the time limit $T$,
-	then the solution produced by the knapsack is optimal for the \gls{cbrp}.
+	When the knapsack problem is used to select blocks with the total time budget $T$, and if the selected blocks can be connected by any feasible route respecting the time limit $T$, then the solution produced by the knapsack is optimal for the \gls{cbrp}.
 
 	\begin{proof}
 		The classical 0-1 knapsack problem maximizes the total profit
-		(here, the number of cases attended) subject to a total time constraint $T$.
-		The greedy heuristic first solves this knapsack problem to select a subset of blocks
-		whose total time does not exceed $T$ and whose total profit is maximized.
-		If, after this selection, exist at least one possible route to connect the selected
-		blocks within the total time respecting the limit $T$,
-		then there are no additional constraints beyond the knapsack constraint.
-		Therefore, the solution found by the knapsack is not only feasible but also optimal for the \gls{cbrp},
-		as no other selection of blocks can yield a higher profit without exceeding the time limit.
-		Thus, under the assumption of feasible routing, the knapsack solution is optimal.
+		(here, the number of cases attended) subject to a total time constraint $T$. The greedy heuristic first solves this knapsack problem to select a subset of blocks whose total time does not exceed $T$ and whose total profit is maximized. If, after this selection, exist at least one possible route to connect the selected blocks within the total time respecting the limit $T$, then there are no additional constraints beyond the knapsack constraint. Therefore, the solution found by the knapsack is not only feasible but also optimal for the \gls{cbrp}, as no other selection of blocks can yield a higher profit without exceeding the time limit. Thus, under the assumption of feasible routing, the knapsack solution is optimal.
 	\end{proof}
 	\label{property:knapsack-optimal-allocation}
 \end{property}
 
-The SolveScenario subroutine implements a binary search strategy to find a good allocation of time between
-block attendance and routing. The algorithm starts by initializing
-the binary search bounds, with the lower bound $lb$ set to 0.5 and upper bound $ub$
-set to 1.0, representing the fraction of total time $T$ that can be allocated to block attendance.
+The SolveScenario subroutine implements a binary search strategy to find a good allocation of time between block attendance and routing. The algorithm starts by initializing the binary search bounds, with the lower bound $lb$ set to 0.5 and upper bound $ub$ set to 1.0, representing the fraction of total time $T$ that can be allocated to block attendance.
 
-The algorithm first attempts to find a solution using the full time budget $T$ by calling
-BinarySolve with $available\_time = T$. If this succeeds (returning a non-negative objective value),
-the algorithm immediately returns this as an optimal solution based on the
-property~\ref{property:knapsack-optimal-allocation}.
+The algorithm first attempts to find a solution using the full time budget $T$ by calling BinarySolve with $available\_time = T$. If this succeeds (returning a non-negative objective value), the algorithm immediately returns this as an optimal solution based on the property~\ref{property:knapsack-optimal-allocation}.
 
-If the full time allocation is infeasible, the algorithm tries a more conservative approach
-by allocating only 50\% of the total time to block attendance. If this also fails, it adjusts
-the search bounds by setting the upper bound to the current lower bound and the lower bound
-to 0.0, effectively searching in the range [0.0, 0.5]. If the 50\% allocation succeeds, it
-becomes the current best solution and the search continues in the range [0.5, 1.0].
+If the full time allocation is infeasible, the algorithm tries a more conservative approach by allocating only 50\% of the total time to block attendance. If this also fails, it adjusts the search bounds by setting the upper bound to the current lower bound and the lower bound to 0.0, effectively searching in the range [0.0, 0.5]. If the 50\% allocation succeeds, it becomes the current best solution and the search continues in the range [0.5, 1.0].
 
-The binary search loop continues until the search interval becomes sufficiently small (less than 0.001).
-In each iteration, the algorithm calculates the midpoint of the current search interval and
-attempts to solve the problem with that time allocation. If the solution is infeasible
-(BinarySolve returns -1), the upper bound is reduced to the current midpoint. If feasible,
-the solution becomes the new best solution and the lower bound is increased to the current
-midpoint. This process efficiently narrows down to a local optimal time allocation.
+The binary search loop continues until the search interval becomes sufficiently small (less than 0.001). In each iteration, the algorithm calculates the midpoint of the current search interval and attempts to solve the problem with that time allocation. If the solution is infeasible (BinarySolve returns -1), the upper bound is reduced to the current midpoint. If feasible, the solution becomes the new best solution and the lower bound is increased to the current midpoint. This process efficiently narrows down to a local optimal time allocation.
 
-
-\begin{algorithm}[H]
+\begin{algorithm}[h!]
+	\caption{SolveScenario}
 	\SetAlgoLined
 	\KwData{Case counts $cases$, time requirements $time$, time limit $T$}
 	\KwResult{Objective value $OF$ and selected blocks $y$}
@@ -215,25 +187,14 @@ midpoint. This process efficiently narrows down to a local optimal time allocati
 	}
 
 	\Return{$OF$}\;
-	\caption{SolveScenario}
 \end{algorithm}
 
-The BinarySolve subroutine combines knapsack optimization with
-routing feasibility checking to determine the optimal block selection for a given time allocation.
-The knapsack solution selects blocks that maximize the total case count within the allocated attendance
-time. If no blocks can be selected (empty solution), the algorithm returns -1 indicating infeasibility.
+The BinarySolve subroutine combines knapsack optimization with routing feasibility checking to determine the optimal block selection for a given time allocation. The knapsack solution selects blocks that maximize the total case count within the allocated attendance time. If no blocks can be selected (empty solution), the algorithm returns -1 indicating infeasibility.
 
-After obtaining the knapsack solution, the algorithm calculates the total time required to attend
-all selected blocks. This includes the time spent at each block location performing the required activities.
-The routing cost calculation could use a caching mechanism to avoid redundant computations.
-The HeuristicBlockConnection subroutine is called to compute a heuristic minimum routing cost for
-visiting all selected blocks in an sequence.
-Finally, the algorithm performs a feasibility check by verifying that the sum of block attendance
-time and routing cost does not exceed the total time limit $T$. If feasible, it returns the
-objective value, otherwise it returns -1 indicating that the current time allocation is insufficient.
+After obtaining the knapsack solution, the algorithm calculates the total time required to attend all selected blocks. This includes the time spent at each block location performing the required activities. The routing cost calculation could use a caching mechanism to avoid redundant computations. The HeuristicBlockConnection subroutine is called to compute a heuristic minimum routing cost for visiting all selected blocks in an sequence. Finally, the algorithm performs a feasibility check by verifying that the sum of block attendance time and routing cost does not exceed the total time limit $T$. If feasible, it returns the objective value, otherwise it returns -1 indicating that the current time allocation is insufficient.
 
-
-\begin{algorithm}[H]
+\begin{algorithm}[h!]
+	\caption{BinarySolve}
 	\SetAlgoLined
 	\KwData{Case counts $cases$, time requirements $time$, reserved time $reserved\_time$, total time $T$}
 	\KwResult{Objective value $OF$ and selected blocks $y$}
@@ -251,37 +212,24 @@ objective value, otherwise it returns -1 indicating that the current time alloca
 	}
 
 	\tcp{Calculate routing cost}
-	$connection\_cost \leftarrow$ \Call{HeuristicBlockConnection}{$G$, $SP$, $y$}\;
+	$connection\_cost \leftarrow$ \Call{HeuristicBlockConnection}{$G$, $y$}\;
 
 	\tcp{Feasibility check}
 	\If{$block\_attended\_time + connection\_cost \leq T$}{
 		\Return{$OF$}\;
 	}
 	\Return{$-1$}\;
-	\caption{BinarySolve}
 \end{algorithm}
 
-The KnapsackSolve subroutine implements the classic 0-1 knapsack problem using dynamic programming.
-The problem is formulated as selecting a subset of blocks that maximizes the total cases addressed
-while respecting the time constraint. The algorithm initializes a two-dimensional \gls{dp} table
-$dp[n+1][MT+1]$ where $dp[i][w]$ represents the
-maximum cases that can be addressed using the first $i$ blocks with a time capacity of $w$. The table
-is initialized with zeros, representing the base case where no blocks are selected.
+The KnapsackSolve subroutine implements the classic 0-1 knapsack problem using dynamic programming. The problem is formulated as selecting a subset of blocks that maximizes the total cases addressed while respecting the time constraint. The algorithm initializes a two-dimensional \gls{dp} table $dp[n+1][MT+1]$ where $dp[i][w]$ represents the maximum cases that can be addressed using the first $i$ blocks with a time capacity of $w$. The table is initialized with zeros, representing the base case where no blocks are selected.
 
-The \gls{dp} table is filled using the standard knapsack recurrence relation. For each block $i$ and time
-capacity $w$, the algorithm considers two options: either include block $i$ (if its time requirement
-fits within the remaining capacity) or exclude it. The optimal choice is the one that maximizes the
-total cases addressed. The recurrence relation is:
-$dp[i][w] = \max(dp[i-1][w], dp[i-1][w-time[i-1]] + cases[i-1])$ if $time[i-1] \leq w$,
-otherwise $dp[i][w] = dp[i-1][w]$.
-This ensures that each block is considered at most once and the time constraint is respected.
+The \gls{dp} table is filled using the standard knapsack recurrence relation. For each block $i$ and time capacity $w$, the algorithm considers two options: either include block $i$ (if its time requirement fits within the remaining capacity) or exclude it. The optimal choice is the one that maximizes the total cases addressed. The recurrence relation is: $dp[i][w] = \max(dp[i-1][w], dp[i-1][w-time[i-1]] + cases[i-1])$ if $time[i-1] \leq w$, otherwise $dp[i][w] = dp[i-1][w]$. This ensures that each block is considered at most once and the time constraint is respected.
 
-After filling the \gls{dp} table, the algorithm backtracks to reconstruct the actual solution. Starting from
-the maximum time capacity $MT$ and the last block $n$, it checks if including block $i$ contributed to
-the optimal solution by comparing $dp[i][w]$ with $dp[i-1][w]$. If they differ, block $i-1$ is added to
+After filling the \gls{dp} table, the algorithm backtracks to reconstruct the actual solution. Starting from the maximum time capacity $MT$ and the last block $n$, it checks if including block $i$ contributed to the optimal solution by comparing $dp[i][w]$ with $dp[i-1][w]$. If they differ, block $i-1$ is added to
 the solution and the remaining capacity is reduced accordingly.
 
-\begin{algorithm}[H]
+\begin{algorithm}[h!]
+	\caption{KnapsackSolve}
 	\SetAlgoLined
 	\KwData{Selected blocks $y$, case counts $cases$, time requirements $time$, maximum time $MT$}
 	\KwResult{Maximum objective value $OF$}
@@ -311,34 +259,18 @@ the solution and the remaining capacity is reduced accordingly.
 	}
 
 	\Return{$dp[n][MT]$}\;
-	\caption{KnapsackSolve}
 \end{algorithm}
 
-The HeuristicBlockConnection subroutine solves the routing problem
-for visiting all selected blocks using a heuristic approach. This
-is essentially a variant of the \gls{tsp}
-where the goal is to find the minimum cost route that visits at least one node from all
-selected blocks.
-The algorithm first handles the trivial case where only one block is selected.
-In this case, no routing is needed, so the cost is zero and the path simply
-goes from the depot to the block and back to the depot.
+The HeuristicBlockConnection subroutine solves the routing problem for visiting all selected blocks using a heuristic approach. This is essentially a variant of the \gls{tsp} where the goal is to find the minimum cost route that visits at least one node from all selected blocks. The algorithm first handles the trivial case where only one block is selected. In this case, no routing is needed, so the cost is zero and the path simply goes from the depot to the block and back to the depot.
 
-For multiple blocks, the algorithm uses a heuristic approach that tries
-different block orderings to find a good solution. The heuristic considers
-two different block sequence strategies ($block\_seq = 0$ and $block\_seq = 1$)
-and four different sorting options ($sort\_opt = 0$ to $3$) for each strategy.
+% TODO: from here
 
-For each combination of block sequence and sorting option, the algorithm:
-\begin{enumerate}
-	\item Orders the blocks according to the selected sorting criterion
-	\item Uses the shortest path calculator to find the optimal route visiting blocks in the determined order
-	\item Calculates the total routing cost for this ordering
-	\item Updates the best solution if a better cost is found
-\end{enumerate}
+Besides the sequence of blocks, the heuristic also defines the route connecting those blocks and which node attends to each block. The algorithm uses a heuristic approach that variates the block sequence (sorting option) and the distance considered between the blocks (the small shortest path between each pair of blocks or the shortest path between the selected node of the previous block and the selected node of the next block).
 
-The algorithm maintains the best solution found across all combinations.
+For each combination of block sequence and sorting option, the algorithm sort the blocks according to the selected sorting criterion, uses the shortest path calculator to find the feasible route visiting blocks in the determined order, then calculates the total routing cost for this ordering and updates the best solution if a better cost is found. The algorithm maintains the best solution found across all combinations.
 
-\begin{algorithm}[H]
+\begin{algorithm}[h!]
+	\caption{HeuristicBlockConnection}
 	\SetAlgoLined
 	\KwData{Graph $G$, shortest path calculator $SP$, selected blocks $blocks$}
 	\KwResult{Routing cost for visiting all blocks}
@@ -353,10 +285,10 @@ The algorithm maintains the best solution found across all combinations.
 	$best\_path \leftarrow$ empty\;
 
 	\tcp{Try different block orderings}
-	\For{$block\_seq = 0$ \textbf{to} $1$}{
-		\For{$sort\_opt = 0$ \textbf{to} $3$}{
-			$ordered\_blocks \leftarrow$ sort blocks according to $sort\_opt$\;
-			$path \leftarrow$ \Call{FindShortestPath}{$G$, $SP$, $ordered\_blocks$}\;
+	\For{$block\_seq = 1$ \textbf{to} $2$}{
+		\For{$sort\_opt = 1$ \textbf{to} $4$}{
+			$ordered\_blocks \leftarrow$ \Call{GetBestBlockOrder}{$blocks$, $sort\_opt$, $block\_seq$}\;
+			$path \leftarrow$ \Call{GetBestPath}{$G$, $SP$, $ordered\_blocks$}\;
 			$cost \leftarrow$ calculate total routing cost\;
 			\If{$cost < best\_cost$}{
 				$best\_cost \leftarrow cost$\;
@@ -364,9 +296,113 @@ The algorithm maintains the best solution found across all combinations.
 			}
 		}
 	}
-
 	\Return{$best\_cost$, $best\_path$}\;
-	\caption{HeuristicBlockConnection}
+\end{algorithm}
+
+Algorithm~\ref{alg:best-order-blocks} presents a greedy constructive heuristic for determining the order in which blocks should be visited. Given a set of blocks $\mathcal{B} = \{b_1, b_2, \ldots, b_m\}$ and a sorting option $\sigma$, the algorithm constructs an ordered sequence $\mathcal{B}' = \langle b'_1, b'_2, \ldots, b'_m \rangle$ that minimizes the total travel distance between consecutive blocks.
+
+The algorithm begins by applying an initial sorting criterion to the blocks based on the parameter $\sigma$. When $\sigma = 0$, blocks are sorted in ascending order by their cumulative hop distance, prioritizing blocks that are generally closer to other blocks in the network. For $\sigma = 1$, blocks are sorted in descending order by the number of nodes they contain, favoring larger blocks that offer more routing flexibility. When $\sigma = 2$, blocks are sorted by their count of zero-hop nodes in descending order, emphasizing blocks with high internal connectivity.
+
+Following the initial sorting, the algorithm employs a greedy strategy to iteratively construct the block visitation sequence. The first block in the sorted list is selected as the starting point, and a reference node from this block is identified as having the minimum hop distance to the next unvisited block. In subsequent iterations, the algorithm evaluates all remaining unvisited blocks and selects the one with the minimum shortest path distance from the current reference node. When multiple blocks have equal distances, ties are broken by preferring blocks with larger numbers of nodes, as these provide greater flexibility in path construction. The reference node is then updated to the closest node in the newly selected block, and this process continues until all blocks have been ordered.
+
+\begin{algorithm}[h!]
+	\caption{Greedy Block Ordering Heuristic}
+	\label{alg:best-order-blocks}
+	
+	\KwIn{Set of blocks $\mathcal{B}$; sorting option $\sigma$}
+	\KwOut{Ordered sequence of blocks $\mathcal{B}'$}
+
+	Sort $\mathcal{B}$ according to $\sigma$\;
+	Initialize $\mathcal{B}' \gets \langle~\rangle$\;
+	Choose starting block and its reference node based on proximity to the next block\;
+	\While{there are unvisited blocks}{
+		From current reference node, select next block $b$ minimizing distance from reference (break ties by largest block)\;
+		Update reference node to closest node in $b$\;
+		Append $b$ to $\mathcal{B}'$ and mark as visited\;
+	}
+	\Return{$\mathcal{B}'$}\;
+
+\end{algorithm}
+
+The time complexity of Algorithm~\ref{alg:best-order-blocks} is $\mathcal{O}(m^2 \cdot n_{\max} + m \log m)$, where $m = |\mathcal{B}|$ is the number of blocks and $n_{\max} = \max_{b \in \mathcal{B}} |\mathcal{N}_b|$ is the maximum block size. The $m \log m$ term accounts for the initial sorting operation, while the $m^2 \cdot n_{\max}$ term represents the nested iterations over unvisited blocks and their constituent nodes during the greedy construction phase.
+
+Algorithm~\ref{alg:create-layered-dag} constructs a \gls{dag} to represent the problem of connecting a sequence of blocks in the graph. Given an ordered sequence of blocks $\mathcal{B} = \{b_1, b_2, \ldots, b_m\}$ to visit, the algorithm creates a multi-layered \gls{dag} where each layer $i$ corresponds to block $b_i$ and contains a vertex for each node in that block.
+
+The \gls{dag} structure facilitates efficient path computation by creating explicit layers where layer $i$ contains all nodes belonging to block $b_i$, and connecting every vertex in layer $i$ to every vertex in layer $i+1$ with arc weights equal to the shortest path distance between the corresponding graph nodes. Additionally, a dummy source depot (vertex $|V_{DAG}|$) is connected to all vertices in the first layer, and a dummy sink depot (vertex $|V_{DAG}|+1$) is connected from all vertices in the last layer to ensure proper path initialization and termination.
+
+The resulting \gls{dag} has $|V_{DAG}| = \sum_{i=1}^{m} |\mathcal{N}_{b_i}|$ vertices (excluding depots), where $\mathcal{N}_{b_i}$ denotes the set of nodes in block $b_i$. The mapping function $\phi: V_{DAG} \rightarrow V \cup \{\text{depot}\}$ maintains the correspondence between \gls{dag} vertices and original graph vertices. A shortest path from source to sink in this \gls{dag} corresponds to an optimal traversal through the blocks in the specified order, where each block is visited exactly once by selecting one of its constituent nodes.
+
+The time complexity of Algorithm~\ref{alg:create-layered-dag} is $\mathcal{O}(m \cdot n_{\max}^2 \cdot T_{SP})$, where $n_{\max} = \max_{i} |\mathcal{N}_{b_i}|$ is the maximum block size and $T_{SP}$ is the time complexity of the shortest path computation between two nodes.
+
+\begin{algorithm}[h!]
+	\caption{Create Layered Directed Acyclic Graph for Block Connection}
+	\label{alg:create-layered-dag}
+	
+	\KwIn{$\mathcal{B} = \{b_1, b_2, \ldots, b_m\}$: ordered sequence of blocks to visit}
+	\KwOut{$G_{DAG} = (V_{DAG}, A_{DAG})$: layered directed acyclic graph\\
+	\phantom{Output: }$\phi$: mapping from DAG vertices to graph vertices\\
+	\phantom{Output: }$|V_{DAG}|$: number of vertices in the DAG (excluding depots)}
+	
+	\tcp{Initialize vertex counter and retrieve block information}
+	$|V_{DAG}| \gets 0$\;
+	$\mathcal{N}_b \gets$ nodes per block from graph\;
+	$A_{DAG} \gets \emptyset$\;
+	
+	\tcp{Calculate total number of vertices in DAG}
+	\For{$i \gets 1$ \KwTo $m$}{
+		$|V_{DAG}| \gets |V_{DAG}| + |\mathcal{N}_{b_i}|$\;
+	}
+	
+	\tcp{Initialize DAG structure with source and sink depots}
+	Initialize $G_{DAG}$ with $|V_{DAG}| + 2$ vertices\;
+	$\phi(|V_{DAG}|) \gets \text{depot}$\;
+	$\phi(|V_{DAG}| + 1) \gets \text{depot}$\;
+	
+	\tcp{Construct layered structure}
+	$v_{offset} \gets 0$ \tcp*{Track vertex position in DAG}
+	
+	\For{$i \gets 1$ \KwTo $m-1$}{
+		$b_{\text{curr}} \gets b_i$\;
+		$b_{\text{next}} \gets b_{i+1}$\;
+		$v_j \gets v_{offset}$ \tcp*{Starting vertex index for layer $i$}
+		$v_k \gets v_{offset} + |\mathcal{N}_{b_{\text{curr}}}|$ \tcp*{Starting vertex index for layer $i+1$}
+		
+		\tcp{Create arcs between consecutive layers}
+		\ForEach{$n_j \in \mathcal{N}_{b_{\text{curr}}}$}{
+			\tcp{Connect source depot to first layer}
+			\If{$i = 1$}{
+				$A_{DAG} \gets A_{DAG} \cup \{(|V_{DAG}|, v_j, 0)\}$\;
+			}
+			
+			$\phi(v_j) \gets n_j$ \tcp*{Map DAG vertex to graph vertex}
+			$v'_k \gets v_k$\;
+			
+			\ForEach{$n_k \in \mathcal{N}_{b_{\text{next}}}$}{
+				$\phi(v'_k) \gets n_k$\;
+				
+				\tcp{Compute arc weight as shortest path length}
+				\eIf{$n_j = n_k$}{
+					$w \gets 0$\;
+				}{
+					$w \gets \text{ShortestPath}(n_j, n_k)$\;
+				}
+				
+				$A_{DAG} \gets A_{DAG} \cup \{(v_j, v'_k, w)\}$\;
+				
+				\tcp{Connect last layer to sink depot}
+				\If{$i = m - 1$}{
+					$A_{DAG} \gets A_{DAG} \cup \{(v'_k, |V_{DAG}| + 1, 0)\}$\;
+				}
+				
+				$v'_k \gets v'_k + 1$\;
+			}
+			
+			$v_j \gets v_j + 1$\;
+		}
+		
+		$v_{offset} \gets v_{offset} + |\mathcal{N}_{b_{\text{curr}}}|$\;
+	}
+	\Return{$G_{DAG}, \phi, |V_{DAG}|$}\;
 \end{algorithm}
 
 
