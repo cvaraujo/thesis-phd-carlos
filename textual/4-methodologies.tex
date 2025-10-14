@@ -99,13 +99,13 @@ constraints~\eqref{eq:arc-time-constraints} and~\eqref{eq:block-time-constraints
 The resulting subproblems in the \gls{lpp} are \gls{kn} and \gls{rcsp} problems.
 This relaxation is the expensive one in terms of computational demand.
 
-\section{Deterministic \gls{cbrp} Heuristics}\label{sec:deterministic-heuristics}
+\section{Deterministic \gls{cbrp} Heuristic}\label{sec:deterministic-heuristics}
 
 This section present the heuristic approaches to solve the \gls{cbrp} in its deterministic version. The constructive heuristic of section~\ref{sec:greedy-constructive-algorithm} is a generic approach that can be used to solve the \gls{cbrp} also in its stochastic version.
 
 \newcommand{\Call}[2]{\textit{#1}(#2)}
 
-\section{Greedy Constructive Algorithm}\label{sec:greedy-constructive-algorithm}
+\subsection{Greedy Constructive Algorithm}\label{sec:greedy-constructive-algorithm}
 
 The Greedy Constructive algorithm combines a binary search strategy to determine a high-quality time allocation with a \gls{kn}-based block selection and a heuristic routing method based on shortest paths in a \gls{dag}. The algorithm operates within three main steps: initially selects blocks to attend maximizing the profit per block, then defines a sequence for visiting all blocks of the previous step and, finally, create a route connecting those blocks in the selected order and check if it is feasible within the total time constraint.
 
@@ -617,7 +617,57 @@ Figure~\ref{fig:layered-dag-adaptation} presents an example of the adaptation fo
 	\Return{$\mathcal{B}'$}\;
 \end{algorithm}
 
-\section{Stochastic Heuristics}\label{sec:stochastic-heuristics}
+\section{Stochastic \gls{cbrp} Heuristics}\label{sec:stochastic-heuristics}
+
+This section presents the stochastic heuristics for the \gls{cbrp}. The heuristics are divided into three main sections: constructive, local search and a metaheuristic based on simulated annealing.
+
+The first step is to highlight the similarities between the deterministic and stochastic versions of the \gls{cbrp}. Considering the formulation Path-SCBRP, presented in Section~\ref{sec:cbrp-stochastic-models}, the first relevant property is that the stochastic version of the problem is a set of $k = |S|$ independent \gls{cbrp} instances, one for each scenario $s \in S$ considering a fixed first stage solution. Therefore, it is possible to use deterministic approaches to solve stages and scenarios independently.
+
+\subsection{Constructive Heuristic}
+
+Considering that the first stage and the scenarios of the second stage could be solve independently, the initial solution for the \gls{scbrp} could use the constructive heuristic presented in Section~\ref{sec:greedy-constructive-algorithm}. More details about the constructive heuristic are presented in Section~\ref{sec:greedy-constructive-algorithm}.
+
+
+\begin{algorithm}[h!]
+	\caption{Create Initial Solution}
+	\SetAlgoLined
+	\KwData{graph $G$, scenarios $S$, time limit $T$, blocks $B$, reduction factor $\alpha$, first-stage profit $p_b^{0}$, scenario profit $p_b^{\omega}$}
+	\KwResult{Solution with first-stage route and scenario-specific routes}
+	
+	$solution \leftarrow \text{new Solution}(Input)$\;
+	
+	$cases\_per\_block \leftarrow \text{vector of size } |B|$\;
+	$time\_per\_block \leftarrow \text{vector of size } B$\;
+	
+	\tcp{Set first-stage profit values for all blocks}
+	\For{$b = 1$ \textbf{to} $|B|$}{
+		$cases\_per\_block[b] \leftarrow p_{b}^{0} + \alpha \sum_{\omega \in \Omega} \xi^{\omega} p_{b}^{\omega}$\;	
+	}
+
+	\tcp{Solve first stage using greedy heuristic and add to solution}
+	$first\_stage\_of \leftarrow \Call{GreedyConstructiveAlgorithm}{cases\_per\_block, T, y_0}$\;
+	Add first-stage allocation and route to solution\;
+	
+	\tcp{Solve Second Stage Problems for each scenario}
+	\For{$s = 1$ \textbf{to} $S$}{
+		\tcp{Adjust scenario costs based on first-stage solution}
+		\For{$b = 1$ \textbf{to} $|B|$}{
+			\uIf{$y_b^{0} = 1$}{
+				$cases\_per\_block[b] \leftarrow (1 - \alpha) p_{b}^{s}$\;
+			}\Else{
+				$cases\_per\_block[b] \leftarrow p_{b}^{s}$\;
+			}
+		}
+		$scn\_of \leftarrow \Call{GreedyConstructiveAlgorithm}{cases\_per\_block, T, y_s}$\;
+		Add scenario allocation and route to solution\;
+		$scn\_of \leftarrow \xi^{s} \times scn\_of$\;
+	}
+	\Return{$solution$}\;
+	\end{algorithm}
+
+\subsection{Local Search Heuristic}
+
+\subsection{Simulated Annealing Heuristic}
 
 \section{Dengue Virus Spread Simulation}\label{sec:dengue-virus-spread-simulation}
 
@@ -1031,8 +1081,6 @@ data-driven risk mapping to prioritize high-risk zones, and \textit{(iii)} ad
 hoc resource allocation that overlooks transmission dynamics. Consequently,
 interventions often occur too late to curb outbreaks effectively, perpetuating
 cycles of suboptimal public health outcomes.
-
-
 
 \section{Statistical Analysis of Results}\label{subsec:statistical-analysis}
 
