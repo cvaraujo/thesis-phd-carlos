@@ -623,10 +623,147 @@ This section presents the stochastic heuristics for the \gls{cbrp}. The heuristi
 
 The first step is to highlight the similarities between the deterministic and stochastic versions of the \gls{cbrp}. Considering the formulation Path-SCBRP, presented in Section~\ref{sec:cbrp-stochastic-models}, the first relevant property is that the stochastic version of the problem is a set of $k = |S|$ independent \gls{cbrp} instances, one for each scenario $s \in S$ considering a fixed first stage solution. Therefore, it is possible to use deterministic approaches to solve stages and scenarios independently.
 
+\begin{figure}[h!]
+	\centering
+	\begin{tikzpicture}
+		[
+			node distance=1.9cm, % distance between nodes
+			font=\tiny,
+			align=center
+		]
+
+		% Defining styles
+		\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, text width=3cm, fill=blue!30!white]
+
+		%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+		\tikzstyle{io} = [ellipse, minimum width=2cm, text width=2cm, minimum height=1cm, text centered, draw=black, fill=gray!30!white, font=\bf\tiny]
+
+		\tikzstyle{process} = [tape, minimum width=1.5cm, text width=2cm, minimum height=1cm, text centered, draw=black, fill=green!30!white, font=\bf\tiny]
+
+		\tikzstyle{decision} = [diamond, text width=1.5cm, aspect=2, text height=1, text centered, draw=black, fill=yellow!30!white, font=\bf\tiny]
+
+		\tikzstyle{stage} = [rectangle, minimum width=1cm, text width=1cm, minimum height=1cm, draw=black, font=\bf\tiny]
+
+		\tikzstyle{artificial} = [rectangle, draw=white, font=\bf\tiny]
+
+		\tikzstyle{arrow} = [thick,->,>=stealth]
+
+		% Create states
+		\node (start) [process] at (0, 0) {Greedy Deterministic Heuristic\\for each scenario};
+
+		\node (ls_in_route) [process, below of=start, xshift=-5cm] {In Route Swap};
+		\node (ls_out_route) [process, right of=ls_in_route, xshift=1cm] {Out Route Swap};
+		\node (ls_add_block) [process, right of=ls_out_route, xshift=1cm] {Add Block to Route};
+		\node (ls_remove_block) [process, right of=ls_add_block, xshift=1cm] {Remove Block from Route};
+		\node (ls_route_improvement) [process, right of=ls_remove_block, xshift=1cm] {Route Improvement};
+
+		\node (swap_random) [startstop, below of=ls_route_improvement, xshift=-5cm] {Swap Random Block};
+		\node (swap_first) [startstop, right of=swap_random, xshift=1cm] {Swap First Improve};
+		\node (swap_best) [startstop, right of=swap_first, xshift=1cm] {Swap Best Improve};
+
+
+
+		% \node (deterministic) [startstop, right of=start, xshift=7cm] {Deterministic\\Optimization\\Problem};
+
+		% % Links
+		% \draw [arrow] (start) -- node[text width=3cm, fill=white, align=center] {Replacement of Random Elements} (deterministic);
+
+		% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Stage 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+		% \node (metaheuristic) [process, below of=deterministic] {Metaheuristic Algorithm};
+
+		% \node (deterministic-sol) [io, below of=metaheuristic] {New Deterministic Solution};
+		% \node (ml-component) [process, below of=deterministic-sol] {Machine Learning Component};
+		% \node (fast-sim-component) [process, below of=ml-component] {Fast Simulation Component};
+
+		% \node (promissing-sol) [decision, xshift=-2.5cm, left of=ml-component] {Promissing\\Solution?};
+		% \node (surrogate-sol) [decision, xshift=-2.5cm, left of=fast-sim-component] {Surrogate\\Model\\Available?};
+
+		% \node (surrogate-component) [process, below of=surrogate-sol] {Surrogate Model};
+
+		% \node (update-sol-list) [io, below of=surrogate-component] {Update Solution List};
+
+		% \node (available-time) [decision, xshift=-2.5cm, left of=update-sol-list] {Available\\Computation\\Time?};
+
+		% % Links
+		% \draw [arrow] (deterministic) -- (metaheuristic);
+		% \draw [arrow] (metaheuristic) -- (deterministic-sol);
+		% \draw [arrow] (deterministic-sol) -- (ml-component);
+
+		% \draw [arrow] (ml-component) -- (promissing-sol);
+		% \draw [arrow] (promissing-sol) -- node[anchor=east] {yes} (surrogate-sol);
+		% \draw [arrow] (promissing-sol) -| node[anchor=south,xshift=2.5cm] {no} (available-time);
+
+		% %
+		% \draw [arrow] (surrogate-sol) -- node[anchor=east] {yes} (surrogate-component);
+		% \draw [arrow] (surrogate-sol) -- node[anchor=north] {no} (fast-sim-component);
+
+		% %
+		% \draw [arrow] (surrogate-component) -- (update-sol-list);
+		% \draw [arrow] (update-sol-list) -- (available-time);
+
+		% % 
+		% \draw [arrow] (available-time.west) |- node[anchor=west, yshift=-8.5cm] {yes} (metaheuristic);
+
+		% % Feedback
+		% \node (art1) [artificial, right of=metaheuristic, xshift=0.5cm] {};
+
+		% \draw [arrow,dashed,-] (metaheuristic) -- (art1.center);
+		% \draw [arrow,dashed] (art1.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=-1.8cm] {Feedback} (ml-component.north east);
+
+		% % 
+		% \node (art2) [artificial, right of=ml-component, xshift=0.5cm] {};
+
+		% \draw [arrow,dashed,-] (ml-component.east) -- (art2.center);
+		% \draw [arrow,dashed] (art2.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=-1.9cm] {Feedback} (surrogate-component);
+
+		% % 
+		% \node (art3) [artificial, right of=fast-sim-component] {};
+
+		% \draw [arrow,dashed,-] (fast-sim-component.east) -- (art3.center);
+		% \draw [arrow,dashed] (art3.center) |- node[text width=1cm, fill=white, align=center, rotate=270, xshift=0.8cm] {Feedback} (ml-component.south east);
+
+		% \node (stage1) [stage, fit=(art1.east) (update-sol-list) (available-time) (deterministic-sol) (start.south west), yshift=-0.5cm] {};
+		% \node (art4) [artificial, left of=stage1, rotate=90, yshift=5.5cm] {Stage 1};
+
+		% % Second Stage
+		% \node (elite-sol) [io, below of=available-time, yshift=-0.75cm] {Elite Stochastic Solutions};
+		% \node (intensive-sim-component) [process, below of=update-sol-list, yshift=-0.75cm] {Intensive Simulation Component};
+
+		% \draw [arrow] (available-time) -- node[anchor=east, yshift=0.5cm] {no} (elite-sol);
+		% \draw [arrow] (elite-sol) -- (intensive-sim-component);
+
+		% \node (art5) [artificial, left of=elite-sol, below of=available-time, xshift=0.3cm] {};
+		% \node (art6) [artificial, right of=intensive-sim-component, below of=intensive-sim-component, yshift=1.25cm, xshift=4.9cm] {};
+
+		% \node (stage2) [stage, fit=(art5) (art6)] {};
+		% \node (art7) [artificial, left of=stage2, rotate=90, yshift=5.5cm] {Stage 2};
+
+		% % Third stage
+		% \node (risk-component) [process, below of=intensive-sim-component, yshift=-0.25cm] {Risk/Reliability\\Component};
+		% \draw [arrow] (intensive-sim-component) -- (risk-component);
+
+		% \node (art8) [artificial, left of=risk-component, below of=elite-sol, xshift=0.3cm, yshift=0.55cm] {};
+		% \node (art9) [artificial, right of=risk-component, below of=risk-component, yshift=1.25cm, xshift=4.9cm] {};
+
+		% \node (stage3) [stage, fit=(art8) (art9)] {};
+		% \node (art10) [artificial, left of=stage3, rotate=90, yshift=5.5cm] {Stage 3};
+
+		% % Final
+		% \node (elite-stochastic-sol) [io, below of=risk-component, yshift=-0.5cm] {Elite Stochastic\\Solutions with Probabilistic Information};
+
+		% \draw [arrow] (risk-component) -- (elite-stochastic-sol);
+	\end{tikzpicture}
+	\caption{Logic Behind Simheuristics \cite{juan:2022}.}
+	\label{fig:logic-simheuristics}
+\end{figure}
+
 \subsection{Constructive Heuristic}
 
 Considering that the first stage and the scenarios of the second stage could be solve independently, the initial solution for the \gls{scbrp} could use the constructive heuristic presented in Section~\ref{sec:greedy-constructive-algorithm}. More details about the constructive heuristic are presented in Section~\ref{sec:greedy-constructive-algorithm}.
 
+The initial solution heuristic for the \gls{scbrp} is based on a two-stage approach that leverages deterministic greedy algorithms. In the first stage, all blocks are assigned adjusted profit values that combine both the nominal (first-stage) and scenario-based (second-stage) profits for each block, weighted by the reduction factor $\alpha$ and scenario probabilities. The greedy constructive algorithm is then used to generate a feasible first-stage route that maximizes the aggregated profit while respecting the time constraint. Subsequently, for each scenario, the algorithm solves an independent routing problem where the profits associated with first-stage-visited blocks are appropriately reduced, reflecting the fact that those blocks have already been serviced. The greedy constructive algorithm is applied to each scenario with these adjusted profit values, producing scenario-specific routes. The overall solution consists of the first-stage routing plan together with a collection of scenario-dependent second-stage routes, thus providing a complete and feasible plan for the \gls{scbrp}.
 
 \begin{algorithm}[h!]
 	\caption{Create Initial Solution}
@@ -663,7 +800,7 @@ Considering that the first stage and the scenarios of the second stage could be 
 		$scn\_of \leftarrow \xi^{s} \times scn\_of$\;
 	}
 	\Return{$solution$}\;
-	\end{algorithm}
+\end{algorithm}
 
 \subsection{Local Search Heuristic}
 
