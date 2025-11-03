@@ -2,3 +2,68 @@
 \label{chp:deterministic-methodologies-and-results}
 
 This chapter presents the deterministic methodologies used in this work and the results obtained.
+
+\definecolor{rowgrey}{HTML}{c0c0c0}
+\definecolor{rowlight}{HTML}{efefef}
+\begin{table}[ht!]
+    \centering
+    \caption{Results of the Model Path-CBRP.}
+    \label{tab:results-det-path-cbrp-exp}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lrrrrrrrrrrrr}
+    \toprule
+    \multicolumn{1}{c}{\textbf{Instance}} &
+      \multicolumn{1}{c}{\textbf{|V|}} &
+      \multicolumn{1}{c}{\textbf{|A|}} &
+      \multicolumn{1}{c}{\textbf{|B|}} &
+      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}} &
+      \multicolumn{1}{c}{\textbf{LB}} &
+      \multicolumn{1}{c}{\textbf{UB}} &
+      \multicolumn{1}{c}{\textbf{gap (\%)}} &
+      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}} &
+      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Frac.\\ Cuts\end{tabular}}} &
+      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}} &
+      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Solution\\ Time(m)\end{tabular}}} &
+      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ time (s)\end{tabular}}} \\ \midrule
+    \rowcolor{rowgrey}alto-santo-1000-1 & 179  & 524  & 84  & 19 & 39  & 39  & 0,00  & 28      & 0 & 100   & 765  & 0,23    \\
+    \rowcolor{rowgrey}alto-santo-1000-2 & 179  & 524  & 84  & 39 & 240 & 240 & 0,00  & 367378  & 0 & 726   & 1198 & 442,08  \\
+    \rowcolor{rowgrey}alto-santo-1000-3 & 179  & 524  & 84  & 39 & 247 & 247 & 0,00  & 7483    & 0 & 536   & 1198 & 15,50   \\
+    \rowcolor{rowgrey}alto-santo-1000-4 & 179  & 524  & 84  & 39 & 254 & 254 & 0,00  & 9876    & 0 & 597   & 1198 & 20,59   \\
+    \rowcolor{rowgrey}alto-santo-1000-5 & 179  & 524  & 84  & 39 & 270 & 270 & 0,00  & 234995  & 0 & 632   & 1198 & 253,44  \\
+    \rowcolor{rowgrey}alto-santo-1000-6 & 179  & 524  & 84  & 39 & 321 & 321 & 0,00  & 1033422 & 0 & 503   & 1200 & 730,57  \\
+    \rowcolor{rowgrey}alto-santo-2000-1 & 253  & 710  & 102 & 19 & 39  & 39  & 0,00  & 1       & 0 & 88    & 759  & 0,16    \\
+    \rowcolor{rowgrey}alto-santo-2000-2 & 253  & 710  & 102 & 34 & 248 & 248 & 0,00  & 20321   & 0 & 421   & 1200 & 32,89   \\
+    \rowcolor{rowgrey}alto-santo-2000-3 & 253  & 710  & 102 & 34 & 253 & 253 & 0,00  & 214446  & 0 & 348   & 1200 & 220,83  \\
+    \rowcolor{rowgrey}alto-santo-2000-4 & 253  & 710  & 102 & 32 & 260 & 260 & 0,00  & 259037  & 0 & 248   & 1198 & 211,09  \\
+    \rowcolor{rowgrey}alto-santo-2000-5 & 253  & 710  & 102 & 32 & 277 & 277 & 0,00  & 240919  & 0 & 339   & 1200 & 267,51  \\
+    \rowcolor{rowgrey}alto-santo-2000-6 & 253  & 710  & 102 & 33 & 327 & 327 & 0,00  & 1017152 & 0 & 410   & 1200 & 1114,31 \\
+    \rowcolor{rowgrey}alto-santo-3000-1 & 353  & 964  & 128 & 19 & 39  & 39  & 0,00  & 25209   & 0 & 253   & 1191 & 71,54   \\
+    \rowcolor{rowgrey}alto-santo-3000-2 & 353  & 964  & 128 & 34 & 248 & 248 & 0,00  & 12269   & 0 & 420   & 1199 & 33,95   \\
+    \rowcolor{rowgrey}alto-santo-3000-3 & 353  & 964  & 128 & 34 & 253 & 253 & 0,00  & 206261  & 0 & 470   & 1198 & 214,77  \\
+    \rowcolor{rowgrey}alto-santo-3000-4 & 353  & 964  & 128 & 34 & 260 & 260 & 0,00  & 862246  & 0 & 457   & 1200 & 984,20  \\
+    \rowcolor{rowgrey}alto-santo-3000-5 & 353  & 964  & 128 & 34 & 277 & 277 & 0,00  & 271522  & 0 & 500   & 1199 & 300,22  \\
+    \rowcolor{rowgrey}alto-santo-3000-6 & 353  & 964  & 128 & 34 & 327 & 327 & 0,00  & 946477  & 0 & 516   & 1200 & 1052,62 \\ \midrule
+    \rowcolor{rowlight}limoeiro-1000-1   & 400  & 1260 & 231 & 36 & 53  & 54  & 1,85  & 1035600 & 0 & 3186  & 1199 & 3600,02 \\
+    \rowcolor{rowlight}limoeiro-1000-2   & 400  & 1260 & 231 & 37 & 67  & 69  & 2,90  & 1184828 & 0 & 1619  & 1199 & 3600,04 \\
+    \rowcolor{rowlight}limoeiro-1000-3   & 400  & 1260 & 231 & 38 & 109 & 112 & 2,68  & 1336537 & 0 & 2041  & 1200 & 3600,06 \\
+    \rowcolor{rowlight}limoeiro-1000-4   & 400  & 1260 & 231 & 39 & 111 & 113 & 1,77  & 1518429 & 0 & 1562  & 1196 & 3600,02 \\
+    \rowcolor{rowlight}limoeiro-1000-5   & 400  & 1260 & 231 & 37 & 139 & 142 & 2,11  & 1561327 & 0 & 1308  & 1200 & 3600,01 \\
+    \rowcolor{rowlight}limoeiro-1000-6   & 400  & 1260 & 231 & 37 & 398 & 409 & 2,69  & 1291151 & 0 & 1654  & 1199 & 3600,01 \\
+    \rowcolor{rowlight}limoeiro-1000-7   & 400  & 1260 & 231 & 37 & 424 & 434 & 2,30  & 1270405 & 0 & 2013  & 1200 & 3600,03 \\
+    \rowcolor{rowlight}limoeiro-2000-1   & 1008 & 3112 & 549 & 37 & 61  & 69  & 11,59 & 762812  & 0 & 8194  & 1198 & 3600,05 \\
+    \rowcolor{rowlight}limoeiro-2000-2   & 1008 & 3112 & 549 & 33 & 91  & 103 & 11,65 & 806905  & 0 & 12418 & 1196 & 3600,05 \\
+    \rowcolor{rowlight}limoeiro-2000-3   & 1008 & 3112 & 549 & 36 & 136 & 145 & 6,21  & 751590  & 0 & 7942  & 1199 & 3600,05 \\
+    \rowcolor{rowlight}limoeiro-2000-4   & 1008 & 3112 & 549 & 35 & 138 & 148 & 6,76  & 792598  & 0 & 8909  & 1200 & 3600,07 \\
+    \rowcolor{rowlight}limoeiro-2000-5   & 1008 & 3112 & 549 & 36 & 173 & 186 & 6,99  & 613364  & 0 & 9601  & 1199 & 3600,10 \\
+    \rowcolor{rowlight}limoeiro-2000-6   & 1008 & 3112 & 549 & 36 & 500 & 545 & 8,26  & 798407  & 0 & 9273  & 1200 & 3600,15 \\
+    \rowcolor{rowlight}limoeiro-2000-7   & 1008 & 3112 & 549 & 34 & 516 & 582 & 11,34 & 855682  & 0 & 8147  & 1199 & 3600,01 \\
+    \rowcolor{rowlight}limoeiro-3000-1   & 1240 & 3798 & 660 & 37 & 61  & 69  & 11,59 & 608408  & 0 & 10154 & 1198 & 3600,04 \\
+    \rowcolor{rowlight}limoeiro-3000-2   & 1240 & 3798 & 660 & 35 & 92  & 103 & 10,68 & 678272  & 0 & 14033 & 1192 & 3600,09 \\
+    \rowcolor{rowlight}limoeiro-3000-3   & 1240 & 3798 & 660 & 35 & 131 & 145 & 9,66  & 785581  & 0 & 9358  & 1194 & 3600,04 \\
+    \rowcolor{rowlight}limoeiro-3000-4   & 1240 & 3798 & 660 & 35 & 138 & 148 & 6,76  & 705816  & 0 & 9261  & 1199 & 3600,04 \\
+    \rowcolor{rowlight}limoeiro-3000-5   & 1240 & 3798 & 660 & 37 & 168 & 186 & 9,68  & 583145  & 0 & 9831  & 1200 & 3600,12 \\
+    \rowcolor{rowlight}limoeiro-3000-6   & 1240 & 3798 & 660 & 33 & 492 & 550 & 10,55 & 764855  & 0 & 6193  & 1199 & 3600,05 \\
+    \rowcolor{rowlight}limoeiro-3000-7   & 1240 & 3798 & 660 & 36 & 539 & 588 & 8,33  & 568148  & 0 & 9507  & 1200 & 3600,02 \\ \bottomrule
+    \end{tabular}%
+    }
+    \end{table}
