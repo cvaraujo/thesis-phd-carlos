@@ -3,67 +3,1794 @@
 
 This chapter presents the deterministic methodologies used in this work and the results obtained.
 
+\section{Notations and Definitions}\label{sec:notations-and-definitions}
+
+Let $G = (V, A, B)$ be a weighted and directed graph, where $V = \{1, \dots,
+	n\}$ is the set of vertices, $A = \{(i, j) : i, j \in V, i \neq j\}$ is the
+set of $m$ arcs, and $B = \{b : b \subseteq V\}$ is the set of blocks. In
+each arc, the first vertex is the source and also the predecessor of the
+second vertex in the ordered pair, which is known as the destination. Each
+block $b$ has an associated set of arcs $B(i, j) \subseteq A$ that can be
+serviced by a vehicle.
+
+We now present a formal definition of the \gls{cbrp}. Let a Plannar Graph,
+extracted from a real citymap, be represented as a weighted directed graph $G$.
+Each node in $V$ represents the intersection of at least two streets and has a
+list of blocks $b \subseteq B$ that are associated with it. Each arc $(i, j) \in
+	A$ has a deadheading time $t_{i, j} > 0$, a service time $t^{'}_{i, j} > 0$ such
+that $t_{i, j} \leqslant t^{'}_{i, j}$ and the block $b \in B$ that is
+associated with it. The input to the \gls{cbrp} is defined as:
+
+\begin{itemize}
+	\item $G = (V, A, B)$ is a weighted directed planar graph with the blocks associated with it;
+	\item $p_b : B \rightarrow \mathbb{N}$ is a function that returns the profit
+	      for each block $b \in B$;
+	\item $t_{i, j} : A \rightarrow \mathbb{N}$ is a function that returns the
+	      deadheading time for each arc $(i, j) \in A$;
+	\item $t^{'}_{i, j} : A \rightarrow \mathbb{N}$ is a function that returns
+	      the service time for each arc $(i, j) \in A$;
+	\item $T$ is the time limit for the vehicle to travel and service the blocks;
+	\item $V(b)$ is the set of nodes that are associated with the block $b \in B$;
+	\item $B(i)$ is the set of blocks that are associated with the node $i \in V$;
+	\item $B(i, j)$ is the set of blocks that are associated with the arc $(i, j) \in A$;
+	\item $\delta^{+}_{i}$ is the set of arcs with destination $i$;
+	\item $\delta^{-}_{i}$ is the set of arcs with source $i$;
+\end{itemize}
+
+The \gls{cbrp} is introduced as a general framework for addressing the routing
+of spraying vehicles and other city block servicing problems. The objective of
+the \gls{cbrp} is to determine an optimal traversal that services a subset of
+blocks within a network, maximizing the total collected benefit from each
+serviced block. A vehicle traverses the graph $G$ following a route that can
+serve a subset of blocks within a given time limit $T$. This work considers two
+types of solution routes, depending on whether the vertices can be visited more
+than once: \textit{Walk-based route}, in which any vertex (or arc) can be
+visited multiple times and \textit{Path-based route}, in which no vertex appears
+more than once. An optimal route (walk or path) is one that maximizes the total
+prize collected from the serviced blocks while respecting the vehicle time limit
+$T$.
+
+To facilitate modeling, we augment the graph $G$ by introducing a dummy depot
+$0$, from which the route originates, and a set of arcs $\{(0, i), (i, 0) :
+	\forall i \in V\}$ with times $t_{i,0} = t_{0,i} = 0$, $\forall i \in V$. Thus,
+we define the modified graph as $G' = (V' = V \cup \{0\}, A' = A \cup \{(0, i),
+	(i, 0) : \forall i \in V\})$.
+
+We now present key properties of the \gls{cbrp}. First, due to the operational
+restrictions, once a block $b$ starts being serviced at a given node $i$, it
+must be fully encircled before the vehicle moves to another block. This leads to
+the following property:
+
+\begin{property}
+	\label{claim:core_insight}
+	A block can be serviced if at least one of its nodes is visited.
+\end{property}
+
+From Property~\ref{claim:core_insight}, when formulating the problem, it is not
+necessary to explicitly require the vehicle to completely traverse a block's
+perimeter in order to count it as serviced. Instead, servicing can be achieved
+by visiting at least one node within the block and accounting for the
+corresponding service time. This property is valid due to the definition of the
+blocks $B$ and the fact that the vehicle must service all blocks in a clockwise
+direction.
+
+Figure~\ref{fig:servicing_block_no_surrounding_strategy} illustrates an example
+of this strategy, where servicing is achieved without requiring a full traversal
+of the block's perimeter.
+
+\begin{figure}[h!]
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 9mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+			\node[state, above of = b] (d) {$4$};
+
+			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
+			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, right of = e] (g) {$7$};
+			\node[state, right of = f] (h) {$8$};
+
+			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
+			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
+			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (d);
+			\path[->, draw = gray, opacity = 0.2] (d) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+
+			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (i);
+
+			\path[->, draw = gray, opacity = 0.2, dashed] (j) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2, dashed] (b) edge node {} (e);
+		\end{tikzpicture}
+		\subcaption{Instance Example.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 9mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+			\node[state, above of = b] (d) {$4$};
+
+			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
+			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, right of = e] (g) {$7$};
+			\node[state, right of = f] (h) {$8$};
+
+			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
+			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
+			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
+
+			\path[->, draw = gray, opacity = 1.0] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 1.0] (c) edge node {} (d);
+			\path[->, draw = gray, opacity = 1.0] (d) edge node {} (b);
+			\path[->, draw = gray, opacity = 1.0] (b) edge node {} (a);
+
+			\path[->, draw = gray, opacity = 1.0] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 1.0] (f) edge node {} (h);
+			\path[->, draw = gray, opacity = 1.0] (h) edge node {} (g);
+			\path[->, draw = gray, opacity = 1.0] (g) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 1.0] (i) edge node {} (j);
+			\path[->, draw = gray, opacity = 1.0] (j) edge node {} (k);
+			\path[->, draw = gray, opacity = 1.0] (k) edge node {} (i);
+
+			\path[->, draw = gray, opacity = 1.0, dashed] (j) edge node {} (b);
+			\path[->, draw = gray, opacity = 1.0, dashed] (b) edge node {} (e);
+		\end{tikzpicture}
+		\subcaption{Explicity Block Servicing.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 9mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+			\node[state, above of = b] (d) {$4$};
+
+			\node[state, right of = b, xshift=0.1cm] (e) {$5$};
+			\node[state, right of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, right of = e] (g) {$7$};
+			\node[state, right of = f] (h) {$8$};
+
+			\node[state, below of = b, yshift=-0.5cm] (i) {$9$};
+			\node[state, below of = e, yshift=-0.5cm] (j) {$10$};
+			\node[state, below of = i, left of = j, xshift=0.6cm] (k) {$11$};
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (d);
+			\path[->, draw = gray, opacity = 0.2] (d) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+
+			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (i);
+
+			\path[->, draw = gray, opacity = 1.0, dashed] (j) edge node {} (b);
+			\path[->, draw = gray, opacity = 1.0, dashed] (b) edge node {} (e);
+		\end{tikzpicture}
+		\subcaption{Implicit Block Servicing.}
+	\end{minipage}
+	\caption{\label{fig:servicing_block_no_surrounding_strategy} Strategies for servicing blocks.}
+\end{figure}
+
+Assuming the implicit servicing of a block as allowed by
+Property~\ref{claim:core_insight}, additional properties can be established
+concerning optimal solutions. Let $V_B = \bigcup_{b \in B} V(b)$ be the set of
+nodes belonging to some city block, and let $S^{*} = (v_1, \ldots v_n)$
+represent an optimal route.
+
+\begin{property}
+	\label{lemma_solution_extremities}
+	There exists an optimal route $S^{*}$ with both extremities in $V_B$.
+\end{property}
+
+\begin{proof}
+	Suppose $S^{*}$ does not have both extremities in $V_B$. By removing the
+	prefix and/or suffix of $S^{*}$ whose nodes do not belong to $V_B$, we
+	obtain another solution that preserves the total collected prize and does
+	not increase the total time spent, since $t_a \geqslant 0$.
+\end{proof}
+
+\section{Path-based Formulation}\label{sec:path-based-formulation}
+
+Given an instance for the \gls{cbrp}, consider a path-based solution on the
+original planar graph, in which no arc or vertex is visited more than once. The
+following binary decision variables are introduced for the model:
+
+\begin{itemize}
+	\item $x_{ij} \in \{0, 1\}$ is a binary variable that indicates whether the arc $(i, j) \in A'$ is included in the route ($x_{ij} = 1$) or not ($x_{ij} = 0$);
+	\item $y_{ib} \in \{0, 1\}$ is a binary variable that indicates whether node $i \in V$ is selected as the starting point for serving block $b \in B(i)$ ($y_{ib} = 1$) or not ($y_{ib} = 0$).
+\end{itemize}
+
+A Path-CBRP formulation is defined as follows:
+\allowdisplaybreaks
+
+\begin{align}
+	\text{(Path-CBRP) }          & \max \sum_{i \in V} \sum_{b \in B} p_b y_{ib}                                             & \label{eq:of}                                                  \\
+	\nonumber \text{subject to:} &                                                                                           &                                                                \\
+	                             & \sum_{i \in V} x_{0,i} = \sum_{j \in V} x_{j,0} = 1                                       & \label{eq:s-t-all}                                             \\
+	%
+	                             & \sum_{i \in V} x_{i,j} - \sum_{k \in V} x_{j,k} = 0                                       & \ \forall j \in V \label{eq:flow-conservation}                 \\
+	%
+	                             & \sum_{i \in V(b)} y_{ib} \leq 1                                                           & \ \forall b \in B \label{eq:max-attend}                        \\
+	%
+	                             & \sum_{j \in \delta^{-}(i)} x_{i,j} \geq y_{ib}                                            & \ \forall b \in B, i \in V(b) \label{eq:in-path}               \\
+	%
+	                             & \sum_{(i, j) \in A} x_{i,j}t_{i,j} + \sum_{i \in V} \sum_{b \in B} y_{ib}t^{'}_{b} \leq T & \label{eq:max-time}                                            \\
+	                             & \sum_{(i, j) \in A(S)} x_{i,j} \leq |V(S)| - 1                                            & \ \forall S \subseteq V \label{eq:circuit-subtour-elimination} \\
+	                             & x \in \mathbb{B}^{|A'|}                                                                   & \label{eq:dom-x}                                               \\
+	                             & y \in \mathbb{B}^{|V'| \times |B|}.                                                       & \label{eq:dom-y}
+\end{align}
+
+
+The Path-CBRP formulation generates a closed path that starts and ends at the
+depot. The objective function~\eqref{eq:of} maximizes the total prize collected
+from each serviced block.
+Constraints~\eqref{eq:s-t-all}-\eqref{eq:flow-conservation} enforce the start
+and end of the route at the depot, and the flow conservation at each node, i.e.
+the number of arcs entering a node equals to the number of arcs leaving it.
+Constraints~\eqref{eq:max-attend} and~\eqref{eq:in-path} ensure that exactly one
+node is selected as the starting point for servicing a block.
+Constraints~\eqref{eq:max-time} impose a time limit, accounting for differences
+in time spent while servicing and traveling.
+Constraints~\eqref{eq:circuit-subtour-elimination} prevent the formation of
+subcycles. Finally, constraints~\eqref{eq:dom-x} and~\eqref{eq:dom-y} define the
+domain of the decision variables.
+
+Since the subcycle elimination constraints are exponentially large in relation
+to the input size, there are two most common approaches to solve Path-CBRP: the
+first is to apply the subcycle elimination procedure to integer solutions
+obtained during the solver branch and bound. The second is to replace the
+constraint by a more compact set of constraints based on the \gls{mtz}
+formulation.
+
+% TODO: move to a future subsection with more details
+% The implementation of the subtour elimination constraint leads to a separation
+% heuristic using max-flow/min-cut that is applied in fractional branch and bound
+% solutions. Arc capacities are derived from their relaxed LP solution values. The
+% sum of arcs in the identified min-cut must carry at least the flow indicated by
+% \( y_{ib} \) variables on either side of the cut. The preflow min-cut algorithm
+% from the Lemon Library~\citep{lemon:2011} is used.
+
+To implement the \gls{mtz} approach, we introduce the following additional
+variable:
+
+\begin{itemize}
+	\item $w_{a} \in \mathbb{R}$ is a real-valued variable representing the accumulated
+	      time along the arc $(i, j) \in A'$.
+\end{itemize}
+
+Using this variable, it is possible to replace the
+constraints~\eqref{eq:circuit-subtour-elimination} by the following set of
+constraints:
+
+\begin{align}
+	 & w_{j,k} \geq w_{i,j} + x_{i,j}t_{i,j} - (2 - x_{j,k} - x_{i,j})T & \forall (i, j) \in A, (j, k) \in A, j \in V \label{eq:max-time-compact-leq}                               \\
+	 & w_{i,0} \leq T                                                   & \forall i \in V.                                                            & \label{eq:max-time-compact}
+\end{align}
+
+Constraints~\eqref{eq:max-time-compact-leq} compute the accumulated time at each
+arc, while constraints~\eqref{eq:max-time-compact} enforce an upper bound on the
+\gls{mtz} variable. This reformulated model maintains an equivalent set of
+integer feasible solutions to Path-CBRP while significantly reducing the number
+of constraints, which now grows polynomially with respect to the input size.
+However, the fractional feasible space may widen, since the number of cuts
+reduced from exponential to polynomial. This formulation is referred to as
+Path-CBRP-MTZ.
+
+\section{Walk-based Formulation}\label{sec:cbrp-walk-based-formulation}
+
+The possibility of visiting a vertex more than once is a significant difference
+between the Path-CBRP and the Walk-CBRP. This allows for more flexibility in the
+solution, and achieve values always greater than or equal to the Path-CBRP.
+\Cref{fig:walk-feasible-solution-example} presents a feasible route for the
+Walk-CBRP, that is not feasible for the Path-CBRP. In the example, the route
+starts at the depot, then visits node $2$, and goes to node $5$, then goes back
+to $2$, does the same to node $10$ and finally ends the route going to node $13$
+and depot.
+
+\begin{figure}[h!]
+	\begin{minipage}[c]{.4\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 9mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+			% \node[state, above of = b] (d) {$4$};
+
+			\node[state, right of = b, xshift=0.8cm] (e) {$5$};
+			\node[state, right of = d, xshift=0.8cm] (f) {$6$};
+			\node[state, right of = e] (g) {$7$};
+			\node[state, right of = f] (h) {$8$};
+
+			\node[state, below of = b, yshift=-0.1cm] (i) {$9$};
+			\node[state, below of = e, yshift=-0.1cm] (j) {$10$};
+			\node[state, below of = i, left of = j, xshift=0.4cm] (k) {$11$};
+
+			\node[state, above of = d, yshift=0.1cm] (l) {$12$};
+			\node[state, above of = f, yshift=0.1cm] (m) {$13$};
+			\node[state, above of = l, left of = m, xshift=0.4cm] (n) {$14$};
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+
+			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (i);
+
+			\path[->, draw = gray, opacity = 0.2] (l) edge node {} (n);
+			\path[->, draw = gray, opacity = 0.2] (n) edge node {} (m);
+			\path[->, draw = gray, opacity = 0.2] (m) edge node {} (l);
+
+			\path[->, draw = gray, opacity = 0.2, dashed] (b) edge node {} (m);
+			\path[->, draw = gray, opacity = 0.2, dashed] (m) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2, dashed] (b) edge node {} (e);
+			\path[->, draw = gray, opacity = 0.2, dashed] (e) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2, dashed] (b) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2, dashed] (j) edge node {} (b);
+
+		\end{tikzpicture}
+		\subcaption{Instance Example.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.4\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 9mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, rectangle, double, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+
+			\node[state, rectangle, double, right of = b, xshift=0.8cm] (e) {$5$};
+			\node[state, right of = d, xshift=0.8cm] (f) {$6$};
+			\node[state, right of = e] (g) {$7$};
+			\node[state, right of = f] (h) {$8$};
+
+			\node[state, below of = b, yshift=-0.1cm] (i) {$9$};
+			\node[state, rectangle, double, below of = e, yshift=-0.1cm] (j) {$10$};
+			\node[state, below of = i, left of = j, xshift=0.4cm] (k) {$11$};
+
+			\node[state, above of = d, yshift=0.1cm] (l) {$12$};
+			\node[state, rectangle, double, above of = f, yshift=0.1cm] (m) {$13$};
+			\node[state, above of = l, left of = m, xshift=0.4cm] (n) {$14$};
+
+			\node[state, double, below of = a, left of = i] (s) {$s$};
+			\node[state, double, above of = h, right of = m] (t) {$t$};
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+
+			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (i);
+
+			\path[->, draw = gray, opacity = 0.2] (l) edge node {} (n);
+			\path[->, draw = gray, opacity = 0.2] (n) edge node {} (m);
+			\path[->, draw = gray, opacity = 0.2] (m) edge node {} (l);
+
+			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (m);
+			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (b) edge node {} (e);
+			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (e) edge node {} (b);
+			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (b) edge node {} (j);
+			\path[->, draw = black, opacity = 1.0, bend right=10, dashed] (j) edge node {} (b);
+			% depot
+			\path[->, draw = black, opacity = 1.0, dashed] (s) edge node {} (b);
+			\path[->, draw = black, opacity = 1.0, dashed] (m) edge node {} (t);
+
+		\end{tikzpicture}
+		\subcaption{Walk Solution.}
+	\end{minipage}
+	\caption{\label{fig:walk-feasible-solution-example} Walk Feasible Solution Example.}
+\end{figure}
+
+Given an instance for the \gls{cbrp}, consider a walk-based solution on the
+original planar graph, in which an arc or vertex could be visited more than
+once. The following binary decision variables are introduced for the model:
+
+\begin{itemize}
+	\item $x_{ij} \in \mathbb{Z}$ is an integer variable that indicates the number of times that the arc $(i, j) \in A'$ is traversed in the route;
+	\item $y_{b} \in \{0, 1\}$ is a binary variable that indicates whether block $b \in B$ is attended ($y_{b} = 1$) or not ($y_{b} = 0$).
+\end{itemize}
+
+A Walk-CBRP formulation is defined as follows:
+
+\begin{align}
+	\text{(Walk-CBRP) }          & \max \sum_{b \in B} p_b y_{b}                                             & \label{eq:walk-of}                                                                                 \\
+	\nonumber \text{subject to:} &                                                                           &                                                                                                    \\
+	                             & \sum_{i \in V} x_{0,i} = \sum_{j \in V} x_{j,0} = 1                       & \label{eq:walk-s-t-all}                                                                            \\
+	%
+	                             & \sum_{i \in V} x_{i,j} - \sum_{k \in V} x_{j,k} = 0                       & \ \forall j \in V \label{eq:walk-flow-conservation}                                                \\
+	%
+	                             & \sum_{i \in V(b)} \sum_{j \in \delta^{-}(i)} x_{i,j} \geq y_{b}           & \ \forall b \in B \label{eq:walk-in-path}                                                          \\
+	%
+	                             & \sum_{(i, j) \in A} x_{i,j}t_{i,j} + \sum_{b \in B} y_{b}t^{'}_{b} \leq T & \label{eq:walk-max-time}                                                                           \\
+	                             & \sum_{(i, j) \in \delta^{+}(S)} x_{i,j} \geq x_{k,l} + x_{p,q} - 1        & \forall S \subseteq V, (k, l) \subseteq S, (p, q) \nsubseteq S \label{eq:walk-subtour-elimination} \\
+	                             & x \in \mathbb{Z}^{|A'|}                                                   & \label{eq:walk-dom-x}                                                                              \\
+	                             & y \in \mathbb{B}^{|B|}.                                                   & \label{eq:walk-dom-y}
+\end{align}
+
+The objective~\eqref{eq:walk-of} maximize the profit collected.
+Constraints~\eqref{eq:walk-s-t-all} ensure that the route starts and ends at the
+depot. Constraints~\eqref{eq:walk-flow-conservation} ensure the equity of arcs
+in each used node. Constraints~\eqref{eq:walk-in-path} ensure the connectivity
+to at least one node to any attended block. Constraints~\eqref{eq:walk-max-time}
+ensure that the route and the block service time does not exceed the time limit.
+Constraints~\eqref{eq:walk-subtour-elimination} ensure that the route does not
+contains disconnected subtours. Variables~\eqref{eq:walk-dom-x}
+and~\eqref{eq:walk-dom-y} ensure the domain of the variables.
+
+We define, for every pair of arcs $a' = (k, l)$ and $a'' = (p, q)$, the family
+of separating sets as
+\[
+	\mathrm{cut}(a', a'') = \{ S \subset V \mid \{k, l\} \subseteq S, \ \{p, q\} \nsubseteq S \}.
+\]
+
+That is, every set $S \in \mathrm{cut}(a', a'')$ contains both endpoints of $a'$
+and does not contain the endpoints of $a''$. If two arcs $a'$ and $a''$ are
+selected simultaneously, then for every $S \in \mathrm{cut}(a', a'')$ there must
+be an outgoing arc from $S$ in the solution.
+
+\subsection{Walk-Solution Using Transitive Closure of the Graph}\label{sec:walk-solution-using-transitive-closure}
+
+In this section, we present an adaptation that consists in the adaptation of
+original planar graph that allow us to compute implicit walks using a
+formulation presented in Section~\ref{sec:path-based-formulation}. Our
+approach is to construct a new graph in which blocks are transformed into nodes.
+Let:
+
+\begin{itemize}
+	\item $G' = (V', A')$: be the graph with the node and arcs to the artificial
+	      depot $s = 0$.
+	\item $P_{i,j}$: be the shortest path from node $i$ to node $j$ in $G$ where
+	      $t_{i,j} = t_{P_{i,j}}$, and $t_{i,0} = t_{0,i} = 0$ for all $i \in
+		      V$.
+	\item $V_B = \bigcup_{b \in B} V(b)$: be the set of nodes belonging to some
+	      city block.
+	\item $V_B^0 = V_B \cup \{0\}$: represent the set of block nodes along with
+	      the artificial depot $0$.
+	\item $A_B = A(V_B)$ and $A_B^0 = A(V_B^0)$: be the sets of arcs associated
+	      with $V_B$ and $V_B^0$, respectively.
+\end{itemize}
+
+
+The construction of $G_B^0$ (blocks-as-nodes graph) follows from
+Lemma~\ref{lemma_solution_extremities}, which considers only nodes in $V_B$ from
+the original graph, and from the definition of $P_{i,j}$, ensuring that the
+shortest paths between two nodes in $V_B$ are preserved. Together, these
+properties guarantee that using $G_B^0$ preserves all optimal solutions of the
+\gls{cbrp}.
+
+\Cref{fig:CBRP_transitive_closure_example} illustrates the rationale for using
+graph $G_B$. Specifically, \Cref{subfig:CBRP_instance_digraph} presents a
+\gls{cbrp} instance, while \Cref{subfig:CBRP_solution_graph_G} shows the
+corresponding solution in the original graph, where the dashed arcs represent
+the non-spraying travels. Finally, \Cref{subfig:CBRP_solution_graph_G_B}
+represents the same solution mapped onto the transformed graph structure.
+
+\begin{figure}[h!]
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 8mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+
+			\node[state, right of = b, xshift=0.1cm] (d) {$4$};
+
+			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
+			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, above of = e] (g) {$7$};
+
+			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
+			\node[state, above of = h] (i) {$9$};
+			\node[state, left of = i] (j) {$10$};
+			\node[state, below of = j] (k) {$11$};
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (d);
+			\path[->, draw = gray, opacity = 0.2] (d) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
+
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (h);
+		\end{tikzpicture}
+		\subcaption{\label{subfig:CBRP_instance_digraph} Instance Example.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 8mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+
+			\node[state, right of = b, xshift=0.1cm] (d) {$4$};
+
+			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
+			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, above of = e] (g) {$7$};
+
+			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
+			\node[state, above of = h] (i) {$9$};
+			\node[state, left of = i] (j) {$10$};
+			\node[state, below of = j] (k) {$11$};
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+
+			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (d);
+			\path[->, draw = black, opacity = 1.0, dashed] (d) edge node {} (e);
+
+			\path[->, draw = black, opacity = 1.0, dashed] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
+
+			\path[->, draw = black, opacity = 1.0, dashed] (f) edge node {} (h);
+		\end{tikzpicture}
+		\subcaption{\label{subfig:CBRP_solution_graph_G} Solution on Graph $G$.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.31\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.3cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 8mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+
+			% \node[state, right of = b, xshift=0.2cm] (d) {$4$};
+
+			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
+			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, above of = e] (g) {$7$};
+
+			\node[state, above of = f, xshift=-0.8cm] (h) {$8$};
+			\node[state, above of = h] (i) {$9$};
+			\node[state, left of = i] (j) {$10$};
+			\node[state, below of = j] (k) {$11$};
+
+			\path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			\path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
+			\path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+
+			\path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (f);
+
+			\path[->, draw = gray, opacity = 0.2] (e) edge node {} (f);
+			\path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
+			\path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+
+			\path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
+			\path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
+			\path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
+			\path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
+
+			\path[->, draw = black, opacity = 1.0, dashed] (f) edge node {} (h);
+		\end{tikzpicture}
+		\subcaption{\label{subfig:CBRP_solution_graph_G_B} Solution on Graph $G_B$.}
+	\end{minipage}
+	\caption{\label{fig:CBRP_transitive_closure_example} Solution with Transitive Closure.}
+\end{figure}
+
+This adaptation in the original graph allows us to use any \gls{cbrp} fomulation
+presented in Section~\ref{sec:path-based-formulation} in $G_B$ and generate a
+implicit walk solution, i.e., a solution that is a path in $G_B$, however when
+the arcs represented by shortest paths are converted to real arcs in the
+original graph $G$, the solution could turn into a walk. However, this
+adjustment demands the creation of all arcs between nodes in $V_B$, fact that
+could increase significantly the size of $G_B$ according to the number of blocks
+in the instance.
+
+% As there is an exponential number of
+% constraints~\eqref{eq:walk-subtour-elimination}, we initially do not add any of
+% this type to the model. For each integer solution found, we use connected
+% components to check for violations: Since we allow isolated nodes, we only
+% consider as components those sets containing at least two nodes. If there is
+% more than one component with two or more nodes, the route is not connected; in
+% this case, we add a constraint~\eqref{eq:walk-subtour-elimination} to cut off
+% the solution, using one of the components $S$ found, along with arcs $a'$ whose
+% endpoints belong to $S$, and arcs $a''$ whose endpoints do not belong to $S$.
+
+\section{Preprocessing and Graph Reduction}\label{sec:preprocessing}
+
+In this section, are presented and proved that there are some cases for the removal of nodes and arcs, defined for the \gls{cbrp}. These rules are useful to reduce the size of the instances and to speed up the resolution of the models. Ths focus is to take advantage of the characteristics of the problem, as the grouping of the nodes in the blocks. The main idea is to remove from $G$ vertices and arcs that not affected the optimal solution. The proposed procedure is based on the removal strategies presented by
+\cite{carrabs2021biased} for the \gls{sop}.
+
+For the arc removal procedure, consider $B_g$ be a block in the set of street blocks $B$.
+Consider two vertices $u \in B_h$ and $v \in B_k$, such that $h \neq k \neq g$.
+The preprocessing computes the shortest path between $u$ and $v$ that passes through $B_g$.
+Since the triangle inequality holds, this path consists of two arcs: $(u, w)$ and $(w, v)$, where $w \in B_g$.
+The algorithm marks these two arcs and the vertex $w$ as essential.
+
+This operation is repeated for every block $B_g \in B$ and for all possible pairs of customers $u$ and $v$ with $B(u) \neq B(v) \neq B_g$.
+After completing the computation, the procedure removes from the graph all unmarked vertices and arcs.
+The correctness of this procedure is guaranteed by Propositions~\ref{prop:arc-removal} and~\ref{prop:vertex-removal}, which ensure that there always exists an optimal \gls{cbrp} solution composed exclusively of marked elements.
+
+\begin{proposition}
+	\label{prop:arc-removal}
+	Given a block $B_g \in B$, let $S$ be the set of shortest paths from $u \in B_h$ to $v \in B_k$ passing through $B_g$, with $h \neq k \neq g$.
+	Let $\bar{A}_S$ denote the set of arcs incident to vertices in $B_g$ that do not belong to any path in $S$.
+	Then, there always exists an optimal solution to the \gls{cbrp} that does not contain any arc in $\bar{A}_S$.
+\end{proposition}
+
+\begin{proof}
+	Without loss of generality, suppose that $T^*$ is an optimal solution containing the arcs $(u, w)$ and $(w, v)$, where $u \in B_h$, $w \in B_g$, and $v \in B_k$, with $(u, w) \in \bar{A}_S$.
+	Since $(u, w)$ does not belong to any shortest path in $S$, there exists another customer $w' \in B_g$ such that the path $\{u, w', v\}$ is shorter than $\{u, w, v\}$.
+	By replacing the segment $\{u, w, v\}$ in $T^*$ with $\{u, w', v\}$, we obtain a new tour $T'$, which remains feasible and satisfies $c(T') < c(T^*)$ and $p(T') = p(T^*)$,
+	where $c(\cdot)$ and $p(\cdot)$ denote the cost and collected profit, respectively.
+	Hence, $T'$ is strictly better than $T^*$, contradicting the optimality of $T^*$.
+	Therefore, an optimal solution excluding arcs in $\bar{A}_S$ always exists.
+\end{proof}
+
+\begin{proposition}
+	\label{prop:vertex-removal}
+	Given a block $B_g \in B$, let $S$ be the set of shortest paths from $u \in B_h$ to $v \in B_k$ passing through $B_g$,
+	for every pair of distinct blocks $B_h, B_k \in B \setminus \{ B_g \}$ with $h \neq k$.
+	Let $\bar{V}_S$ denote the set of vertices in $B_g$ that do not belong to any shortest path in $S$.
+	Then, there always exists an optimal solution to the \gls{cbrp} that does not contain any vertex in $\bar{V}_S$.
+\end{proposition}
+
+\begin{proof}
+	The proof follows directly from the argument used in Proposition~\ref{prop:arc-removal}.
+	Any vertex $w \in \bar{V}_S$ can be replaced by a vertex $w' \in B_g$ that belongs to a shorter path $\{u, w', v\}$,
+	resulting in a tour $T'$ with $c(T') < c(T^*)$ and $p(T') = p(T^*)$, which implies that an optimal solution excluding vertices in $\bar{V}_S$ always exists.
+\end{proof}
+
+\section{Lagrangean Relaxations}\label{sec:lagrangean-relaxations}
+
+\newcommand{\mult}[2]{\ensuremath{\lambda^{#1}_{#2}}}
+\newcommand{\lrsp}{\textit{LR-SP}}
+\newcommand{\lrkn}{\textit{LR-KN}}
+\newcommand{\lrcsp}{\textit{LR-RCSP}}
+\newcommand{\lrcspkn}{\textit{LR-RCSP-KN}}
+
+This section presents the \gls{lr} obtained from the formulation Walk-CBRP, presented in
+Section~\ref{sec:cbrp-walk-based-formulation}.
+The Lagrange multipliers are represented by $\lambda$'s,
+then~\mult{\ref{eq:walk-in-path}}{} and
+\mult{\ref{eq:walk-max-time}}{} are
+the non-negative variables  associated with the constraints~\eqref{eq:walk-in-path},
+\eqref{eq:walk-max-time}, respectively. All  the relaxations have as their
+\gls{lpp}, the \gls{kn}, \gls{sp} or the \gls{rcsp} subproblems.
+The nomenclature used for each relaxation  follows the \gls{lr}-X pattern, where ``X''
+represents one of the most difficult subproblems of the \gls{lpp} being solved.
+
+% In this work, we developed three Lagrangean relaxations based on the
+% Path-CBRP-MTZ model. An important detail to consider is the resolution of the
+% lagrangean relaxations when the constraints~\eqref{eq:in-path},
+% \eqref{eq:max-time} and \eqref{eq:max-time-compact}  are dualized, being treated
+% in the \gls{lpp}, i.e., when this problem becomes a shortest path problem with
+% resource constraints and a selection/Knapsack problem on $y$ variables.
+
+\subsection{Lagrangean Relaxation with Shortest Path}\label{sec:lr-sp}
+
+The \gls{lr} resulting from the dualization of the constraints~\eqref{eq:walk-in-path}
+and~\eqref{eq:walk-max-time}
+is very close to the problem of computing \gls{sp}s and is therefore called {\lrsp}.
+The constraints~\eqref{eq:walk-s-t-all}-\eqref{eq:walk-flow-conservation}
+and~\eqref{eq:walk-subtour-elimination}-\eqref{eq:walk-dom-y} model a problem similar
+to create a path going from the depot $s = 0$ through the nodes of $V$ and going back to $s$,
+using the variables $x_{ij}$ for all $i, j \in V, i \neq j$. As the \gls{lpp} contains no
+constraint that apply to the variables $y_{b}$, the subproblem associated with these variables
+consists in selecting the blocks $b \in B$ with the highest value  according to the lagrangian costs.
+When the constraints~\eqref{eq:walk-in-path} and~\eqref{eq:walk-max-time}
+are dualized, the resulting \gls{lpp} is:
+
+\begin{align}
+	\text{(LR-SP)}                                                                                                                                                \max \sum_{b \in B} p_{b} y_{b} + \mult{\ref{eq:walk-max-time}}{}
+	(T - (\sum_{a \in A} x_{i,j}t_{i,j} + \sum_{b \in B} y_b t_b))                                                                                                & \label{eq:lrsp-of}   \\
+	\nonumber                                                                                                                                                     + \sum_{b \in B} \mult{\ref{eq:walk-in-path}}{b}
+	(\sum_{i \in V(b)} \sum_{a \in \delta^{-}(i)}x_{i,j} - y_b)                                                                                                   &                    & \\
+	\nonumber \text{subject to: } \eqref{eq:walk-s-t-all}-\eqref{eq:walk-flow-conservation}\text{ and } \eqref{eq:walk-subtour-elimination}-\eqref{eq:walk-dom-y} &                    &
+\end{align}
+
+
+Thus, rearranging the terms, splitting into variables and inverting the signal in the X
+term we have to solve the following optimization problems:
+\begin{align}
+	\text{(Y)}         & \max \sum_{b \in B} y_{b} (p_b - \mult{\ref{eq:walk-in-path}}{b} - \mult{\ref{eq:walk-max-time}}{} t_b) +                                                            \\
+	\text{(X)}         & \max \sum_{(i,j) \in A} x_{i,j} \mult{\ref{eq:walk-max-time}}{} t_{i,j} - \sum_{b \in B} \sum_{(i,j) \in \delta^{+}(V(b))} x_{i,j} \mult{\ref{eq:walk-in-path}}{b} + \\
+	\text{(constants)} & \mult{\ref{eq:walk-max-time}}{} T
+\end{align}
+
+Two approaches were used to solve {\lrsp}:  the first solution strategy is to use
+an \gls{ilp}  solver to obtain  solutions in  each iteration of  the subgradient
+method;  the  second  approach  is  to solve  the  \gls{lpp}  subproblems  using
+combinatorial  algorithms.  A factor  that  influences  the complexity  of
+solving  the  \gls{sp}  problem  is  related  to  the  possibility  of  negative
+coefficients associated  with the variables  $x_{i,j}$ as consequence  of the
+dualization of constraint~\eqref{eq:walk-max-time}.  Indeed, when  computing a
+\gls{sp} the returned  solution may contain negative cycles, and  to avoid these
+situations we define other variations of {\lrsp} by increasing the difficulty
+of the subproblem adding time constraints.
+
+\subsection{Lagrangean Relaxations with Time Constraints}\label{sec:lr-time-constraints}
+
+Since the time constraint \eqref{eq:walk-max-time} is dualized and the resulting
+\gls{lpp} is a \gls{sp} problem for variables $x_{i,j}$ and a selection problem for variables $y_b$,
+we can define other variations of {\lrsp} by increasing the difficulty of the subproblem.
+Thus, we increase the formulation Walk-CBRP by adding two new constraints that are redundant:
+\begin{align}
+	\sum_{(i,j) \in A} x_{i,j}t_{i,j} \leq T & \label{eq:arc-time-constraints}   \\
+	\sum_{b \in B} y_b t_b \leq T            & \label{eq:block-time-constraints}
+\end{align}
+
+Thus, the resulting \gls{lpp}, referred as {\lrcsp}, is the variation of {\lrsp} with the addition of
+Constraint~\eqref{eq:arc-time-constraints}.
+The most difficult subproblem in the \gls{lpp} passes from a \gls{sp} problem to a
+\gls{sp} problem with resource constraints, known as \gls{rcsp}. Since the amount
+of time spent on the arcs is limited, the presence of negative costs not generate
+a negative cycle that makes the subproblem infeasible. Computing  \gls{rcsp} is NP-hard,
+however there are  exact algorithms that are efficient to  solve this problem in
+practice~\cite{irnich:2006}. Our  implementations use  the labeling  algorithm
+available  in   the  Boost  C++  Library~\cite{boost:2020}.
+
+If the constraint~\eqref{eq:arc-time-constraints} is replaced by
+the constraint~\eqref{eq:block-time-constraints}, the resulting \gls{lpp} will be referred as {\lrkn}.
+The difficult subproblem in the \gls{lpp} now is associated with the variables $y_b$, that changes
+from a selection problem to a \gls{kn} problem~\cite{karp:1972}. Computing a solution for the \gls{kn} problem
+is NP-hard~\cite{korte:2008}, however there are exact algorithms based on dynamic programming that are
+efficient to solve this problem in practice.
+
+The most difficult version of this set of \gls{lrs} is {\lrcspkn}, tha uses both
+constraints~\eqref{eq:arc-time-constraints} and~\eqref{eq:block-time-constraints}.
+The resulting subproblems in the \gls{lpp} are \gls{kn} and \gls{rcsp} problems.
+This relaxation is the expensive one in terms of computational demand.
+
+
+\section{Heuristics}\label{sec:cbrp-constructive-heuristic}
+
+This section present the heuristic approaches to solve the \gls{cbrp} in its deterministic version. The constructive heuristic of Section~\ref{sec:greedy-constructive-algorithm} is a generic approach that can be used to solve the \gls{cbrp} also in its stochastic version.
+
+\newcommand{\Call}[2]{\textit{#1}(#2)}
+
+\subsection{Greedy Constructive Algorithm}\label{sec:greedy-constructive-algorithm}
+
+The Greedy Constructive algorithm combines a binary search strategy to determine a high-quality time allocation with a \gls{kn}-based block selection and a heuristic routing method based on shortest paths in a \gls{dag}. The algorithm operates within three main steps: initially selects blocks to attend maximizing the profit per block, then defines a sequence for visiting all blocks of the previous step and, finally, create a route connecting those blocks in the selected order and check if it is feasible within the total time constraint.
+
+\begin{algorithm}[h!]
+	\caption{Greedy Constructive Algorithm} \label{alg:greedy-constructive-algorithm}
+	\SetAlgoLined
+	\KwData{Graph $G$, time limit $T$}
+	\KwResult{Solution with objective value $OF$, attended blocks $y$ and route $x$}
+
+	\tcp{Initialization}
+	$B \leftarrow$ number of blocks\;
+	$y \leftarrow$ empty vector of blocks\;
+	$x \leftarrow$ empty vector of arcs\;
+	$OF \leftarrow 0$\;
+
+	\tcp{Block Selection}
+	\For{$i = 1$ \textbf{to} $B$}{
+	$blocks[i] \leftarrow i$\;
+	$time[i] \leftarrow$ time to attend block $i$\;
+	$p_b[i] \leftarrow$ profit of block $i$\;
+	}
+
+	$OF \leftarrow$ \Call{SolveScenario}{$p_b$, $time$, $T$, $y$}\;
+
+	\Return{$(OF, y, x)$}\;
+\end{algorithm}
+
+The SolveScenario routine implements a binary search strategy to find a good allocation of time between block attendance and routing. The algorithm starts by initializing the binary search bounds, with the lower bound $lb$ set to $0.5$ and upper bound $ub$ set to $1.0$, representing the fraction of total time $T$ that can be allocated to block attendance. The algorithm first attempts to find a solution using the full time budget $T$ by calling BinarySolve with $available\_time = T$. If this succeeds (returning a non-negative objective value), the algorithm immediately returns this as an optimal solution based on Property~\ref{property:knapsack-optimal-allocation}.
+
+\begin{property}[Optimality of Knapsack Block Selection with Full Time Allocation]
+	When the knapsack problem is used to select blocks with the total time budget $T$, and if the selected blocks can be connected by any feasible route respecting the time limit $T$, then the solution produced by the knapsack is optimal for the \gls{cbrp}.
+
+	\begin{proof}
+		The classical 0-1 knapsack problem maximizes the total profit
+		(here, the number of cases attended) subject to a total time constraint $T$. The greedy heuristic first solves this knapsack problem to select a subset of blocks whose total time does not exceed $T$ and whose total profit is maximized. If, after this selection, exist at least one possible route to connect the selected blocks within the total time respecting the limit $T$, then there are no additional constraints beyond the knapsack constraint. Therefore, the solution found by the knapsack is not only feasible but also optimal for the \gls{cbrp}, as no other selection of blocks can yield a higher profit without exceeding the time limit. Thus, under the assumption of feasible routing, the knapsack solution is optimal.
+	\end{proof}
+	\label{property:knapsack-optimal-allocation}
+\end{property}
+
+If the full time allocation is infeasible, then the algorithm tries a more conservative approach by allocating only $50\%$ of the total time to block attendance. If this also fails, it adjusts the search bounds by setting the upper bound to the current lower bound and the lower bound to $0.0$, effectively searching in the range $[0.0, 0.5]$. If the $50\%$ allocation succeeds, it becomes the current best solution and the search continues in the range $[0.5, 1.0]$.
+
+The binary search loop continues until the search interval becomes sufficiently small (less than $0.001$). In each iteration, the algorithm calculates the midpoint of the current search interval and attempts to solve the problem with that time allocation. If the solution is infeasible (BinarySolve returns \textit{infeasible}), the upper bound is reduced to the current midpoint. If feasible, the solution becomes the new best solution and the lower bound is increased to the current midpoint. This process efficiently define the most profitable feasible time allocation for block attendance and routing to connect the selected blocks.
+
+\begin{algorithm}[h!]
+	\caption{SolveScenario}
+	\SetAlgoLined
+	\KwData{block profit $p_b$, time limit $T$}
+	\KwResult{Objective value $OF$}
+
+	$lb \leftarrow 0.5$, $ub \leftarrow 1.0$, $mid \leftarrow 0.0$\;
+	$OF \leftarrow 0$, $temp\_OF \leftarrow 0$\;
+	$available\_time \leftarrow T$\;
+
+	$temp\_OF \leftarrow$ \Call{BinarySolve}{$p_b$, $available\_time$, $T$, $y$}\;
+	\If{$temp\_OF \text{is not \textit{infeasible}}$}{
+		\Return{$temp\_OF$}; \tcp{Optimal solution}
+
+	}
+
+	$available\_time \leftarrow \lfloor 0.5 \times T \rfloor$; \tcp{Lower bound solution}
+	$temp\_OF \leftarrow$ \Call{BinarySolve}{$p_b$, $available\_time$, $T$, $y$}\;
+	\If{$temp\_OF \text{is \textit{infeasible}}$}{
+		$ub \leftarrow lb$, $lb \leftarrow 0.0$\;
+	}\Else{
+		$OF \leftarrow temp\_OF$\;
+	}
+	$mid \leftarrow \frac{(lb + ub)}{2.0}$\;
+
+	\tcp{Binary search loop}
+	\While{$ub - lb > 0.001$}{
+		$available\_time \leftarrow \lfloor mid \times T \rfloor$\;
+		$temp\_OF \leftarrow$ \Call{BinarySolve}{$p_b$, $available\_time$, $T$, $y$}\;
+		\If{$temp\_OF = -1$}{
+			$ub \leftarrow mid$\;
+		}\Else{
+			$OF \leftarrow temp\_OF$, $y \leftarrow temp\_y$, $lb \leftarrow mid$\;
+		}
+		$mid \leftarrow \frac{(lb + ub)}{2.0}$\;
+	}
+
+	\Return{$OF$}\;
+\end{algorithm}
+
+The BinarySolve routine combines \gls{kn} optimization with routing feasibility checking to determine the optimal block selection for a given reserved time. The \gls{kn} solution selects the blocks that maximize the total profit within the available time. If no blocks can be selected (empty solution), the algorithm returns \textit{infeasible}. The block connection could use a caching mechanism based on the sequence of blocks to avoid redundant computations. The HeuristicBlockConnection routine is called to generate a route connecting the selected blocks in the sequence. Finally, the algorithm performs a feasibility check by verifying if the sum of block attendance time and the connecting routing time does not exceed the total time limit $MT$. If feasible, it returns the objective value, otherwise it returns \textit{infeasible}.
+
+\begin{algorithm}[h!]
+	\caption{BinarySolve}
+	\SetAlgoLined
+	\KwData{Block profit $p_b$, reserved time $reserved\_time$, maximum time $MT$}
+	\KwResult{Objective value $OF$}
+
+	$OF, y \leftarrow$ \Call{KnapsackSolve}{$p_b$, $reserved\_time$, $MT$}\;
+	\If{$y$ is empty}{
+		\Return{\textit{infeasible}}\;
+	}
+
+	$block\_attended\_time \leftarrow 0$; \tcp{Total attendance time}
+	\For{each block $b$ in $y$}{
+		$block\_attended\_time \leftarrow block\_attended\_time +$ time to attend block $b$\;
+	}
+
+	$connection\_time \leftarrow$ \Call{HeuristicBlockConnection}{$G$, $y$}; \tcp{Route time}
+
+	\If{$block\_attended\_time + connection\_time \leq MT$}{
+		\Return{$OF$}; \tcp{Feasible solution}
+	}
+	\Return{\textit{infeasible}}\;
+\end{algorithm}
+
+The KnapsackSolve routine implements the classic 0-1 \gls{kn} problem using \gls{dp}. The problem is formulated as selecting a subset of blocks that maximizes the total profit while respecting the time constraint. The algorithm initializes a two-dimensional \gls{dp} table $dp[n+1][MT+1]$ where $dp[i][w]$ represents the maximum profit that can be achieved using the first $i$ blocks with a time capacity of $w$. The table is initialized with zeros, representing the base case where no blocks are selected.
+
+The \gls{dp} table is filled using the standard \gls{kn} recurrence relation. For each block $i$ and time capacity $w$, the algorithm considers two options: either include block $i$ (if its time requirement fits within the remaining capacity) or exclude it. The optimal choice is the one that maximizes the total profit. The recurrence relation is: $dp[i][w] = \max(dp[i-1][w], dp[i-1][w-time[i-1]] + p_b[i-1])$ if $time[i-1] \leq w$, otherwise $dp[i][w] = dp[i-1][w]$. This ensures that each block is considered at most once and the time constraint is respected.
+
+After filling the \gls{dp} table, the algorithm backtracks to reconstruct the actual solution. Starting from the maximum time capacity $MT$ and the last block $n$, it checks if including block $i$ contributed to the optimal solution by comparing $dp[i][w]$ with $dp[i-1][w]$. If they differ, block $i-1$ is added to the solution and the remaining capacity is reduced accordingly.
+
+\begin{algorithm}[h!]
+	\caption{KnapsackSolve}
+	\SetAlgoLined
+	\KwData{block profit $p_b$, reserved time $T$}
+	\KwResult{Maximum profit $OF$ and selected blocks $y$}
+
+	$n \leftarrow$ number of blocks\;
+	Initialize $dp[n+1][T+1]$ with zeros\;
+
+	\For{$i = 1$ \textbf{to} $n$}{
+		\For{$w = 1$ \textbf{to} $T$}{
+			\If{$time[i-1] \leq w$}{
+				$dp[i][w] \leftarrow \max(dp[i-1][w], dp[i-1][w-time[i-1]] + p_b[i-1])$\;
+			}\Else{
+				$dp[i][w] \leftarrow dp[i-1][w]$\;
+			}
+		}
+	}
+
+	\tcp{Backtrack to find selected blocks}
+	$w \leftarrow T$\;
+	\For{$i = n$ \textbf{downto} $1$}{
+		\If{$dp[i][w] \neq dp[i-1][w]$}{
+			Add block $i-1$ to $y$\;
+			$w \leftarrow w - time[i-1]$\;
+		}
+	}
+
+	\Return{$dp[n][T]$, $y$}\;
+\end{algorithm}
+
+\subsection{Greedy Block Connection Route}\label{sec:greedy-block-conn-route}
+
+The Algorithm~\ref{alg:heuristic-block-connection}, HeuristicBlockConnection, solves the routing problem for visiting all selected blocks using a greedy approach. This is essentially a variant of the \gls{tsp} where the goal is to find a minimum cost route that visits at least one node from all selected blocks. The algorithm first handles the trivial case where only one block is selected. In this case, no routing is needed, so the cost is zero and the path simply goes from the depot to any node of the block and back to the depot.
+
+Besides the sequence of blocks, the heuristic defines the route that connects those blocks and which node attends to each block. The algorithm uses an approach that variates the sequence of blocks (sorting option) and the distance considered between the blocks (the smallest shortest path between each pair of blocks or the shortest path between a specific node from the current block and a specific node of the next block). The algorithm sort the blocks to be attended according to the sorting option and the distance criteria for the greedy heuristic, then create a multi-layered \gls{dag}, that will be described in more details next in this section, to compute the shortest route that visits all blocks in $\mathcal{B}'$. The shortest route is then computed by finding the shortest path from the artificial depot $s$ to $t$ in the \gls{dag}. The route time is then calculated by summing the time of the arcs in the path and the algorithm maintains the best solution found across all the 8 combinations of $sort\_opt$ and $block\_distance\_opt$.
+
+\begin{algorithm}[h!]
+	\caption{Heuristic Block Connection}\label{alg:heuristic-block-connection}
+	\SetAlgoLined
+	\KwData{Graph $G$, shortest path calculator $SP$, selected blocks $blocks$}
+	\KwResult{best route time $best\_time$ and route $best\_path$}
+
+	\If{$|blocks| = 1$}{
+		\Return{$0$}; \tcp{Single block}
+	}
+	$best\_time \leftarrow \infty$\;
+	$best\_path \leftarrow$ empty\;
+
+	\For{$block\_distance\_opt = 1$ \textbf{to} $2$}{
+		\For{$sort\_opt = 1$ \textbf{to} $4$}{
+			$ordered\_blocks \leftarrow$ \Call{GreedyBlockOrderingHeuristic}{$blocks$, $sort\_opt$, $block\_distance\_opt$}\;
+			$G_{DAG} \leftarrow$ \Call{CreateLayeredDAG}{$ordered\_blocks$}\;
+			$path \leftarrow$ \Call{ShortesPathInDAG}{$G_{DAG}(s, t)$}\;
+			$time \leftarrow$ \Call{CalculateTime}{$path$}\;
+			\If{$time < best\_time$}{
+				$best\_time \leftarrow time$\;
+				$best\_path \leftarrow path$\;
+			}
+		}
+	}
+	\Return{$best\_time$, $best\_path$}\;
+\end{algorithm}
+
+The Algorithm~\ref{alg:greedy-block-ordering-heuristic} presents a greedy heuristic that determines the order in which the blocks must be visited. Given a set of blocks $\mathcal{B} = \{b_1, b_2, \ldots, b_m\}$, a sorting option $sort\_opt$, and a block distance option $block\_distance\_opt$, the algorithm constructs an ordered sequence $\mathcal{B}' = \{b'_1, b'_2, \ldots, b'_m\}$ that iteratively minimizes the total travel distance between consecutive blocks. The parameter $sort\_opt$ contains the following options:
+
+\begin{itemize}
+	\item When $sort\_opt = 0$, blocks are sorted in ascending order by the cummulative hops of the block nodes. Hops are the number of arcs in the shortest path between a node $i \in V$ and the closest node $j \in V$ of the block $b \in B$ in the Graph $G$. The goal here is to prioritize blocks that are, in general, closer to the higher number of other blocks in the graph.
+	\item When $sort\_opt = 1$, blocks are sorted in descending order by the number of nodes they contain, favoring larger blocks that offer more routing flexibility.
+	\item When $sort\_opt = 2$, blocks are sorted by their count of zero-hop nodes in descending order, emphasizing blocks with high internal connectivity.
+	\item When $sort\_opt = 3$, blocks are shuffled randomly.
+\end{itemize}
+
+And two options for the block distance option $block\_distance\_opt$:
+\begin{itemize}
+	\item When $block\_distance\_opt = \text{B2B}$, the distance between blocks is the lowest shortest path between all nodes from block $b_1$ to nodes in block $b_2$.
+	\item When $block\_distance\_opt = \text{N2B}$, the distance between blocks is the shortest path between a specific node from the current block and all nodes in the next block.
+\end{itemize}
+
+Following the initial sorting, the algorithm employs a strategy to iteratively construct the block visitation sequence. The first block in the sorted list is selected as the starting point, and a reference node from this block is identified as having the minimum distance to the next unvisited block in the sorted list. In subsequent iterations, the algorithm evaluates all unvisited blocks and selects the one within the shortest path from the current reference node. When multiple blocks have equal distances, ties are broken by preferring blocks with larger numbers of nodes, as these provide greater flexibility in path construction. The reference node is then updated to the closest node in the newly selected block, and this process continues until all blocks have been used.
+
+Given an ordered sequence of blocks $\mathcal{B} = \{b_1, b_2, \ldots, b_m\}$ to visit, the next step is to construct a multi-layered \gls{dag} where each layer $i$ corresponds to block $b_i$ and contains a new vertex for each node that belongs to the block in the original graph $G$. The formal definition of the \gls{dag} is $G_{DAG} = (V_{DAG}, A_{DAG})$ where $V_{DAG} = \{s, t\} \cup v^{b_i}_k: i \in \mathcal{B}, k \in V(b_i)$ and $A_{DAG} = \{(s, v^{b_1}_{k}), (v^{b_m}_{k'}, t): k \in V(b_1), k' \in V(b_m)\} \cup \{(v^{b_i}_o, v^{b_{i+1}}_{d}): i = 1, \ldots, m-1, o \in V(b_i), d \in V(b_{i+1})\}$.  The weight of each arc $(i, j) \in A_{DAG}$ is the shortest path distance between the nodes $i$ and $j$ in the graph $G$ Each path from $s$ to $t$ in $G_{DAG}$ include at least one node from each block in $\mathcal{B}$.
+
+Figure~\ref{fig:layered-dag-adaptation} presents an example of the adaptation for the layered-dag. The graph $G$ in represented in Figure~\ref{subfig:original-graph}, that contains the blocks $A$, $B$ and $C$. Considering that those blocks must be visited in the order $\mathcal{B}': A \rightarrow C \rightarrow B$, the resulting graph $G_{DAG}$ is presented in Figure~\ref{subfig:layered-dag}. One possible solution is presented in Figure~\ref{subfig:layered-dag-solution}, using node $11$ to attend blocks $A$ and $C$, and node $6$ to attend block $B$. The $G_{DAG}$ solution is $s \rightarrow A_{11} \rightarrow C_{11} \rightarrow B_{6} \rightarrow t$, that could be mapped to the original graph as $s \rightarrow 11 \rightarrow 8 \rightarrow 6 \rightarrow t$. The route connecting $s$ and $t$ could be obtained by using any shortest path algorithm.
+
+\begin{figure}[h!]
+	\centering
+	\begin{minipage}[c]{.45\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 2cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 8mm
+			]
+
+			\node[state] (a) at (0,0) {$1$};
+			\node[state, right of = a] (b) {$2$};
+			\node[state, above of = a] (c) {$3$};
+			\node[state, draw = white, text=teal, below of = c, right of = a, yshift=3cm, xshift=-1cm] {A};
+
+			\node[state, right of = b, xshift=0.1cm] (d) {$4$};
+
+			\node[state, right of = d, xshift=0.1cm] (e) {$5$};
+			\node[state, above of = d, xshift=0.1cm] (f) {$6$};
+			\node[state, above of = e] (g) {$7$};
+			\node[state, draw = white, text=red, above of = e, right of = f, yshift=-2.6cm, xshift=-0.6cm] {B};
+
+			\node[state, above of = f, xshift=-0.3cm] (h) {$8$};
+			\node[state, above of = h] (i) {$9$};
+			\node[state, left of = i] (j) {$10$};
+			\node[state, below of = j] (k) {$11$};
+			\node[state, draw = white, text=green, below of = j, right of = k, yshift=3cm, xshift=-1cm] {C};
+
+			\path[->] (a) edge node {} (c);
+			\path[->] (c) edge node {} (a);
+
+			\path[->] (k) edge node {} (b);
+			\path[->] (b) edge node {} (k);
+
+			\path[->] (k) edge node {} (c);
+			\path[->] (c) edge node {} (k);
+
+			\path[->] (b) edge node {} (a);
+			\path[->] (a) edge node {} (b);
+
+			\path[->] (b) edge node {} (d);
+			\path[->] (d) edge node {} (b);
+
+			\path[->] (d) edge node {} (e);
+			\path[->] (e) edge node {} (d);
+
+			\path[->] (e) edge node {} (f);
+			\path[->] (f) edge node {} (e);
+
+			\path[->] (f) edge node {} (g);
+			\path[->] (g) edge node {} (f);
+
+			\path[->] (g) edge node {} (e);
+			\path[->] (e) edge node {} (g);
+
+			\path[->] (h) edge node {} (k);
+			\path[->] (k) edge node {} (h);
+
+			\path[->] (k) edge node {} (j);
+			\path[->] (j) edge node {} (k);
+
+			\path[->] (j) edge node {} (i);
+			\path[->] (i) edge node {} (j);
+
+			\path[->] (i) edge node {} (h);
+			\path[->] (h) edge node {} (i);
+
+			\path[->] (f) edge node {} (h);
+			\path[->] (h) edge node {} (f);
+
+		\end{tikzpicture}
+		\subcaption{\label{subfig:original-graph} Original Graph $G$.}
+	\end{minipage}
+	\\
+	\begin{minipage}[c]{.45\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.5cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 11mm
+			]
+
+			\node[state, double] (s) at (0,0) {$s$};
+			\node[state, right of = s, draw = white] (depot_legend) {Depot};
+
+			\node[state, below of = s, draw = teal, xshift=-0.6cm, yshift=-0.5cm] (a2) {$A_2$};
+			\node[state, left of = a2, draw = teal] (a1) {$A_1$};
+			\node[state, right of = a2, draw = teal] (a3) {$A_3$};
+			\node[state, right of = a3, draw = teal] (a11) {$A_{11}$};
+
+			\node[state, below of = a1, yshift=-1cm, draw = green] (c8) {$C_8$};
+			\node[state, right of = c8, draw = green] (c9) {$C_9$};
+			\node[state, right of = c9, draw = green] (c10) {$C_{10}$};
+			\node[state, right of = c10, draw = green] (c11) {$C_{11}$};
+
+			\node[state, below of = c9, xshift=-0.8cm, yshift=-1cm, draw = red] (b5) {$B_5$};
+			\node[state, right of = b5, draw = red] (b6) {$B_6$};
+			\node[state, right of = b6, draw = red] (b7) {$B_7$};
+
+			\node[state, double, below of = b6, yshift=-0.5cm] (t) {$t$};
+			% Arcs
+			\path[->, draw=black, thick] (s) edge (a1);
+			\path[->, draw=black, thick] (s) edge (a2);
+			\path[->, draw=black, thick] (s) edge (a3);
+			\path[->, draw=black, thick] (s) edge (a11);
+
+			\path[->, draw=black, thick] (a1) edge (c8);
+			\path[->, draw=black, thick] (a1) edge (c9);
+			\path[->, draw=black, thick] (a1) edge (c10);
+			\path[->, draw=black, thick] (a1) edge (c11);
+			\path[->, draw=black, thick] (a2) edge (c8);
+			\path[->, draw=black, thick] (a2) edge (c9);
+			\path[->, draw=black, thick] (a2) edge (c10);
+			\path[->, draw=black, thick] (a2) edge (c11);
+			\path[->, draw=black, thick] (a3) edge (c8);
+			\path[->, draw=black, thick] (a3) edge (c9);
+			\path[->, draw=black, thick] (a3) edge (c10);
+			\path[->, draw=black, thick] (a3) edge (c11);
+			\path[->, draw=black, thick] (a11) edge (c8);
+			\path[->, draw=black, thick] (a11) edge (c9);
+			\path[->, draw=black, thick] (a11) edge (c10);
+			\path[->, draw=black, thick] (a11) edge (c11);
+
+			\path[->, draw=black, thick] (c8) edge (b5);
+			\path[->, draw=black, thick] (c8) edge (b6);
+			\path[->, draw=black, thick] (c8) edge (b7);
+			\path[->, draw=black, thick] (c9) edge (b5);
+			\path[->, draw=black, thick] (c9) edge (b6);
+			\path[->, draw=black, thick] (c9) edge (b7);
+			\path[->, draw=black, thick] (c10) edge (b5);
+			\path[->, draw=black, thick] (c10) edge (b6);
+			\path[->, draw=black, thick] (c10) edge (b7);
+			\path[->, draw=black, thick] (c11) edge (b5);
+			\path[->, draw=black, thick] (c11) edge (b6);
+			\path[->, draw=black, thick] (c11) edge (b7);
+
+			\path[->, draw=black, thick] (b5) edge (t);
+			\path[->, draw=black, thick] (b6) edge (t);
+			\path[->, draw=black, thick] (b7) edge (t);
+
+			% \path[->, draw = gray, opacity = 0.2] (a) edge node {} (c);
+			% \path[->, draw = gray, opacity = 0.2] (c) edge node {} (b);
+			% \path[->, draw = gray, opacity = 0.2] (b) edge node {} (a);
+
+			% \path[->, draw = black, opacity = 1.0, dashed] (b) edge node {} (d);
+			% \path[->, draw = black, opacity = 1.0, dashed] (d) edge node {} (e);
+
+			% \path[->, draw = black, opacity = 1.0, dashed] (e) edge node {} (f);
+			% \path[->, draw = gray, opacity = 0.2] (f) edge node {} (g);
+			% \path[->, draw = gray, opacity = 0.2] (g) edge node {} (e);
+
+			% \path[->, draw = gray, opacity = 0.2] (h) edge node {} (k);
+			% \path[->, draw = gray, opacity = 0.2] (k) edge node {} (j);
+			% \path[->, draw = gray, opacity = 0.2] (j) edge node {} (i);
+			% \path[->, draw = gray, opacity = 0.2] (i) edge node {} (h);
+
+			% \path[->, draw = black, opacity = 1.0, dashed] (f) edge node {} (h);
+		\end{tikzpicture}
+		\subcaption{\label{subfig:layered-dag} Layered DAG $G_{DAG}$.}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[c]{.45\textwidth}
+		\begin{tikzpicture}[
+				> = stealth, % arrow head style
+				shorten > = 0.8pt, % don't touch arrow head to node
+				auto,
+				node distance = 1.5cm, % distance between nodes
+				semithick % line style
+			]
+
+			\tikzstyle{every state}=[
+			draw = black,
+			thick,
+			fill = white,
+			minimum size = 11mm
+			]
+
+			\node[state, double] (s) at (0,0) {$s$};
+			\node[state, right of = s, draw = white] (depot_legend) {Depot};
+
+			\node[state, below of = s, draw = teal, xshift=-0.6cm, yshift=-0.5cm] (a2) {$A_2$};
+			\node[state, left of = a2, draw = teal] (a1) {$A_1$};
+			\node[state, right of = a2, draw = teal] (a3) {$A_3$};
+			\node[state, right of = a3, draw = teal] (a11) {$A_{11}$};
+			% \node[state, right of = a11, draw = white] (depot_legend) {Block A};
+
+			\node[state, below of = a1, yshift=-1cm, draw = green] (c8) {$C_8$};
+			\node[state, right of = c8, draw = green] (c9) {$C_9$};
+			\node[state, right of = c9, draw = green] (c10) {$C_{10}$};
+			\node[state, right of = c10, draw = green] (c11) {$C_{11}$};
+			% \node[state, right of = c11, draw = white] (depot_legend) {Block C};
+
+			\node[state, below of = c9, xshift=-0.8cm, yshift=-1cm, draw = red] (b5) {$B_5$};
+			\node[state, right of = b5, draw = red] (b6) {$B_6$};
+			\node[state, right of = b6, draw = red] (b7) {$B_7$};
+			% \node[state, right of = b7, draw = white] (depot_legend) {Block B};
+
+			\node[state, double, below of = b6, yshift=-0.5cm] (t) {$t$};
+			% Arcs
+			\path[->, draw=gray, opacity=0.2, thick] (s) edge (a1);
+			\path[->, draw=gray, opacity=0.2, thick] (s) edge (a2);
+			\path[->, draw=gray, opacity=0.2, thick] (s) edge (a3);
+			\path[->, draw=black, thick] (s) edge (a11);
+
+			\path[->, draw=gray, opacity=0.2, thick] (a1) edge (c8);
+			\path[->, draw=gray, opacity=0.2, thick] (a1) edge (c9);
+			\path[->, draw=gray, opacity=0.2, thick] (a1) edge (c10);
+			\path[->, draw=gray, opacity=0.2, thick] (a1) edge (c11);
+			\path[->, draw=gray, opacity=0.2, thick] (a2) edge (c8);
+			\path[->, draw=gray, opacity=0.2, thick] (a2) edge (c9);
+			\path[->, draw=gray, opacity=0.2, thick] (a2) edge (c10);
+			\path[->, draw=gray, opacity=0.2, thick] (a2) edge (c11);
+			\path[->, draw=gray, opacity=0.2, thick] (a3) edge (c8);
+			\path[->, draw=gray, opacity=0.2, thick] (a3) edge (c9);
+			\path[->, draw=gray, opacity=0.2, thick] (a3) edge (c10);
+			\path[->, draw=gray, opacity=0.2, thick] (a3) edge (c11);
+			\path[->, draw=gray, opacity=0.2, thick] (a11) edge (c8);
+			\path[->, draw=gray, opacity=0.2, thick] (a11) edge (c9);
+			\path[->, draw=gray, opacity=0.2, thick] (a11) edge (c10);
+			\path[->, draw=black, thick] (a11) edge (c11);
+
+			\path[->, draw=gray, opacity=0.2, thick] (c8) edge (b5);
+			\path[->, draw=gray, opacity=0.2, thick] (c8) edge (b6);
+			\path[->, draw=gray, opacity=0.2, thick] (c8) edge (b7);
+			\path[->, draw=gray, opacity=0.2, thick] (c9) edge (b5);
+			\path[->, draw=gray, opacity=0.2, thick] (c9) edge (b6);
+			\path[->, draw=gray, opacity=0.2, thick] (c9) edge (b7);
+			\path[->, draw=gray, opacity=0.2, thick] (c10) edge (b5);
+			\path[->, draw=gray, opacity=0.2, thick] (c10) edge (b6);
+			\path[->, draw=gray, opacity=0.2, thick] (c10) edge (b7);
+			\path[->, draw=gray, opacity=0.2, thick] (c11) edge (b5);
+			\path[->, draw=black, thick] (c11) edge (b6);
+			\path[->, draw=gray, opacity=0.2, thick] (c11) edge (b7);
+
+			\path[->, draw=gray, opacity=0.2, thick] (b5) edge (t);
+			\path[->, draw=black, thick] (b6) edge (t);
+			\path[->, draw=gray, opacity=0.2, thick] (b7) edge (t);
+		\end{tikzpicture}
+		\subcaption{\label{subfig:layered-dag-solution} Solution generated in $G_{DAG}$.}
+	\end{minipage}
+	\caption{\label{fig:layered-dag-adaptation} Layered DAG Adaptation.}
+\end{figure}
+
+\begin{algorithm}[h!]
+	\caption{Greedy Block Ordering Heuristic}\label{alg:greedy-block-ordering-heuristic}
+	\SetAlgoLined
+	\KwData{Blocks to visit $\mathcal{B}$, sorting option $sort\_opt$, block distance option $block\_distance\_opt$}
+	\KwResult{Ordered sequence $\mathcal{B}'$ of blocks}
+
+	$\mathcal{B}' \leftarrow \emptyset$\;
+	$backup\_blocks \leftarrow \mathcal{B}$\;
+
+	\tcp{Apply initial sorting strategy}
+	\uIf{$sort\_opt = 0$}{
+		Sort $backup\_blocks$ by cumulative hops (ascending)\;
+	}
+	\uElseIf{$sort\_opt = 1$}{
+		Sort $backup\_blocks$ by number of nodes in the blocks (descending)\;
+	}
+	\uElseIf{$sort\_opt = 2$}{
+		Sort $backup\_blocks$ by zero-hop count (descending)\;
+	}
+	\uElse{
+		Shuffle $backup\_blocks$\;
+	}
+
+	\tcp{Iterative block selection}
+	\While{$|connect\_order| < |\mathcal{B}|$}{
+		\uIf{$\mathcal{B}'$ is empty}{
+			Add first block from $backup\_blocks$ to $\mathcal{B}'$\;
+			Find reference node with minimum distance to next block\;
+		}
+
+		$best\_block \leftarrow -1$, $min\_distance \leftarrow \infty$\;
+		\For{each candidate block $b$ in $backup\_blocks$}{
+			\uElseIf{$block\_distance\_opt = \text{B2B}$}{
+				$(distance, ref\_node) \leftarrow \Call{MinBlock2BlockTime}{last\_ref\_block, b}$\;
+			}
+			\uElse {
+				$(distance, ref\_node) \leftarrow$ \Call{MinNode2BlockTime}{$last\_ref\_node, b$}\;
+			}
+			$num\_nodes \leftarrow$ number of nodes in block $b$\;
+			\If{$distance < min\_distance$ \textbf{or} ($distance = min\_distance$ \textbf{and} $num\_nodes > num\_best\_nodes$)}{
+				$min\_distance \leftarrow distance$\;
+				$best\_block \leftarrow b$\;
+				$best\_ref\_node \leftarrow ref\_node$\;
+			}
+		}
+		Add $best\_block$ to $\mathcal{B}'$\;
+		Remove $best\_block$ from $backup\_blocks$\;
+		$last\_ref\_node \leftarrow best\_ref\_node$\;
+		$last\_ref\_block \leftarrow best\_block$\;
+
+	}
+	\Return{$\mathcal{B}'$}\;
+\end{algorithm}
+
+\section{Computational Experiments}\label{sec:computational-experiments-deterministic}
+
 \definecolor{rowgrey}{HTML}{c0c0c0}
 \definecolor{rowlight}{HTML}{efefef}
+
+Lazy Cuts:
 \begin{table}[ht!]
-    \centering
-    \caption{Results of the Model Path-CBRP.}
-    \label{tab:results-det-path-cbrp-exp}
-    \resizebox{\textwidth}{!}{%
-    \begin{tabular}{lrrrrrrrrrrrr}
-    \toprule
-    \multicolumn{1}{c}{\textbf{Instance}} &
-      \multicolumn{1}{c}{\textbf{|V|}} &
-      \multicolumn{1}{c}{\textbf{|A|}} &
-      \multicolumn{1}{c}{\textbf{|B|}} &
-      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}} &
-      \multicolumn{1}{c}{\textbf{LB}} &
-      \multicolumn{1}{c}{\textbf{UB}} &
-      \multicolumn{1}{c}{\textbf{gap (\%)}} &
-      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}} &
-      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Frac.\\ Cuts\end{tabular}}} &
-      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}} &
-      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Solution\\ Time(m)\end{tabular}}} &
-      \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ time (s)\end{tabular}}} \\ \midrule
-    \rowcolor{rowgrey}alto-santo-1000-1 & 179  & 524  & 84  & 19 & 39  & 39  & 0,00  & 28      & 0 & 100   & 765  & 0,23    \\
-    \rowcolor{rowgrey}alto-santo-1000-2 & 179  & 524  & 84  & 39 & 240 & 240 & 0,00  & 367378  & 0 & 726   & 1198 & 442,08  \\
-    \rowcolor{rowgrey}alto-santo-1000-3 & 179  & 524  & 84  & 39 & 247 & 247 & 0,00  & 7483    & 0 & 536   & 1198 & 15,50   \\
-    \rowcolor{rowgrey}alto-santo-1000-4 & 179  & 524  & 84  & 39 & 254 & 254 & 0,00  & 9876    & 0 & 597   & 1198 & 20,59   \\
-    \rowcolor{rowgrey}alto-santo-1000-5 & 179  & 524  & 84  & 39 & 270 & 270 & 0,00  & 234995  & 0 & 632   & 1198 & 253,44  \\
-    \rowcolor{rowgrey}alto-santo-1000-6 & 179  & 524  & 84  & 39 & 321 & 321 & 0,00  & 1033422 & 0 & 503   & 1200 & 730,57  \\
-    \rowcolor{rowgrey}alto-santo-2000-1 & 253  & 710  & 102 & 19 & 39  & 39  & 0,00  & 1       & 0 & 88    & 759  & 0,16    \\
-    \rowcolor{rowgrey}alto-santo-2000-2 & 253  & 710  & 102 & 34 & 248 & 248 & 0,00  & 20321   & 0 & 421   & 1200 & 32,89   \\
-    \rowcolor{rowgrey}alto-santo-2000-3 & 253  & 710  & 102 & 34 & 253 & 253 & 0,00  & 214446  & 0 & 348   & 1200 & 220,83  \\
-    \rowcolor{rowgrey}alto-santo-2000-4 & 253  & 710  & 102 & 32 & 260 & 260 & 0,00  & 259037  & 0 & 248   & 1198 & 211,09  \\
-    \rowcolor{rowgrey}alto-santo-2000-5 & 253  & 710  & 102 & 32 & 277 & 277 & 0,00  & 240919  & 0 & 339   & 1200 & 267,51  \\
-    \rowcolor{rowgrey}alto-santo-2000-6 & 253  & 710  & 102 & 33 & 327 & 327 & 0,00  & 1017152 & 0 & 410   & 1200 & 1114,31 \\
-    \rowcolor{rowgrey}alto-santo-3000-1 & 353  & 964  & 128 & 19 & 39  & 39  & 0,00  & 25209   & 0 & 253   & 1191 & 71,54   \\
-    \rowcolor{rowgrey}alto-santo-3000-2 & 353  & 964  & 128 & 34 & 248 & 248 & 0,00  & 12269   & 0 & 420   & 1199 & 33,95   \\
-    \rowcolor{rowgrey}alto-santo-3000-3 & 353  & 964  & 128 & 34 & 253 & 253 & 0,00  & 206261  & 0 & 470   & 1198 & 214,77  \\
-    \rowcolor{rowgrey}alto-santo-3000-4 & 353  & 964  & 128 & 34 & 260 & 260 & 0,00  & 862246  & 0 & 457   & 1200 & 984,20  \\
-    \rowcolor{rowgrey}alto-santo-3000-5 & 353  & 964  & 128 & 34 & 277 & 277 & 0,00  & 271522  & 0 & 500   & 1199 & 300,22  \\
-    \rowcolor{rowgrey}alto-santo-3000-6 & 353  & 964  & 128 & 34 & 327 & 327 & 0,00  & 946477  & 0 & 516   & 1200 & 1052,62 \\ \midrule
-    \rowcolor{rowlight}limoeiro-1000-1   & 400  & 1260 & 231 & 36 & 53  & 54  & 1,85  & 1035600 & 0 & 3186  & 1199 & 3600,02 \\
-    \rowcolor{rowlight}limoeiro-1000-2   & 400  & 1260 & 231 & 37 & 67  & 69  & 2,90  & 1184828 & 0 & 1619  & 1199 & 3600,04 \\
-    \rowcolor{rowlight}limoeiro-1000-3   & 400  & 1260 & 231 & 38 & 109 & 112 & 2,68  & 1336537 & 0 & 2041  & 1200 & 3600,06 \\
-    \rowcolor{rowlight}limoeiro-1000-4   & 400  & 1260 & 231 & 39 & 111 & 113 & 1,77  & 1518429 & 0 & 1562  & 1196 & 3600,02 \\
-    \rowcolor{rowlight}limoeiro-1000-5   & 400  & 1260 & 231 & 37 & 139 & 142 & 2,11  & 1561327 & 0 & 1308  & 1200 & 3600,01 \\
-    \rowcolor{rowlight}limoeiro-1000-6   & 400  & 1260 & 231 & 37 & 398 & 409 & 2,69  & 1291151 & 0 & 1654  & 1199 & 3600,01 \\
-    \rowcolor{rowlight}limoeiro-1000-7   & 400  & 1260 & 231 & 37 & 424 & 434 & 2,30  & 1270405 & 0 & 2013  & 1200 & 3600,03 \\
-    \rowcolor{rowlight}limoeiro-2000-1   & 1008 & 3112 & 549 & 37 & 61  & 69  & 11,59 & 762812  & 0 & 8194  & 1198 & 3600,05 \\
-    \rowcolor{rowlight}limoeiro-2000-2   & 1008 & 3112 & 549 & 33 & 91  & 103 & 11,65 & 806905  & 0 & 12418 & 1196 & 3600,05 \\
-    \rowcolor{rowlight}limoeiro-2000-3   & 1008 & 3112 & 549 & 36 & 136 & 145 & 6,21  & 751590  & 0 & 7942  & 1199 & 3600,05 \\
-    \rowcolor{rowlight}limoeiro-2000-4   & 1008 & 3112 & 549 & 35 & 138 & 148 & 6,76  & 792598  & 0 & 8909  & 1200 & 3600,07 \\
-    \rowcolor{rowlight}limoeiro-2000-5   & 1008 & 3112 & 549 & 36 & 173 & 186 & 6,99  & 613364  & 0 & 9601  & 1199 & 3600,10 \\
-    \rowcolor{rowlight}limoeiro-2000-6   & 1008 & 3112 & 549 & 36 & 500 & 545 & 8,26  & 798407  & 0 & 9273  & 1200 & 3600,15 \\
-    \rowcolor{rowlight}limoeiro-2000-7   & 1008 & 3112 & 549 & 34 & 516 & 582 & 11,34 & 855682  & 0 & 8147  & 1199 & 3600,01 \\
-    \rowcolor{rowlight}limoeiro-3000-1   & 1240 & 3798 & 660 & 37 & 61  & 69  & 11,59 & 608408  & 0 & 10154 & 1198 & 3600,04 \\
-    \rowcolor{rowlight}limoeiro-3000-2   & 1240 & 3798 & 660 & 35 & 92  & 103 & 10,68 & 678272  & 0 & 14033 & 1192 & 3600,09 \\
-    \rowcolor{rowlight}limoeiro-3000-3   & 1240 & 3798 & 660 & 35 & 131 & 145 & 9,66  & 785581  & 0 & 9358  & 1194 & 3600,04 \\
-    \rowcolor{rowlight}limoeiro-3000-4   & 1240 & 3798 & 660 & 35 & 138 & 148 & 6,76  & 705816  & 0 & 9261  & 1199 & 3600,04 \\
-    \rowcolor{rowlight}limoeiro-3000-5   & 1240 & 3798 & 660 & 37 & 168 & 186 & 9,68  & 583145  & 0 & 9831  & 1200 & 3600,12 \\
-    \rowcolor{rowlight}limoeiro-3000-6   & 1240 & 3798 & 660 & 33 & 492 & 550 & 10,55 & 764855  & 0 & 6193  & 1199 & 3600,05 \\
-    \rowcolor{rowlight}limoeiro-3000-7   & 1240 & 3798 & 660 & 36 & 539 & 588 & 8,33  & 568148  & 0 & 9507  & 1200 & 3600,02 \\ \bottomrule
-    \end{tabular}%
-    }
-    \end{table}
+	\centering
+	\caption{Results of the Model Path-CBRP.}
+	\label{tab:results-det-path-cbrp-exp}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lrrrrrrrrrrrr}
+			\toprule
+			\multicolumn{1}{c}{\textbf{Instance}}                                                   &
+			\multicolumn{1}{c}{\textbf{|V|}}                                                        &
+			\multicolumn{1}{c}{\textbf{|A|}}                                                        &
+			\multicolumn{1}{c}{\textbf{|B|}}                                                        &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}}  &
+			\multicolumn{1}{c}{\textbf{LB}}                                                         &
+			\multicolumn{1}{c}{\textbf{UB}}                                                         &
+			\multicolumn{1}{c}{\textbf{gap (\%)}}                                                   &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}}     &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Frac.\\ Cuts\end{tabular}}}       &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}}        &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Solution\\ Time(m)\end{tabular}}} &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ time (s)\end{tabular}}}                                                                                       \\ \midrule
+			\rowcolor{rowgrey}alto-santo-1000-1                                                     & 179  & 524  & 84  & 19 & 39  & 39  & 0,00  & 28      & 0 & 100   & 765  & 0,23    \\
+			\rowcolor{rowgrey}alto-santo-1000-2                                                     & 179  & 524  & 84  & 39 & 240 & 240 & 0,00  & 367378  & 0 & 726   & 1198 & 442,08  \\
+			\rowcolor{rowgrey}alto-santo-1000-3                                                     & 179  & 524  & 84  & 39 & 247 & 247 & 0,00  & 7483    & 0 & 536   & 1198 & 15,50   \\
+			\rowcolor{rowgrey}alto-santo-1000-4                                                     & 179  & 524  & 84  & 39 & 254 & 254 & 0,00  & 9876    & 0 & 597   & 1198 & 20,59   \\
+			\rowcolor{rowgrey}alto-santo-1000-5                                                     & 179  & 524  & 84  & 39 & 270 & 270 & 0,00  & 234995  & 0 & 632   & 1198 & 253,44  \\
+			\rowcolor{rowgrey}alto-santo-1000-6                                                     & 179  & 524  & 84  & 39 & 321 & 321 & 0,00  & 1033422 & 0 & 503   & 1200 & 730,57  \\
+			\rowcolor{rowgrey}alto-santo-2000-1                                                     & 253  & 710  & 102 & 19 & 39  & 39  & 0,00  & 1       & 0 & 88    & 759  & 0,16    \\
+			\rowcolor{rowgrey}alto-santo-2000-2                                                     & 253  & 710  & 102 & 34 & 248 & 248 & 0,00  & 20321   & 0 & 421   & 1200 & 32,89   \\
+			\rowcolor{rowgrey}alto-santo-2000-3                                                     & 253  & 710  & 102 & 34 & 253 & 253 & 0,00  & 214446  & 0 & 348   & 1200 & 220,83  \\
+			\rowcolor{rowgrey}alto-santo-2000-4                                                     & 253  & 710  & 102 & 32 & 260 & 260 & 0,00  & 259037  & 0 & 248   & 1198 & 211,09  \\
+			\rowcolor{rowgrey}alto-santo-2000-5                                                     & 253  & 710  & 102 & 32 & 277 & 277 & 0,00  & 240919  & 0 & 339   & 1200 & 267,51  \\
+			\rowcolor{rowgrey}alto-santo-2000-6                                                     & 253  & 710  & 102 & 33 & 327 & 327 & 0,00  & 1017152 & 0 & 410   & 1200 & 1114,31 \\
+			\rowcolor{rowgrey}alto-santo-3000-1                                                     & 353  & 964  & 128 & 19 & 39  & 39  & 0,00  & 25209   & 0 & 253   & 1191 & 71,54   \\
+			\rowcolor{rowgrey}alto-santo-3000-2                                                     & 353  & 964  & 128 & 34 & 248 & 248 & 0,00  & 12269   & 0 & 420   & 1199 & 33,95   \\
+			\rowcolor{rowgrey}alto-santo-3000-3                                                     & 353  & 964  & 128 & 34 & 253 & 253 & 0,00  & 206261  & 0 & 470   & 1198 & 214,77  \\
+			\rowcolor{rowgrey}alto-santo-3000-4                                                     & 353  & 964  & 128 & 34 & 260 & 260 & 0,00  & 862246  & 0 & 457   & 1200 & 984,20  \\
+			\rowcolor{rowgrey}alto-santo-3000-5                                                     & 353  & 964  & 128 & 34 & 277 & 277 & 0,00  & 271522  & 0 & 500   & 1199 & 300,22  \\
+			\rowcolor{rowgrey}alto-santo-3000-6                                                     & 353  & 964  & 128 & 34 & 327 & 327 & 0,00  & 946477  & 0 & 516   & 1200 & 1052,62 \\ \midrule
+			\rowcolor{rowlight}limoeiro-1000-1                                                      & 400  & 1260 & 231 & 36 & 53  & 54  & 1,85  & 1035600 & 0 & 3186  & 1199 & 3600,02 \\
+			\rowcolor{rowlight}limoeiro-1000-2                                                      & 400  & 1260 & 231 & 37 & 67  & 69  & 2,90  & 1184828 & 0 & 1619  & 1199 & 3600,04 \\
+			\rowcolor{rowlight}limoeiro-1000-3                                                      & 400  & 1260 & 231 & 38 & 109 & 112 & 2,68  & 1336537 & 0 & 2041  & 1200 & 3600,06 \\
+			\rowcolor{rowlight}limoeiro-1000-4                                                      & 400  & 1260 & 231 & 39 & 111 & 113 & 1,77  & 1518429 & 0 & 1562  & 1196 & 3600,02 \\
+			\rowcolor{rowlight}limoeiro-1000-5                                                      & 400  & 1260 & 231 & 37 & 139 & 142 & 2,11  & 1561327 & 0 & 1308  & 1200 & 3600,01 \\
+			\rowcolor{rowlight}limoeiro-1000-6                                                      & 400  & 1260 & 231 & 37 & 398 & 409 & 2,69  & 1291151 & 0 & 1654  & 1199 & 3600,01 \\
+			\rowcolor{rowlight}limoeiro-1000-7                                                      & 400  & 1260 & 231 & 37 & 424 & 434 & 2,30  & 1270405 & 0 & 2013  & 1200 & 3600,03 \\
+			\rowcolor{rowlight}limoeiro-2000-1                                                      & 1008 & 3112 & 549 & 37 & 61  & 69  & 11,59 & 762812  & 0 & 8194  & 1198 & 3600,05 \\
+			\rowcolor{rowlight}limoeiro-2000-2                                                      & 1008 & 3112 & 549 & 33 & 91  & 103 & 11,65 & 806905  & 0 & 12418 & 1196 & 3600,05 \\
+			\rowcolor{rowlight}limoeiro-2000-3                                                      & 1008 & 3112 & 549 & 36 & 136 & 145 & 6,21  & 751590  & 0 & 7942  & 1199 & 3600,05 \\
+			\rowcolor{rowlight}limoeiro-2000-4                                                      & 1008 & 3112 & 549 & 35 & 138 & 148 & 6,76  & 792598  & 0 & 8909  & 1200 & 3600,07 \\
+			\rowcolor{rowlight}limoeiro-2000-5                                                      & 1008 & 3112 & 549 & 36 & 173 & 186 & 6,99  & 613364  & 0 & 9601  & 1199 & 3600,10 \\
+			\rowcolor{rowlight}limoeiro-2000-6                                                      & 1008 & 3112 & 549 & 36 & 500 & 545 & 8,26  & 798407  & 0 & 9273  & 1200 & 3600,15 \\
+			\rowcolor{rowlight}limoeiro-2000-7                                                      & 1008 & 3112 & 549 & 34 & 516 & 582 & 11,34 & 855682  & 0 & 8147  & 1199 & 3600,01 \\
+			\rowcolor{rowlight}limoeiro-3000-1                                                      & 1240 & 3798 & 660 & 37 & 61  & 69  & 11,59 & 608408  & 0 & 10154 & 1198 & 3600,04 \\
+			\rowcolor{rowlight}limoeiro-3000-2                                                      & 1240 & 3798 & 660 & 35 & 92  & 103 & 10,68 & 678272  & 0 & 14033 & 1192 & 3600,09 \\
+			\rowcolor{rowlight}limoeiro-3000-3                                                      & 1240 & 3798 & 660 & 35 & 131 & 145 & 9,66  & 785581  & 0 & 9358  & 1194 & 3600,04 \\
+			\rowcolor{rowlight}limoeiro-3000-4                                                      & 1240 & 3798 & 660 & 35 & 138 & 148 & 6,76  & 705816  & 0 & 9261  & 1199 & 3600,04 \\
+			\rowcolor{rowlight}limoeiro-3000-5                                                      & 1240 & 3798 & 660 & 37 & 168 & 186 & 9,68  & 583145  & 0 & 9831  & 1200 & 3600,12 \\
+			\rowcolor{rowlight}limoeiro-3000-6                                                      & 1240 & 3798 & 660 & 33 & 492 & 550 & 10,55 & 764855  & 0 & 6193  & 1199 & 3600,05 \\
+			\rowcolor{rowlight}limoeiro-3000-7                                                      & 1240 & 3798 & 660 & 36 & 539 & 588 & 8,33  & 568148  & 0 & 9507  & 1200 & 3600,02 \\ \bottomrule
+		\end{tabular}%
+	}
+\end{table}
+
+Frac Cuts:
+\begin{table}[ht!]
+	\centering
+	\caption{Results of the Model Path-CBRP with Frac. Cuts.}
+	\label{tab:results-det-path-cbrp-exp-frac}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lrrrrrrrlrrrr}
+			\multicolumn{1}{c}{\textbf{Instance}}                                                     &
+			\multicolumn{1}{c}{\textbf{|V|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|A|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|B|}}                                                          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}}    &
+			\multicolumn{1}{c}{\textbf{LB}}                                                           &
+			\multicolumn{1}{c}{\textbf{UB}}                                                           &
+			\multicolumn{1}{c}{\textbf{gap (\%)}}                                                     &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}}       &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Frac\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Solution \\ Time (m)\end{tabular}}} &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ Time (s)\end{tabular}}}                                                                                              \\
+			alto-santo-1000-1                                                                         & 179  & 524  & 84  & 19 & 39  & 39  & 0,00  & 4087   & 215913   & 379  & 995  & 85,63   \\
+			alto-santo-1000-2                                                                         & 179  & 524  & 84  & 39 & 240 & 240 & 0,00  & 11915  & 711426   & 462  & 1199 & 206,82  \\
+			alto-santo-1000-3                                                                         & 179  & 524  & 84  & 38 & 246 & 247 & 0,40  & 163183 & 11486721 & 567  & 1195 & 3605,02 \\
+			alto-santo-1000-4                                                                         & 179  & 524  & 84  & 39 & 254 & 254 & 0,00  & 41059  & 2967054  & 667  & 1200 & 948,04  \\
+			alto-santo-1000-5                                                                         & 179  & 524  & 84  & 39 & 270 & 270 & 0,00  & 3990   & 234634   & 380  & 1199 & 59,89   \\
+			alto-santo-1000-6                                                                         & 179  & 524  & 84  & 39 & 321 & 323 & 0,62  & 145476 & 10990844 & 549  & 1200 & 3644,81 \\
+			alto-santo-2000-1                                                                         & 253  & 710  & 102 & 19 & 39  & 39  & 0,00  & 3676   & 398924   & 349  & 761  & 138,75  \\
+			alto-santo-2000-2                                                                         & 253  & 710  & 102 & 34 & 248 & 248 & 0,00  & 48535  & 1622897  & 381  & 1199 & 630,18  \\
+			alto-santo-2000-3                                                                         & 253  & 710  & 102 & 34 & 253 & 254 & 0,39  & 238221 & 9217878  & 307  & 1199 & 3605,11 \\
+			alto-santo-2000-4                                                                         & 253  & 710  & 102 & 34 & 260 & 260 & 0,00  & 135902 & 5037193  & 367  & 1197 & 2003,84 \\
+			alto-santo-2000-5                                                                         & 253  & 710  & 102 & 34 & 277 & 278 & 0,36  & 210331 & 9868944  & 238  & 1199 & 3615,29 \\
+			alto-santo-2000-6                                                                         & 253  & 710  & 102 & 34 & 327 & 329 & 0,61  & 157196 & 9194997  & 391  & 1197 & 3636,76 \\
+			alto-santo-3000-1                                                                         & 353  & 964  & 128 & 18 & 39  & 39  & 0,00  & 19601  & 529420   & 326  & 1200 & 313,04  \\
+			alto-santo-3000-2                                                                         & 353  & 964  & 128 & 34 & 248 & 248 & 0,00  & 12143  & 572386   & 311  & 1199 & 276,16  \\
+			alto-santo-3000-3                                                                         & 353  & 964  & 128 & 34 & 253 & 253 & 0,00  & 138067 & 5378323  & 302  & 1200 & 2610,47 \\
+			alto-santo-3000-4                                                                         & 353  & 964  & 128 & 34 & 260 & 261 & 0,38  & 161830 & 7368434  & 413  & 1200 & 3629,97 \\
+			alto-santo-3000-5                                                                         & 353  & 964  & 128 & 34 & 277 & 278 & 0,36  & 149208 & 7373458  & 274  & 1198 & 3650,84 \\
+			alto-santo-3000-6                                                                         & 353  & 964  & 128 & 34 & 327 & 328 & 0,30  & 113911 & 7204678  & 346  & 1200 & 3639,15 \\
+			limoeiro-1000-1                                                                           & 400  & 1260 & 231 & 31 & 42  & 55  & 23,64 & 42065  & 5499766  & 2263 & 1118 & 3706,12 \\
+			limoeiro-1000-2                                                                           & 400  & 1260 & 231 & 35 & 62  & 69  & 10,14 & 50555  & 6805624  & 2641 & 1177 & 3758,76 \\
+			limoeiro-1000-3                                                                           & 400  & 1260 & 231 & 38 & 109 & 113 & 3,54  & 45571  & 6619159  & 1505 & 1196 & 3952,29 \\
+			limoeiro-1000-4                                                                           & 400  & 1260 & 231 & 35 & 90  & 114 & 21,05 & 56969  & 7484046  & 1975 & 1131 & 3997,40 \\
+			limoeiro-1000-5                                                                           & 400  & 1260 & 231 & 37 & 134 & 143 & 6,29  & 47922  & 6332169  & 1513 & 1196 & 3607,20 \\
+			limoeiro-1000-6                                                                           & 400  & 1260 & 231 & 37 & 273 & 410 & 33,41 & 57360  & 7293691  & 2363 & 1200 & 3912,31 \\
+			limoeiro-1000-7                                                                           & 400  & 1260 & 231 & 35 & 378 & 437 & 13,50 & 54440  & 6917895  & 2327 & 1194 & 3647,31 \\
+			limoeiro-2000-1                                                                           & 1008 & 3112 & 549 & 16 & 28  & 69  & 59,42 & 18216  & 3137714  & 1427 & 520  & 3716,88 \\
+			limoeiro-2000-2                                                                           & 1008 & 3112 & 549 & 18 & 43  & 103 & 58,25 & 19800  & 3148458  & 2214 & 589  & 3764,21 \\
+			limoeiro-2000-3                                                                           & 1008 & 3112 & 549 & 18 & 65  & 145 & 55,17 & 17380  & 2931110  & 2413 & 565  & 3666,37 \\
+			limoeiro-2000-4                                                                           & 1008 & 3112 & 549 & 16 & 44  & 149 & 70,47 & 19397  & 3164385  & 1841 & 613  & 3740,89 \\
+			limoeiro-2000-5                                                                           & 1008 & 3112 & 549 & 33 & 98  & 186 & 47,31 & 18552  & 3040656  & 2591 & 1074 & 3642,62 \\
+			limoeiro-2000-6                                                                           & 1008 & 3112 & 549 & 35 & 388 & 546 & 28,94 & 18289  & 3008656  & 2339 & 1194 & 3627,89 \\
+			limoeiro-2000-7                                                                           & 1008 & 3112 & 549 & 34 & 520 & 583 & 10,81 & 19223  & 3076123  & 2127 & 1196 & 3690,55 \\
+			limoeiro-3000-1                                                                           & 1240 & 3798 & 660 & 16 & 28  & 70  & 60,00 & 14993  & 2539608  & 1968 & 523  & 3749,80 \\
+			limoeiro-3000-2                                                                           & 1240 & 3798 & 660 & 22 & 48  & 103 & 53,40 & 15975  & 2315621  & 2710 & 928  & 3665,97 \\
+			limoeiro-3000-3                                                                           & 1240 & 3798 & 660 & 21 & 70  & 146 & 52,05 & 15567  & 2418523  & 2359 & 721  & 3682,41 \\
+			limoeiro-3000-4                                                                           & 1240 & 3798 & 660 & 23 & 71  & 149 & 52,35 & 13698  & 2191289  & 2825 & 774  & 3605,04 \\
+			limoeiro-3000-5                                                                           & 1240 & 3798 & 660 & 22 & 86  & 186 & 53,76 & 14896  & 2430782  & 2262 & 739  & 3676,35 \\
+			limoeiro-3000-6                                                                           & 1240 & 3798 & 660 & 26 & 213 & 550 & 61,27 & 15746  & 2506030  & 1973 & 891  & 3661,27 \\
+			limoeiro-3000-7                                                                           & 1240 & 3798 & 660 & 27 & 210 & 590 & 64,41 & 15188  & 2509333  & 2525 & 979  & 3616,08
+		\end{tabular}%
+	}
+\end{table}
+
+MTZ:
+\begin{table}[ht!]
+	\centering
+	\caption{Results of the Model Path-CBRP-MTZ.}
+	\label{tab:results-det-path-cbrp-mtz}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lrrrrrrrlrrrr}
+			\multicolumn{1}{c}{\textbf{Instance}}                                                     &
+			\multicolumn{1}{c}{\textbf{|V|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|A|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|B|}}                                                          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}}    &
+			\multicolumn{1}{c}{\textbf{LB}}                                                           &
+			\multicolumn{1}{c}{\textbf{UB}}                                                           &
+			\multicolumn{1}{c}{\textbf{gap (\%)}}                                                     &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}}       &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Frac\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Solution \\ Time (m)\end{tabular}}} &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ Time (s)\end{tabular}}}                                                                                     \\
+			alto-santo-1000-1                                                                         & 179  & 524  & 84  & 19 & 39  & 39  & 0,00  & 4       & 0 & 0 & 808  & 0,85    \\
+			alto-santo-1000-2                                                                         & 179  & 524  & 84  & 39 & 240 & 240 & 0,00  & 76949   & 0 & 0 & 1200 & 103,16  \\
+			alto-santo-1000-3                                                                         & 179  & 524  & 84  & 39 & 247 & 247 & 0,00  & 84022   & 0 & 0 & 1199 & 104,91  \\
+			alto-santo-1000-4                                                                         & 179  & 524  & 84  & 39 & 254 & 254 & 0,00  & 137274  & 0 & 0 & 1199 & 165,64  \\
+			alto-santo-1000-5                                                                         & 179  & 524  & 84  & 39 & 270 & 270 & 0,00  & 53951   & 0 & 0 & 1199 & 82,94   \\
+			alto-santo-1000-6                                                                         & 179  & 524  & 84  & 39 & 321 & 321 & 0,00  & 144173  & 0 & 0 & 1199 & 122,62  \\
+			alto-santo-2000-1                                                                         & 253  & 710  & 102 & 19 & 39  & 39  & 0,00  & 1       & 0 & 0 & 818  & 0,37    \\
+			alto-santo-2000-2                                                                         & 253  & 710  & 102 & 34 & 248 & 248 & 0,00  & 8084    & 0 & 0 & 1200 & 17,54   \\
+			alto-santo-2000-3                                                                         & 253  & 710  & 102 & 34 & 253 & 253 & 0,00  & 51376   & 0 & 0 & 1200 & 131,72  \\
+			alto-santo-2000-4                                                                         & 253  & 710  & 102 & 34 & 260 & 260 & 0,00  & 51525   & 0 & 0 & 1197 & 79,38   \\
+			alto-santo-2000-5                                                                         & 253  & 710  & 102 & 34 & 277 & 277 & 0,00  & 51935   & 0 & 0 & 1197 & 120,56  \\
+			alto-santo-2000-6                                                                         & 253  & 710  & 102 & 34 & 327 & 327 & 0,00  & 82594   & 0 & 0 & 1198 & 106,74  \\
+			alto-santo-3000-1                                                                         & 353  & 964  & 128 & 18 & 39  & 39  & 0,00  & 52374   & 0 & 0 & 1200 & 142,84  \\
+			alto-santo-3000-2                                                                         & 353  & 964  & 128 & 34 & 248 & 248 & 0,00  & 9385    & 0 & 0 & 1198 & 21,53   \\
+			alto-santo-3000-3                                                                         & 353  & 964  & 128 & 34 & 253 & 253 & 0,00  & 39956   & 0 & 0 & 1199 & 47,31   \\
+			alto-santo-3000-4                                                                         & 353  & 964  & 128 & 34 & 260 & 260 & 0,00  & 51189   & 0 & 0 & 1196 & 121,81  \\
+			alto-santo-3000-5                                                                         & 353  & 964  & 128 & 34 & 277 & 277 & 0,00  & 56496   & 0 & 0 & 1200 & 80,59   \\
+			alto-santo-3000-6                                                                         & 353  & 964  & 128 & 34 & 327 & 327 & 0,00  & 81374   & 0 & 0 & 1199 & 129,07  \\
+			limoeiro-1000-1                                                                           & 400  & 1260 & 231 & 34 & 51  & 55  & 7,27  & 3046986 & 0 & 0 & 1197 & 3600,08 \\
+			limoeiro-1000-2                                                                           & 400  & 1260 & 231 & 35 & 65  & 68  & 4,41  & 1738681 & 0 & 0 & 1200 & 3600,06 \\
+			limoeiro-1000-3                                                                           & 400  & 1260 & 231 & 38 & 109 & 112 & 2,68  & 1940054 & 0 & 0 & 1197 & 3600,04 \\
+			limoeiro-1000-4                                                                           & 400  & 1260 & 231 & 39 & 111 & 112 & 0,89  & 1495999 & 0 & 0 & 1199 & 3600,05 \\
+			limoeiro-1000-5                                                                           & 400  & 1260 & 231 & 37 & 139 & 142 & 2,11  & 1663106 & 0 & 0 & 1199 & 3600,03 \\
+			limoeiro-1000-6                                                                           & 400  & 1260 & 231 & 36 & 397 & 405 & 1,98  & 2172930 & 0 & 0 & 1199 & 3600,04 \\
+			limoeiro-1000-7                                                                           & 400  & 1260 & 231 & 36 & 420 & 430 & 2,33  & 2224966 & 0 & 0 & 1200 & 3600,03 \\
+			limoeiro-2000-1                                                                           & 1008 & 3112 & 549 & 35 & 62  & 68  & 8,82  & 1668797 & 0 & 0 & 1200 & 3600,09 \\
+			limoeiro-2000-2                                                                           & 1008 & 3112 & 549 & 34 & 95  & 102 & 6,86  & 1948295 & 0 & 0 & 1196 & 3600,04 \\
+			limoeiro-2000-3                                                                           & 1008 & 3112 & 549 & 35 & 133 & 144 & 7,64  & 1627132 & 0 & 0 & 1192 & 3600,08 \\
+			limoeiro-2000-4                                                                           & 1008 & 3112 & 549 & 34 & 135 & 147 & 8,16  & 1843703 & 0 & 0 & 1200 & 3600,06 \\
+			limoeiro-2000-5                                                                           & 1008 & 3112 & 549 & 34 & 167 & 184 & 9,24  & 1612394 & 0 & 0 & 1200 & 3600,09 \\
+			limoeiro-2000-6                                                                           & 1008 & 3112 & 549 & 36 & 497 & 539 & 7,79  & 1468697 & 0 & 0 & 1199 & 3600,08 \\
+			limoeiro-2000-7                                                                           & 1008 & 3112 & 549 & 35 & 527 & 575 & 8,35  & 1414399 & 0 & 0 & 1200 & 3600,07 \\
+			limoeiro-3000-1                                                                           & 1240 & 3798 & 660 & 35 & 59  & 69  & 14,49 & 1619206 & 0 & 0 & 1194 & 3600,07 \\
+			limoeiro-3000-2                                                                           & 1240 & 3798 & 660 & 33 & 94  & 102 & 7,84  & 1767073 & 0 & 0 & 1200 & 3600,08 \\
+			limoeiro-3000-3                                                                           & 1240 & 3798 & 660 & 37 & 135 & 144 & 6,25  & 1448918 & 0 & 0 & 1200 & 3600,04 \\
+			limoeiro-3000-4                                                                           & 1240 & 3798 & 660 & 34 & 138 & 147 & 6,12  & 1459183 & 0 & 0 & 1200 & 3600,05 \\
+			limoeiro-3000-5                                                                           & 1240 & 3798 & 660 & 35 & 169 & 184 & 8,15  & 1610817 & 0 & 0 & 1196 & 3600,06 \\
+			limoeiro-3000-6                                                                           & 1240 & 3798 & 660 & 34 & 489 & 542 & 9,78  & 1410844 & 0 & 0 & 1200 & 3600,08 \\
+			limoeiro-3000-7                                                                           & 1240 & 3798 & 660 & 35 & 522 & 581 & 10,15 & 1651824 & 0 & 0 & 1200 & 3600,06
+		\end{tabular}%
+	}
+\end{table}
+
+Lazy Cuts + Preprocessing:
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[ht!]
+	\centering
+	\caption{Results of the Model Path-CBRP-MTZ.}
+	\label{tab:results-det-path-cbrp-mtz}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lrrrrrrrlrrrr}
+			\multicolumn{1}{c}{\textbf{Instance}}                                                     &
+			\multicolumn{1}{c}{\textbf{|V|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|A|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|B|}}                                                          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}}    &
+			\multicolumn{1}{c}{\textbf{LB}}                                                           &
+			\multicolumn{1}{c}{\textbf{UB}}                                                           &
+			\multicolumn{1}{c}{\textbf{gap (\%)}}                                                     &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}}       &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Frac\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Solution \\ Time (m)\end{tabular}}} &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ Time (s)\end{tabular}}}                                                                                        \\
+			alto-santo-1000-1                                                                         & 98  & 282  & 19  & 19 & 39  & 39  & 0,00  & 15      & 0 & 95    & 958  & 0,12    \\
+			alto-santo-1000-2                                                                         & 122 & 370  & 45  & 39 & 240 & 240 & 0,00  & 5553    & 0 & 418   & 1199 & 9,39    \\
+			alto-santo-1000-3                                                                         & 122 & 370  & 45  & 39 & 247 & 247 & 0,00  & 6603    & 0 & 420   & 1198 & 15,51   \\
+			alto-santo-1000-4                                                                         & 122 & 370  & 45  & 39 & 254 & 254 & 0,00  & 7469    & 0 & 431   & 1198 & 42,74   \\
+			alto-santo-1000-5                                                                         & 122 & 370  & 45  & 39 & 270 & 270 & 0,00  & 140989  & 0 & 425   & 1200 & 112,58  \\
+			alto-santo-1000-6                                                                         & 127 & 386  & 49  & 39 & 321 & 321 & 0,00  & 1451492 & 0 & 344   & 1200 & 1073,44 \\
+			alto-santo-2000-1                                                                         & 99  & 286  & 19  & 19 & 39  & 39  & 0,00  & 2909    & 0 & 110   & 917  & 0,32    \\
+			alto-santo-2000-2                                                                         & 153 & 450  & 47  & 34 & 248 & 248 & 0,00  & 11069   & 0 & 247   & 1198 & 12,74   \\
+			alto-santo-2000-3                                                                         & 153 & 450  & 47  & 33 & 253 & 253 & 0,00  & 166720  & 0 & 297   & 1200 & 119,86  \\
+			alto-santo-2000-4                                                                         & 153 & 450  & 47  & 34 & 260 & 260 & 0,00  & 199332  & 0 & 413   & 1197 & 144,84  \\
+			alto-santo-2000-5                                                                         & 153 & 450  & 47  & 33 & 277 & 277 & 0,00  & 277695  & 0 & 324   & 1200 & 182,98  \\
+			alto-santo-2000-6                                                                         & 155 & 458  & 51  & 34 & 327 & 327 & 0,00  & 360680  & 0 & 357   & 1200 & 276,34  \\
+			alto-santo-3000-1                                                                         & 141 & 386  & 20  & 18 & 39  & 39  & 0,00  & 114763  & 0 & 114   & 1191 & 152,59  \\
+			alto-santo-3000-2                                                                         & 193 & 558  & 49  & 34 & 248 & 248 & 0,00  & 21286   & 0 & 354   & 1200 & 33,20   \\
+			alto-santo-3000-3                                                                         & 193 & 558  & 49  & 34 & 253 & 253 & 0,00  & 60054   & 0 & 253   & 1200 & 56,12   \\
+			alto-santo-3000-4                                                                         & 193 & 558  & 49  & 34 & 260 & 260 & 0,00  & 118629  & 0 & 411   & 1199 & 111,82  \\
+			alto-santo-3000-5                                                                         & 193 & 558  & 49  & 34 & 277 & 277 & 0,00  & 63964   & 0 & 271   & 1196 & 57,58   \\
+			alto-santo-3000-6                                                                         & 195 & 566  & 53  & 34 & 327 & 327 & 0,00  & 674992  & 0 & 477   & 1200 & 525,47  \\
+			limoeiro-1000-1                                                                           & 285 & 872  & 40  & 35 & 52  & 54  & 3,70  & 1793344 & 0 & 1674  & 1199 & 3600,02 \\
+			limoeiro-1000-2                                                                           & 300 & 926  & 49  & 37 & 67  & 68  & 1,47  & 2458393 & 0 & 665   & 1200 & 3600,02 \\
+			limoeiro-1000-3                                                                           & 313 & 988  & 68  & 39 & 110 & 112 & 1,79  & 1844483 & 0 & 1383  & 1200 & 3600,01 \\
+			limoeiro-1000-4                                                                           & 313 & 988  & 73  & 39 & 111 & 112 & 0,89  & 1824648 & 0 & 930   & 1199 & 3600,01 \\
+			limoeiro-1000-5                                                                           & 316 & 1012 & 85  & 38 & 139 & 142 & 2,11  & 1504178 & 0 & 1788  & 1200 & 3600,01 \\
+			limoeiro-1000-6                                                                           & 333 & 1088 & 142 & 36 & 397 & 406 & 2,22  & 1991368 & 0 & 1105  & 1199 & 3600,01 \\
+			limoeiro-1000-7                                                                           & 333 & 1088 & 146 & 36 & 422 & 434 & 2,76  & 996967  & 0 & 4184  & 1199 & 3600,04 \\
+			limoeiro-2000-1                                                                           & 658 & 2016 & 79  & 35 & 62  & 68  & 8,82  & 1249205 & 0 & 11292 & 1195 & 3600,02 \\
+			limoeiro-2000-2                                                                           & 717 & 2224 & 110 & 34 & 95  & 103 & 7,77  & 1091569 & 0 & 11515 & 1199 & 3600,03 \\
+			limoeiro-2000-3                                                                           & 728 & 2289 & 142 & 35 & 134 & 145 & 7,59  & 1132646 & 0 & 6332  & 1199 & 3600,03 \\
+			limoeiro-2000-4                                                                           & 729 & 2295 & 149 & 35 & 138 & 148 & 6,76  & 1212630 & 0 & 5855  & 1199 & 3600,05 \\
+			limoeiro-2000-5                                                                           & 776 & 2473 & 189 & 36 & 166 & 185 & 10,27 & 1014571 & 0 & 11162 & 1200 & 3600,08 \\
+			limoeiro-2000-6                                                                           & 798 & 2589 & 325 & 33 & 483 & 544 & 11,21 & 911338  & 0 & 10013 & 1200 & 3600,01 \\
+			limoeiro-2000-7                                                                           & 801 & 2599 & 334 & 34 & 527 & 582 & 9,45  & 1012915 & 0 & 8003  & 1200 & 3600,06 \\
+			limoeiro-3000-1                                                                           & 850 & 2592 & 87  & 35 & 62  & 69  & 10,14 & 1102099 & 0 & 6358  & 1192 & 3600,03 \\
+			limoeiro-3000-2                                                                           & 891 & 2756 & 120 & 35 & 94  & 103 & 8,74  & 1035776 & 0 & 10579 & 1200 & 3600,06 \\
+			limoeiro-3000-3                                                                           & 910 & 2837 & 154 & 36 & 135 & 145 & 6,90  & 1028364 & 0 & 8023  & 1200 & 3600,02 \\
+			limoeiro-3000-4                                                                           & 910 & 2839 & 161 & 36 & 137 & 148 & 7,43  & 1126411 & 0 & 8186  & 1198 & 3600,03 \\
+			limoeiro-3000-5                                                                           & 929 & 2947 & 202 & 36 & 170 & 185 & 8,11  & 865016  & 0 & 11916 & 1196 & 3600,02 \\
+			limoeiro-3000-6                                                                           & 949 & 3049 & 345 & 35 & 498 & 549 & 9,29  & 964170  & 0 & 7049  & 1200 & 3600,03 \\
+			limoeiro-3000-7                                                                           & 952 & 3067 & 356 & 36 & 538 & 589 & 8,66  & 856985  & 0 & 11243 & 1197 & 3600,06
+		\end{tabular}%
+	}
+\end{table}
+
+Frac Cuts + Preprocessing:
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[ht!]
+	\centering
+	\caption{Results of the Model Path-CBRP-MTZ.}
+	\label{tab:results-det-path-cbrp-mtz}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lrrrrrrrlrrrr}
+			\multicolumn{1}{c}{\textbf{Instance}}                                                     &
+			\multicolumn{1}{c}{\textbf{|V|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|A|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|B|}}                                                          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}}    &
+			\multicolumn{1}{c}{\textbf{LB}}                                                           &
+			\multicolumn{1}{c}{\textbf{UB}}                                                           &
+			\multicolumn{1}{c}{\textbf{gap (\%)}}                                                     &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}}       &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Frac\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Solution \\ Time (m)\end{tabular}}} &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ Time (s)\end{tabular}}}                                                                                             \\
+			alto-santo-1000-1                                                                         & 98  & 282  & 19  & 19 & 39  & 39  & 0,00  & 47     & 657      & 71   & 856  & 0,82    \\
+			alto-santo-1000-2                                                                         & 122 & 370  & 45  & 39 & 240 & 240 & 0,00  & 16586  & 1082615  & 494  & 1199 & 237,30  \\
+			alto-santo-1000-3                                                                         & 122 & 370  & 45  & 39 & 247 & 247 & 0,00  & 21459  & 1483322  & 464  & 1198 & 407,99  \\
+			alto-santo-1000-4                                                                         & 122 & 370  & 45  & 39 & 254 & 254 & 0,00  & 7705   & 409644   & 329  & 1198 & 90,59   \\
+			alto-santo-1000-5                                                                         & 122 & 370  & 45  & 39 & 270 & 270 & 0,00  & 5609   & 364595   & 284  & 1199 & 83,61   \\
+			alto-santo-1000-6                                                                         & 127 & 386  & 49  & 39 & 321 & 322 & 0,31  & 259748 & 13258805 & 449  & 1195 & 3628,44 \\
+			alto-santo-2000-1                                                                         & 99  & 286  & 19  & 19 & 39  & 39  & 0,00  & 3845   & 144519   & 238  & 822  & 30,13   \\
+			alto-santo-2000-2                                                                         & 153 & 450  & 47  & 34 & 248 & 248 & 0,00  & 11021  & 422133   & 305  & 1200 & 104,08  \\
+			alto-santo-2000-3                                                                         & 153 & 450  & 47  & 34 & 253 & 253 & 0,00  & 56954  & 2095001  & 331  & 1200 & 559,46  \\
+			alto-santo-2000-4                                                                         & 153 & 450  & 47  & 32 & 260 & 260 & 0,00  & 209550 & 7667563  & 300  & 1200 & 2166,81 \\
+			alto-santo-2000-5                                                                         & 153 & 450  & 47  & 34 & 277 & 277 & 0,00  & 128917 & 4842505  & 285  & 1197 & 1370,66 \\
+			alto-santo-2000-6                                                                         & 155 & 458  & 51  & 34 & 327 & 328 & 0,30  & 197428 & 12226881 & 366  & 1200 & 3610,98 \\
+			alto-santo-3000-1                                                                         & 141 & 386  & 20  & 18 & 39  & 40  & 2,50  & 413842 & 10899015 & 158  & 1199 & 3600,24 \\
+			alto-santo-3000-2                                                                         & 193 & 558  & 49  & 34 & 248 & 248 & 0,00  & 55833  & 1925525  & 357  & 1199 & 647,27  \\
+			alto-santo-3000-3                                                                         & 193 & 558  & 49  & 34 & 253 & 253 & 0,00  & 260368 & 9776005  & 350  & 1200 & 3324,74 \\
+			alto-santo-3000-4                                                                         & 193 & 558  & 49  & 32 & 260 & 261 & 0,38  & 240050 & 11102591 & 363  & 1197 & 3605,37 \\
+			alto-santo-3000-5                                                                         & 193 & 558  & 49  & 32 & 277 & 277 & 0,00  & 69288  & 2660476  & 430  & 1196 & 864,10  \\
+			alto-santo-3000-6                                                                         & 195 & 566  & 53  & 34 & 327 & 328 & 0,30  & 194542 & 10774452 & 462  & 1199 & 3654,11 \\
+			limoeiro-1000-1                                                                           & 285 & 872  & 40  & 36 & 53  & 54  & 1,85  & 45596  & 5755335  & 890  & 1200 & 3609,35 \\
+			limoeiro-1000-2                                                                           & 300 & 926  & 49  & 34 & 64  & 69  & 7,25  & 71158  & 8502988  & 1994 & 1197 & 3622,12 \\
+			limoeiro-1000-3                                                                           & 313 & 988  & 68  & 38 & 109 & 112 & 2,68  & 57521  & 8002316  & 853  & 1193 & 3812,63 \\
+			limoeiro-1000-4                                                                           & 313 & 988  & 73  & 39 & 111 & 113 & 1,77  & 49353  & 6900436  & 849  & 1200 & 3810,07 \\
+			limoeiro-1000-5                                                                           & 316 & 1012 & 85  & 37 & 139 & 143 & 2,80  & 52435  & 7478733  & 1668 & 1198 & 3635,74 \\
+			limoeiro-1000-6                                                                           & 333 & 1088 & 142 & 29 & 201 & 410 & 50,98 & 63221  & 8153849  & 1942 & 881  & 3721,44 \\
+			limoeiro-1000-7                                                                           & 333 & 1088 & 146 & 36 & 420 & 436 & 3,67  & 59137  & 7878147  & 2273 & 1200 & 3667,02 \\
+			limoeiro-2000-1                                                                           & 658 & 2016 & 79  & 5  & 11  & 69  & 84,06 & 33590  & 5404535  & 2482 & 131  & 4036,97 \\
+			limoeiro-2000-2                                                                           & 717 & 2224 & 110 & 11 & 30  & 103 & 70,87 & 30180  & 4594505  & 2472 & 357  & 3669,70 \\
+			limoeiro-2000-3                                                                           & 728 & 2289 & 142 & 21 & 68  & 145 & 53,10 & 29328  & 4549462  & 2093 & 678  & 3666,43 \\
+			limoeiro-2000-4                                                                           & 729 & 2295 & 149 & 13 & 39  & 149 & 73,83 & 28156  & 4437435  & 2955 & 502  & 3768,72 \\
+			limoeiro-2000-5                                                                           & 776 & 2473 & 189 & 18 & 71  & 186 & 61,83 & 25612  & 4112013  & 1885 & 558  & 3623,96 \\
+			limoeiro-2000-6                                                                           & 798 & 2589 & 325 & 29 & 230 & 547 & 57,95 & 22720  & 3699195  & 2476 & 965  & 3611,74 \\
+			limoeiro-2000-7                                                                           & 801 & 2599 & 334 & 19 & 178 & 583 & 69,47 & 25985  & 4280877  & 1790 & 608  & 3912,74 \\
+			limoeiro-3000-1                                                                           & 850 & 2592 & 87  & 17 & 29  & 69  & 57,97 & 25441  & 4031620  & 2459 & 545  & 3953,82 \\
+			limoeiro-3000-2                                                                           & 891 & 2756 & 120 & 15 & 32  & 103 & 68,93 & 24457  & 3582653  & 2445 & 582  & 3760,25 \\
+			limoeiro-3000-3                                                                           & 910 & 2837 & 154 & 26 & 73  & 145 & 49,66 & 21459  & 3488596  & 2892 & 851  & 3836,52 \\
+			limoeiro-3000-4                                                                           & 910 & 2839 & 161 & 13 & 39  & 149 & 73,83 & 21798  & 3524356  & 2107 & 480  & 3627,46 \\
+			limoeiro-3000-5                                                                           & 929 & 2947 & 202 & 23 & 82  & 186 & 55,91 & 23068  & 3611894  & 1982 & 759  & 3755,96 \\
+			limoeiro-3000-6                                                                           & 949 & 3049 & 345 & 10 & 127 & 550 & 76,91 & 21598  & 3339066  & 1941 & 301  & 3710,07 \\
+			limoeiro-3000-7                                                                           & 952 & 3067 & 356 & 18 & 177 & 590 & 70,00 & 18890  & 3231983  & 2374 & 555  & 3672,23
+		\end{tabular}%
+	}
+\end{table}
+
+MTZ + Preprocessing:
+\begin{table}[ht!]
+	\centering
+	\caption{Results of the Model Path-CBRP-MTZ.}
+	\label{tab:results-det-path-cbrp-mtz}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lrrrrrrrlrrrr}
+			\multicolumn{1}{c}{\textbf{Instance}}                                                     &
+			\multicolumn{1}{c}{\textbf{|V|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|A|}}                                                          &
+			\multicolumn{1}{c}{\textbf{|B|}}                                                          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}}    &
+			\multicolumn{1}{c}{\textbf{LB}}                                                           &
+			\multicolumn{1}{c}{\textbf{UB}}                                                           &
+			\multicolumn{1}{c}{\textbf{gap (\%)}}                                                     &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}}       &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Frac\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}}          &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Solution \\ Time (m)\end{tabular}}} &
+			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ Time (s)\end{tabular}}}                                                                                    \\
+			alto-santo-1000-1                                                                         & 98  & 282  & 19  & 19 & 39  & 39  & 0,00  & 679     & 0 & 0 & 765  & 1,15    \\
+			alto-santo-1000-2                                                                         & 122 & 370  & 45  & 39 & 240 & 240 & 0,00  & 62506   & 0 & 0 & 1198 & 59,45   \\
+			alto-santo-1000-3                                                                         & 122 & 370  & 45  & 39 & 247 & 247 & 0,00  & 57663   & 0 & 0 & 1198 & 67,61   \\
+			alto-santo-1000-4                                                                         & 122 & 370  & 45  & 39 & 254 & 254 & 0,00  & 18497   & 0 & 0 & 1198 & 19,26   \\
+			alto-santo-1000-5                                                                         & 122 & 370  & 45  & 39 & 270 & 270 & 0,00  & 30801   & 0 & 0 & 1198 & 22,92   \\
+			alto-santo-1000-6                                                                         & 127 & 386  & 49  & 39 & 321 & 321 & 0,00  & 95790   & 0 & 0 & 1200 & 75,53   \\
+			alto-santo-2000-1                                                                         & 99  & 286  & 19  & 19 & 39  & 39  & 0,00  & 1       & 0 & 0 & 759  & 0,30    \\
+			alto-santo-2000-2                                                                         & 153 & 450  & 47  & 34 & 248 & 248 & 0,00  & 3830    & 0 & 0 & 1200 & 12,01   \\
+			alto-santo-2000-3                                                                         & 153 & 450  & 47  & 34 & 253 & 253 & 0,00  & 59210   & 0 & 0 & 1200 & 35,58   \\
+			alto-santo-2000-4                                                                         & 153 & 450  & 47  & 34 & 260 & 260 & 0,00  & 49843   & 0 & 0 & 1198 & 58,03   \\
+			alto-santo-2000-5                                                                         & 153 & 450  & 47  & 32 & 277 & 277 & 0,00  & 54179   & 0 & 0 & 1200 & 27,57   \\
+			alto-santo-2000-6                                                                         & 155 & 458  & 51  & 36 & 327 & 327 & 0,00  & 60812   & 0 & 0 & 1200 & 67,57   \\
+			alto-santo-3000-1                                                                         & 141 & 386  & 20  & 18 & 39  & 39  & 0,00  & 52872   & 0 & 0 & 1191 & 108,60  \\
+			alto-santo-3000-2                                                                         & 193 & 558  & 49  & 34 & 248 & 248 & 0,00  & 13889   & 0 & 0 & 1199 & 23,77   \\
+			alto-santo-3000-3                                                                         & 193 & 558  & 49  & 34 & 253 & 253 & 0,00  & 24818   & 0 & 0 & 1198 & 32,16   \\
+			alto-santo-3000-4                                                                         & 193 & 558  & 49  & 34 & 260 & 260 & 0,00  & 63648   & 0 & 0 & 1200 & 33,82   \\
+			alto-santo-3000-5                                                                         & 193 & 558  & 49  & 34 & 277 & 277 & 0,00  & 34918   & 0 & 0 & 1199 & 25,73   \\
+			alto-santo-3000-6                                                                         & 195 & 566  & 53  & 34 & 327 & 327 & 0,00  & 69442   & 0 & 0 & 1200 & 102,87  \\
+			limoeiro-1000-1                                                                           & 285 & 872  & 40  & 35 & 52  & 53  & 1,89  & 2627979 & 0 & 0 & 1199 & 3600,02 \\
+			limoeiro-1000-2                                                                           & 300 & 926  & 49  & 36 & 66  & 68  & 2,94  & 1752176 & 0 & 0 & 1199 & 3600,04 \\
+			limoeiro-1000-3                                                                           & 313 & 988  & 68  & 39 & 110 & 111 & 0,90  & 1683788 & 0 & 0 & 1200 & 3600,03 \\
+			limoeiro-1000-4                                                                           & 313 & 988  & 73  & 39 & 111 & 112 & 0,89  & 1598236 & 0 & 0 & 1196 & 3600,03 \\
+			limoeiro-1000-5                                                                           & 316 & 1012 & 85  & 36 & 138 & 141 & 2,13  & 1869930 & 0 & 0 & 1200 & 3600,03 \\
+			limoeiro-1000-6                                                                           & 333 & 1088 & 142 & 37 & 398 & 403 & 1,24  & 2511424 & 0 & 0 & 1199 & 3600,03 \\
+			limoeiro-1000-7                                                                           & 333 & 1088 & 146 & 37 & 423 & 430 & 1,63  & 2730572 & 0 & 0 & 1200 & 3600,04 \\
+			limoeiro-2000-1                                                                           & 658 & 2016 & 79  & 35 & 63  & 67  & 5,97  & 1822536 & 0 & 0 & 1198 & 3600,03 \\
+			limoeiro-2000-2                                                                           & 717 & 2224 & 110 & 34 & 95  & 101 & 5,94  & 2297627 & 0 & 0 & 1196 & 3600,05 \\
+			limoeiro-2000-3                                                                           & 728 & 2289 & 142 & 34 & 135 & 143 & 5,59  & 1602838 & 0 & 0 & 1199 & 3600,03 \\
+			limoeiro-2000-4                                                                           & 729 & 2295 & 149 & 34 & 137 & 146 & 6,16  & 1644104 & 0 & 0 & 1200 & 3600,05 \\
+			limoeiro-2000-5                                                                           & 776 & 2473 & 189 & 38 & 172 & 183 & 6,01  & 2215884 & 0 & 0 & 1199 & 3600,04 \\
+			limoeiro-2000-6                                                                           & 798 & 2589 & 325 & 36 & 497 & 534 & 6,93  & 1557636 & 0 & 0 & 1200 & 3600,04 \\
+			limoeiro-2000-7                                                                           & 801 & 2599 & 334 & 34 & 521 & 569 & 8,44  & 1586556 & 0 & 0 & 1199 & 3600,08 \\
+			limoeiro-3000-1                                                                           & 850 & 2592 & 87  & 35 & 63  & 68  & 7,35  & 1604067 & 0 & 0 & 1198 & 3600,05 \\
+			limoeiro-3000-2                                                                           & 891 & 2756 & 120 & 34 & 94  & 101 & 6,93  & 2119765 & 0 & 0 & 1192 & 3600,04 \\
+			limoeiro-3000-3                                                                           & 910 & 2837 & 154 & 33 & 133 & 144 & 7,64  & 1830645 & 0 & 0 & 1194 & 3600,08 \\
+			limoeiro-3000-4                                                                           & 910 & 2839 & 161 & 35 & 137 & 147 & 6,80  & 1842920 & 0 & 0 & 1199 & 3600,08 \\
+			limoeiro-3000-5                                                                           & 929 & 2947 & 202 & 35 & 166 & 184 & 9,78  & 1931751 & 0 & 0 & 1200 & 3600,07 \\
+			limoeiro-3000-6                                                                           & 949 & 3049 & 345 & 32 & 485 & 545 & 11,01 & 2130725 & 0 & 0 & 1199 & 3600,08 \\
+			limoeiro-3000-7                                                                           & 952 & 3067 & 356 & 34 & 527 & 583 & 9,61  & 1468909 & 0 & 0 & 1200 & 3600,07
+		\end{tabular}%
+	}
+\end{table}
+
