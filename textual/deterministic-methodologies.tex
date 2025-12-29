@@ -1418,7 +1418,7 @@ The experiments consider a time limit of 3600 seconds. The experiments consider 
 
 This work uses nonparametric analysis, as suggested by~\cite{demsar:2006}, to compare the results.  The null hypothesis,  with a confidence  level of $95\%$,  is that there is  no \gls{ssd} when comparing  two or more strategies.  This work uses an adaptation of the Friedman test, made by Iman and Davenport, to compare multiple strategies on a set of different instances, rejecting the null hypothesis when the value of the test is greater than the critical value according to the F-distribution. With this, this work proceeds with a {\em post hoc} analysis applying the Nemenyi test to identify the group of strategies that are statistically equivalents, which occurs when the average ranks of two samples differ by at most a given critical difference. For the comparison of two strategies, this work uses the Wilcoxon test, rejecting the null hypothesis if the result of the test is smaller than $-1.96$.
 
-\subsection{Path-Based Solution}\label{subsec:path-based-solution}
+\subsection{Path-Based Solutions}\label{subsec:path-based-solutions}
 
 Six variants of the path-based formulation were evaluated as follows.
 
@@ -1430,6 +1430,8 @@ Six variants of the path-based formulation were evaluated as follows.
 \end{itemize}
 
 Table~\ref{tab:results-det-path-cbrp} exhibit the results of the \textsc{Path-CBRP} variant. The first column show the instance name, the second ($|V|$) is the number of nodes, $|A|$ is the number of arcs, ($|B|$) is the number of blocks, Attended Blocks presents the number of blocks attended in the solution, $LB$ and $UB$ are the lower and upper bounds, respectively, the gap column shows the percentage of the gap between LB and UB. The next column ($\#B\&B$) is the number of nodes in the \gls{bb} tree at the time the computation stopped, Frac. Cuts is the number of new constraints added by the separation heuristic, Lazy Cuts is the number of new constraints to eliminate the subtours, Solution Time (m) is the amount of time consumed in the solution (sum of route and serving time) in minutes, and Exec. time (s) is the execution time in seconds. The lines highlighted in dark gray (\crule[rowgrey]{3mm}{3mm}) represent the instances in which the optimality was proved. The rows highlighted in light gray (\crule[rowlight]{3mm}{3mm}) correspond to the instances in which a feasible solution was found, but the duality gap could not be closed.
+
+Tables~\ref{tab:results-det-path-cbrp-frac},~\ref{tab:results-det-path-cbrp-mtz-exp},~\ref{tab:results-det-path-cbrp-prep},~\ref{tab:results-det-path-cbrp-frac-prep} and~\ref{tab:results-det-path-cbrp-mtz-prep} exhibit the results of the \textsc{Path-CBRP}, \textsc{Path-CBRP-MTZ}, \textsc{Path-CBRP-Prep}, \textsc{Path-CBRP-Frac-Prep}, and \textsc{Path-CBRP-MTZ-Prep} variants, respectively. The tables shows the same columns as Table~\ref{tab:results-det-path-cbrp}.
 
 \begin{table}[ht!]
 	\centering
@@ -1494,7 +1496,6 @@ Table~\ref{tab:results-det-path-cbrp} exhibit the results of the \textsc{Path-CB
 	}
 \end{table}
 
-Table~\ref{tab:results-det-path-cbrp-frac} exhibit the results of the \textsc{Path-CBRP} variant with the addition of the fractional cuts separation heuristic. The table shows the same columns as Table~\ref{tab:results-det-path-cbrp}.
 
 \begin{table}[ht!]
 	\centering
@@ -1557,8 +1558,6 @@ Table~\ref{tab:results-det-path-cbrp-frac} exhibit the results of the \textsc{Pa
 		\end{tabular}%
 	}
 \end{table}
-
-Table~\ref{tab:results-det-path-cbrp-mtz-exp} exhibit the results of the \textsc{Path-CBRP-MTZ} variant.
 
 \begin{table}[ht!]
 	\centering
@@ -1626,8 +1625,6 @@ Table~\ref{tab:results-det-path-cbrp-mtz-exp} exhibit the results of the \textsc
 		\end{tabular}%
 	}
 \end{table}
-
-Tables~\ref{tab:results-det-path-cbrp-prep},~\ref{tab:results-det-path-cbrp-frac-prep} and~\ref{tab:results-det-path-cbrp-mtz-prep} exhibit the results of the \textsc{Path-CBRP}, \textsc{Path-CBRP-Frac}, and \textsc{Path-CBRP-MTZ} variants with the addition of the preprocessing steps described in Section~\ref{sec:preprocessing}, respectively.
 
 \begin{table}[ht!]
 	\centering
@@ -1827,17 +1824,52 @@ Tables~\ref{tab:results-det-path-cbrp-prep},~\ref{tab:results-det-path-cbrp-frac
 	}
 \end{table}
 
-The  Iman-Davenport  test  applied  to  the lower  bound  values  indicates  the
-existence of \gls{ssd} among the results.  Applying the Nemenyi test,  represented by
-Figure~\ref{fig:cd-models-ub-lb}, indicated the \textsc{Path-CBRP-Frac} model with lower average rank, while grouping as statistically equivalent the \textsc{Path-CBRP-MTZ} and the \textsc{Path-CBRP} models. Although statistically equivalent, the win count between the two approaches indicates that \textsc{Path-CBRP-Frac} performed better, accounting for 13 wins while \textsc{Path-CBRP-MTZ} achieved 11. There is still an important fact to be considered, for instances containing from 300 nodes or above, the model was not able to compute any lower bounds while \textsc{Path-CBRP} obtained lower bounds for all instances. Such information shows that \textsc{Path-CBRP} outperformed the \textsc{Path-CBRP-Frac} and \textsc{Path-CBRP-MTZ} models for the larger instances.
+
+\subsubsection{Statistical Analysis and results summary}\label{subsec:deterministic-path-based-descriptive-summary}
+
+The results of the six variants of the path-based formulation are summarized in Table~\ref{tab:deterministic-path-based-summary}. The table shows the number of instances, the number of optimal solutions, the percentage of optimal solutions, the average gap, the average time, the average number of blocks attended, the average \gls{lb}, and the average \gls{ub}.
+
+\begin{table}[ht!]
+	\centering
+	\caption{Summary of computational results for all methodologies.}\label{tab:deterministic-path-based-summary}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{lcccccccc}
+			\toprule
+			Method              & Inst. & Opt. & Opt.(\%) & Avg.Gap(\%) & Avg.Time(s) & Avg.Blocks & Avg.LB & Avg.UB \\
+			\midrule
+			Path-CBRP           & 39    & 18   & 46.2     & 3.75        & 2091.48     & 34.4       & 223.49 & 232.79 \\
+			Path-CBRP-Frac      & 39    & 10   & 25.6     & 21.61       & 2933.01     & 29.9       & 184.05 & 233.44 \\
+			Path-CBRP-MTZ       & 39    & 18   & 46.2     & 3.62        & 1979.00     & 34.2       & 222.90 & 231.56 \\
+			Path-CBRP-Prep      & 39    & 18   & 46.2     & 3.49        & 2013.55     & 34.4       & 223.49 & 232.56 \\
+			Path-CBRP-Frac-Prep & 39    & 13   & 33.3     & 25.62       & 2730.04     & 27.5       & 165.69 & 233.21 \\
+			Path-CBRP-MTZ-Prep  & 39    & 18   & 46.2     & 2.97        & 1958.33     & 34.2       & 223.13 & 231.08 \\
+			\bottomrule
+		\end{tabular}%
+	}
+\end{table}
+
+The Path-CBRP achieved 18 optimal solutions (46.2\%) with an average gap of 3.75\% and mean runtime of 2091.48 seconds. This formulation provides a strong baseline performance, attending an average of 34.4 blocks per solution. The Path-CBRP-MTZ formulation demonstrated comparable performance in terms of optimal solutions (18 out of 39) while achieving a slightly better average gap of 3.62\% and faster mean runtime of 1979 seconds. Despite the theoretically weaker LP relaxation of MTZ constraints, this formulation benefits from a more compact model representation that could reduce solver overhead.
+
+Notably, the Path-CBRP-Frac achieved only 10 optimal solutions (25.6\%) with an average gap of 21.61\%, approximately six times higher than the other base formulations. The average runtime increased to 2933.01 seconds, and the solutions attended fewer blocks on average (29.9 versus 34.2--34.4). These results suggest that aggressive fractional cut generation is counterproductive for this problem class, as the computational overhead of generating and managing a large number of cuts outweighs the potential benefits of strengthening the LP relaxation.
+
+Preprocessing significantly reduces the problem size, with average reductions of 29.1\% in the number of vertices ($|V|$: 596.1 $\rightarrow$ 422.5), 27.0\% in arcs ($|A|$: 1804.6 $\rightarrow$ 1318.2), and 65.5\% in blocks ($|B|$: 306.8 $\rightarrow$ 105.9). The substantial reduction in block count indicates that preprocessing effectively identifies and eliminates non-essential blocks from the problem formulation. For the exponential formulation, preprocessing reduced the average gap from 3.75\% to 3.49\% (an improvement of 0.26 percentage points) while decreasing runtime by 3.7\% (2091.48s to 2013.55s). The number of optimal solutions remained unchanged at 18 out of 39 instances.
+
+The MTZ formulation benefited most from preprocessing, with the average gap improving from 3.62\% to 2.97\%, a reduction of 0.65 percentage points. This variant achieved the lowest average gap among all methods while maintaining the fastest average runtime (1958.33 seconds). The combination of the compact MTZ formulation with the reduced problem size proved to be the most effective approach. Interestingly, preprocessing had a negative impact on the fractional cuts variant. Although the number of optimal solutions increased from 10 to 13, the average gap worsened from 21.61\% to 25.62\%. This counterintuitive result suggests that the reduced search space may eliminate promising regions that the fractional cuts strategy cannot recover, leading to poorer solution quality overall.
+
+Analysis of the attended blocks metric reveals consistent behavior across non-fractional methods, with all approaches attending approximately 34 blocks on average. In contrast, the fractional cut variants attended significantly fewer blocks (27.5--29.9), indicating that these methods terminate with suboptimal solutions that fail to maximize block coverage. The average lower and upper bounds provide additional insight into solution quality. All non-fractional methods achieved comparable average lower bounds (222.90--223.49), while the fractional variants produced substantially weaker bounds (165.69--184.05). The best average upper bound was achieved by Path-CBRP-MTZ-Prep (231.08), indicating its superior overall performance.
+
+The computational experiments yield several important conclusions. First, the Path-CBRP-MTZ-Prep formulation emerges as the best-performing approach, achieving the lowest average gap (2.97\%), fastest runtime (1958.33s), and best upper bound quality (231.08). Second, preprocessing provides consistent benefits for exponential and MTZ formulations, with problem size reductions of up to 65.5\% for blocks translating to improved solution quality and reduced computational time. Third, fractional cutting planes prove detrimental to performance, with gaps approximately six times higher than alternative approaches despite increased computational effort. This finding suggests that for this problem class, the lazy constraint approach combined with efficient preprocessing outperforms more aggressive cutting plane strategies. Finally, the MTZ formulation, when combined with preprocessing, offers a favorable trade-off between model compactness and solution quality, challenging the conventional preference for exponential formulations in routing problems.
+
+The  Iman-Davenport  test  applied  to  the lower  bound  values (higher is better)  indicates  the existence of \gls{ssd} among the results.
+Applying the Nemenyi test, represented by Figure~\ref{fig:cd-models-lb}, indicated the {Path-CBRP-Prep} model with higher average rank, while grouping as statistically equivalent the Path-CBRP, Path-CBRP-MTZ-Prep and Path-CBRP-MTZ. Although statistically equivalent, the win count (Table~\ref{tab:win-counts-models-lb}) between the four formulations indicates that {Path-CBRP} performed better, accounting for 31 wins while {Path-CBRP-Prep} achieved 28.
+The same analysis was applied to the upper bound values (lower is better), represented by Figure~\ref{fig:cd-models-ub}, indicating the {Path-CBRP-MTZ-Prep} model with lower average rank, while grouping as statistically equivalent the {Path-CBRP-MTZ} and {Path-CBRP-Prep}. The win count (Table~\ref{tab:win-counts-models-ub}) indicates that the {Path-CBRP-MTZ-Prep} model performed better, accounting for 32 wins while {Path-CBRP-MTZ} achieved 26.
+
 
 \begin{figure}[h!]
 	\centering
 	\includegraphics[scale=0.5]{images/deterministic-experiments/cd_models_lb.pdf}
 	\caption{Iman-Davenport and Nemenyi tests for Lower Bounds: ID = 7,34, CV = 2,26, CD = 1,21} \label{fig:cd-models-lb}
 \end{figure}
-
-For \gls{lb} values, higher is better.
 
 \begin{table}[h!]
 	\centering
@@ -1879,3 +1911,7 @@ For \gls{lb} values, higher is better.
 		\end{tabular}%
 	}
 \end{table}
+
+\subsection{Walk-Based Solutions}\label{subsec:walk-based-solutions}
+
+Three variants of the walk-based formulation were evaluated as follows.
