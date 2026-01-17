@@ -853,7 +853,7 @@ dualization of constraint~\eqref{eq:walk-max-time}.  Indeed, when  computing a
 situations we define other variations of {\lrsp} by increasing the difficulty
 of the subproblem adding time constraints.
 
-\subsection{Lagrangean Relaxations with Time Constraints}\label{sec:lr-time-constraints}
+\subsection{Lagrangean Relaxations with Time Constraints}\label{subsec:lr-time-constraints}
 
 Since the time constraint \eqref{eq:walk-max-time} is dualized and the resulting
 \gls{lpp} is a \gls{sp} problem for variables $x_{i,j}$ and a selection problem for variables $y_b$,
@@ -1914,4 +1914,42 @@ The same analysis was applied to the upper bound values (lower is better), repre
 
 \subsection{Walk-Based Solutions}\label{subsec:walk-based-solutions}
 
-Three variants of the walk-based formulation were evaluated as follows.
+This sections presents the results of the walk-based methodologies. Starting from the mathematical formulations, the Lagrangean Relaxation, the Greedy Heuristic and the Lower and Upper Bounds Analysis. The results presented in the following sections highlight the main differences and difficulties of the walk-based solutions compared to the path-based formulation.
+
+\subsubsection{Mathematical Formulations}\label{subsec:walk-based-mathematical-formulation}
+
+Since the use of the preprocessing steps for the path-based formulation achieved significant improvements in the solution quality, it is natural to extend this approach to the walk-based formulation. In addiction, the use of fractional cuts for the path-based formulation proved to be detrimental to the solution quality and will not be used in the walk-based formulation. Considering that the results with fractional cuts and without preprocessing were fully dominated by the results with preprocessing and without fractional cuts, those results will not be presented. With this, two variants of the walk-based formulation will be evaluated.
+
+\begin{itemize}
+	\item \textsc{Walk-CBRP-Prep}: This version incorporates subcycle elimination constraints as lazy constraints. Whenever an integer solution is identified, a post-processing step checks for multiple connected components (i.e., subtours disconnected from the depot).
+	\item \textsc{Walk-CBRP-MTZ}: This implementation includes \gls{mtz} constraints for subcycle elimination directly in the model.
+\end{itemize}
+
+\subsubsection{Lagrangean Relaxation}\label{subsec:lagrangean-relaxation}
+
+The Lagrangean Relaxation of the walk-based formulation is obtained by dualizing the max time constraint (\eqref{eq:walk-max-time}) and the constraints that associate the attended blocks to the path (\eqref{eq:walk-in-path}). The \gls{lpp} developed here is the same presented in Section~\ref{subsec:lr-time-constraints}, LR-RCSP-KN.
+
+Four variations of the LR-RCSP-KN will be evaluated:
+\begin{itemize}
+	\item \textsc{LR-RCSP-KN}: This version uses the Boost algorithm to compute \gls{rcsp} problems and the dynamic programming algorithm to compute \gls{kn} problems.
+	\item \textsc{LR-RCSP-KN-Solver}: This version uses the Gurobi solver to solve the subproblems.
+	
+	\item the other two two approaches are the same cited above, changing the starting set of lagrange multipliers to be the one obtained by the resulting of the variables from the dual solution of the original model by the Barrier Method. These variants are referred to as \textsc{LR-RCSP-KN-BM} and \textsc{LR-RCSP-KN-Solver-BM}, respectively.
+\end{itemize}
+
+Considering the essential parameters used in the subgradient method, the following combinations of values were evaluated:
+
+\begin{itemize}
+	\item stpe size ($\pi$) = $[1.0, 1.5, 2.0]$;
+	\item maximum number of iterations (\textsc{maxIter}) = $[2000, 5000, 10000]$;
+	\item Iterations without improvement ($updatePi$) = $[50, 100, 200, 500]$;
+	\item Reduction factor of $\pi$ = $[0.50, 0.60, 0.70, 0.80, 0.90, 0.92, 0.94, 0.96, 0.98, 0.99]$;
+\end{itemize}
+
+The other stopping criteria is the maximum execution time, limited to 1800 seconds (30 minutes).
+
+\subsubsection{Greedy Heuristic}\label{subsec:greedy-heuristic}
+
+\subsubsection{Lower and Upper Bounds Analysis}\label{subsec:lower-and-upper-bounds-analysis}
+
+\subsection{Path vs Walk Analysis}\label{subsec:path-vs-walk-analysis}
