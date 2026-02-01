@@ -1925,6 +1925,117 @@ Since the use of the preprocessing steps for the path-based formulation achieved
 	\item \textsc{Walk-CBRP-MTZ}: This implementation includes \gls{mtz} constraints for subcycle elimination directly in the model.
 \end{itemize}
 
+\begin{table}[ht!]
+	\centering
+	\caption{Results of the Model Walk-CBRP.} \label{tab:results-det-walk-cbrp-exp}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{lrrrrrrrrrr}
+	\multicolumn{1}{c}{\textbf{Instance}} &
+	  \multicolumn{1}{c}{\textbf{|V|}} &
+	  \multicolumn{1}{c}{\textbf{|A|}} &
+	  \multicolumn{1}{c}{\textbf{|B|}} &
+	  \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}} &
+	  \multicolumn{1}{c}{\textbf{LB}} &
+	  \multicolumn{1}{c}{\textbf{UB}} &
+	  \multicolumn{1}{c}{\textbf{gap (\%)}} &
+	  \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}} &
+	  \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}} &
+	  \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ time (s)\end{tabular}}} \\
+	\rowcolor[HTML]{EFEFEF} 
+	alto-santo-1000-1 & 179  & 524  & 84  & 19 & 39  & 39  & 7     & 0 & 84204   & 88    \\
+	alto-santo-1000-2 & 179  & 524  & 84  & 9  & 49  & 243 & 2761  & 0 & 1304386 & 3.608 \\
+	alto-santo-1000-3 & 179  & 524  & 84  & 9  & 50  & 250 & 2933  & 0 & 1250590 & 3.607 \\
+	alto-santo-1000-4 & 179  & 524  & 84  & 9  & 50  & 257 & 2875  & 0 & 1091250 & 3.604 \\
+	alto-santo-1000-5 & 179  & 524  & 84  & 19 & 111 & 272 & 2527  & 0 & 775602  & 3.602 \\
+	alto-santo-1000-6 & 179  & 524  & 84  & 10 & 61  & 324 & 3571  & 0 & 2248636 & 3.601 \\
+	alto-santo-2000-1 & 253  & 710  & 102 & 19 & 39  & 39  & 712   & 0 & 501426  & 550   \\
+	alto-santo-2000-2 & 253  & 710  & 102 & 33 & 246 & 249 & 4657  & 0 & 468120  & 3.602 \\
+	alto-santo-2000-3 & 253  & 710  & 102 & 3  & 21  & 256 & 4078  & 0 & 935992  & 3.601 \\
+	alto-santo-2000-4 & 253  & 710  & 102 & 32 & 256 & 262 & 3571  & 0 & 589274  & 3.601 \\
+	alto-santo-2000-5 & 253  & 710  & 102 & 33 & 276 & 279 & 6365  & 0 & 297220  & 3.601 \\
+	alto-santo-2000-6 & 253  & 710  & 102 & 4  & 35  & 330 & 4468  & 0 & 775834  & 3.603 \\
+	alto-santo-3000-1 & 353  & 964  & 128 & 2  & 2   & 40  & 926   & 0 & 376796  & 297   \\
+	alto-santo-3000-2 & 353  & 964  & 128 & 34 & 247 & 251 & 8185  & 0 & 494528  & 3.601 \\
+	alto-santo-3000-3 & 353  & 964  & 128 & 33 & 251 & 258 & 7352  & 0 & 565110  & 3.601 \\
+	alto-santo-3000-4 & 353  & 964  & 128 & 33 & 259 & 265 & 14900 & 0 & 447564  & 3.600 \\
+	alto-santo-3000-5 & 353  & 964  & 128 & 33 & 275 & 282 & 3571  & 0 & 778776  & 3.600 \\
+	alto-santo-3000-6 & 353  & 964  & 128 & 33 & 326 & 334 & 7092  & 0 & 586336  & 3.601 \\
+	limoeiro-1000-1   & 400  & 1260 & 231 & 2  & 8   & 56  & 2778  & 0 & 744260  & 3.603 \\
+	limoeiro-1000-2   & 400  & 1260 & 231 & 4  & 6   & 70  & 3992  & 0 & 341252  & 3.602 \\
+	limoeiro-1000-3   & 400  & 1260 & 231 & 2  & 24  & 117 & 5954  & 0 & 752070  & 620   \\
+	limoeiro-1000-4   & 400  & 1260 & 231 & 3  & 8   & 116 & 3446  & 0 & 608358  & 3.608 \\
+	limoeiro-1000-5   & 400  & 1260 & 231 & 7  & 42  & 149 & 3967  & 0 & 1885066 & 3.607 \\
+	limoeiro-1000-6   & 400  & 1260 & 231 & 5  & 42  & 422 & 3442  & 0 & 1159044 & 3.603 \\
+	limoeiro-1000-7   & 400  & 1260 & 231 & 9  & 59  & 458 & 4845  & 0 & 1762086 & 3.633 \\
+	limoeiro-2000-1   & 1008 & 3112 & 549 & 2  & 8   & 71  & 4819  & 0 & 1725052 & 3.601 \\
+	limoeiro-2000-2   & 1008 & 3112 & 549 & 2  & 13  & 111 & 3723  & 0 & 1951346 & 3.626 \\
+	limoeiro-2000-3   & 1008 & 3112 & 549 & 3  & 27  & 149 & 5037  & 0 & 1301930 & 3.606 \\
+	limoeiro-2000-4   & 1008 & 3112 & 549 & 2  & 23  & 159 & 7094  & 0 & 651154  & 883   \\
+	limoeiro-2000-5   & 1008 & 3112 & 549 & 3  & 33  & 191 & 6551  & 0 & 719364  & 3.604 \\
+	limoeiro-2000-6   & 1008 & 3112 & 549 & 10 & 107 & 560 & 7916  & 0 & 1850112 & 3.606 \\
+	limoeiro-2000-7   & 1008 & 3112 & 549 & 4  & 48  & 601 & 8958  & 0 & 943558  & 3.601 \\
+	limoeiro-3000-1   & 1240 & 3798 & 660 & 3  & 5   & 76  & 3525  & 0 & 1767152 & 3.606 \\
+	limoeiro-3000-2   & 1240 & 3798 & 660 & 7  & 21  & 106 & 5384  & 0 & 1599472 & 3.604 \\
+	limoeiro-3000-3   & 1240 & 3798 & 660 & 3  & 27  & 149 & 5582  & 0 & 1391940 & 3.600 \\
+	limoeiro-3000-4   & 1240 & 3798 & 660 & 3  & 8   & 160 & 7005  & 0 & 446980  & 538   \\
+	limoeiro-3000-5   & 1240 & 3798 & 660 & 2  & 28  & 192 & 7206  & 0 & 1056684 & 3.603 \\
+	limoeiro-3000-6   & 1240 & 3798 & 660 & 2  & 58  & 568 & 9643  & 0 & 566660  & 3.604 \\
+	limoeiro-3000-7   & 1240 & 3798 & 660 & 3  & 79  & 613 & 7668  & 0 & 808332  & 3.601
+	\end{tabular}%
+	}
+\end{table}
+
+\begin{table}[ht!]
+	\centering
+	\caption{Results of the Model Walk-MTZ.}
+	\label{tab:results-det-walk-cbrp-mtz}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{lrrrrrrrrrr}
+	\multicolumn{1}{c}{\textbf{Instance}} & \multicolumn{1}{c}{\textbf{|V|}} & \multicolumn{1}{c}{\textbf{|A|}} & \multicolumn{1}{c}{\textbf{|B|}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Attended\\ Blocks\end{tabular}}} & \multicolumn{1}{c}{\textbf{LB}} & \multicolumn{1}{c}{\textbf{UB}} & \multicolumn{1}{c}{\textbf{gap (\%)}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}\#B\&B\\ Nodes\end{tabular}}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Lazy\\ Cuts\end{tabular}}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Exec.\\ time (s)\end{tabular}}} \\
+	\rowcolor[HTML]{EFEFEF} 
+	alto-santo-1000-1 & 69 & 4692 & 19 & 19 & 39 & 39 & 0,00 & 1 & 0 & 10,29 \\
+	alto-santo-1000-2 & 116 & 13340 & 45 & 38 & 237 & 242 & 2,07 & 35 & 0 & 289,68 \\
+	alto-santo-1000-3 & 116 & 13340 & 45 & 35 & 240 & 250 & 4,00 & 31 & 0 & 320,10 \\
+	alto-santo-1000-4 & 116 & 13340 & 45 & 25 & 217 & 256 & 15,23 & 33 & 0 & 280,29 \\
+	alto-santo-1000-5 & 116 & 13340 & 45 & 34 & 257 & 273 & 5,86 & 31 & 0 & 266,28 \\
+	alto-santo-1000-6 & 118 & 13806 & 49 & 34 & 310 & 326 & 4,91 & 21 & 0 & 331,00 \\
+	alto-santo-2000-1 & 69 & 4692 & 19 & 19 & 39 & 39 & 0,00 & 1 & 0 & 10,27 \\
+	alto-santo-2000-2 & 139 & 19182 & 47 & 29 & 233 & 251 & 7,17 & 16 & 0 & 819,49 \\
+	alto-santo-2000-3 & 139 & 19182 & 47 & 25 & 229 & 257 & 10,89 & 15 & 0 & 596,88 \\
+	alto-santo-2000-4 & 139 & 19182 & 47 & 33 & 253 & 265 & 4,53 & 18 & 0 & 662,37 \\
+	alto-santo-2000-5 & 139 & 19182 & 47 & 23 & 231 & 282 & 18,09 & 15 & 0 & 569,61 \\
+	alto-santo-2000-6 & 141 & 19740 & 51 & 28 & 296 & 333 & 11,11 & 15 & 0 & 627,50 \\
+	alto-santo-3000-1 & 103 & 10506 & 20 & 18 & 38 & 40 & 5,00 & 156 & 0 & 266,15 \\
+	alto-santo-3000-2 & 173 & 29756 & 49 & 21 & 197 & 251 & 21,51 & 6 & 0 & 890,87 \\
+	alto-santo-3000-3 & 173 & 29756 & 49 & 25 & 214 & 258 & 17,05 & 5 & 0 & 980,54 \\
+	alto-santo-3000-4 & 173 & 29756 & 49 & 30 & 231 & 265 & 12,83 & 5 & 0 & 1.262,39 \\
+	alto-santo-3000-5 & 173 & 29756 & 49 & 31 & 272 & 281 & 3,20 & 5 & 0 & 1.006,11 \\
+	alto-santo-3000-6 & 175 & 30450 & 53 & 31 & 310 & 333 & 6,91 & 3 & 0 & 949,27 \\
+	limoeiro-1000-1 & 155 & 23870 & 40 & 31 & 47 & 57 & 17,54 & 9 & 0 & 956,08 \\
+	limoeiro-1000-2 & 184 & 33672 & 49 & 28 & 57 & 71 & 19,72 & 3 & 0 & 1.694,55 \\
+	limoeiro-1000-3 & 226 & 50850 & 68 & 3 & 8 & 116 & 93,10 & 1 & 0 & 692,64 \\
+	limoeiro-1000-4 & 234 & 54522 & 73 & 2 & 2 & 118 & 98,31 & 1 & 0 & 595,51 \\
+	limoeiro-1000-5 & 259 & 66822 & 85 & 3 & 7 & 149 & 95,30 & 1 & 0 & 831,80 \\
+	limoeiro-1000-6 & 327 & 106602 & 142 & 5 & 11 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & - & - & 763,13 \\
+	limoeiro-1000-7 & 328 & 107256 & 146 & 3 & 13 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & - & - & 775,57 \\
+	limoeiro-2000-1 & 325 & 105300 & 79 & 2 & 6 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & - & - & 748,53 \\
+	limoeiro-2000-2 & 440 & 193160 & 110 & 3 & 6 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & - & - & 359,39 \\
+	limoeiro-2000-3 & 512 & 261632 & 142 & 3 & 6 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & - & - & 121,54 \\
+	limoeiro-2000-4 & 527 & 277202 & 149 & 3 & 5 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & - & - & 147,82 \\
+	limoeiro-2000-5 & 776 & 2473 & 189 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} \\
+	limoeiro-2000-6 & 798 & 2589 & 325 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} \\
+	limoeiro-2000-7 & 801 & 2599 & 334 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} \\
+	limoeiro-3000-1 & 430 & 184470 & 87 & 2 & 2 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & - & - & 1.594,31 \\
+	limoeiro-3000-2 & 891 & 2756 & 120 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} \\
+	limoeiro-3000-3 & 910 & 2837 & 154 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} \\
+	limoeiro-3000-4 & 910 & 2839 & 161 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} \\
+	limoeiro-3000-5 & 929 & 2947 & 202 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} \\
+	limoeiro-3000-6 & 949 & 3049 & 345 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} \\
+	limoeiro-3000-7 & 952 & 3067 & 356 & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-} & \multicolumn{1}{l}{-}
+	\end{tabular}%
+	}
+\end{table}
+
 \subsubsection{Lagrangean Relaxation}\label{subsec:lagrangean-relaxation}
 
 The Lagrangean Relaxation of the walk-based formulation is obtained by dualizing the max time constraint (\eqref{eq:walk-max-time}) and the constraints that associate the attended blocks to the path (\eqref{eq:walk-in-path}). The \gls{lpp} developed here is the same presented in Section~\ref{subsec:lr-time-constraints}, LR-RCSP-KN.
@@ -1948,7 +2059,112 @@ Considering the essential parameters used in the subgradient method, the followi
 
 The other stopping criteria is the maximum execution time, limited to 1800 seconds (30 minutes).
 
+\begin{table}[ht!]
+	\centering
+	\caption{Results of Lagrangean Relaxations - Multipliers starting in zero.}
+	\label{tab:results-lagrange-relax-mult-zero}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{llllrrrrrrrrrrrr}
+	\textbf{} & \textbf{} & \textbf{} & \textbf{} & \multicolumn{6}{c}{\textbf{LR}} & \multicolumn{6}{c}{\textbf{LR-Heuristic}} \\
+	\multicolumn{1}{c}{\textbf{Instance}} & \multicolumn{1}{c}{\textbf{|V|}} & \multicolumn{1}{c}{\textbf{|A|}} & \multicolumn{1}{c}{\textbf{|B|}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}First\\ LB\end{tabular}}} & \multicolumn{1}{c}{\textbf{LB}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}First\\ UB\end{tabular}}} & \multicolumn{1}{c}{\textbf{UB}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Gap\\ (\%)\end{tabular}}} & \multicolumn{1}{c}{\textbf{Time (s)}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}First\\ LB\end{tabular}}} & \multicolumn{1}{c}{\textbf{LB}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}First\\ UB\end{tabular}}} & \multicolumn{1}{c}{\textbf{UB}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Gap\\ (\%)\end{tabular}}} & \multicolumn{1}{c}{\textbf{Time (s)}} \\
+	alto-santo-1000-1 & 179 & 524 & 84 & 0 & 13 & 39 & 39 & 66,7 & 29 & 39 & 39 & 39 & 39 & 0,0 & 0 \\
+	alto-santo-1000-2 & 179 & 524 & 84 & 0 & 43 & 246 & 244 & 82,4 & 36 & 238 & 238 & 246 & 244 & 2,5 & 23 \\
+	alto-santo-1000-3 & 179 & 524 & 84 & 0 & 46 & 253 & 251 & 81,7 & 36 & 245 & 245 & 253 & 251 & 2,4 & 26 \\
+	alto-santo-1000-4 & 179 & 524 & 84 & 0 & 50 & 260 & 258 & 80,6 & 27 & 252 & 252 & 260 & 258 & 2,3 & 23 \\
+	alto-santo-1000-5 & 179 & 524 & 84 & 0 & 61 & 277 & 274 & 77,7 & 28 & 268 & 268 & 277 & 274 & 2,2 & 27 \\
+	alto-santo-1000-6 & 179 & 524 & 84 & 0 & 79 & 338 & 330 & 76,1 & 35 & 318 & 318 & 338 & 330 & 3,6 & 23 \\
+	alto-santo-2000-1 & 253 & 710 & 102 & 0 & 13 & 39 & 39 & 66,7 & 49 & 39 & 39 & 39 & 39 & 0,0 & 0 \\
+	alto-santo-2000-2 & 253 & 710 & 102 & 0 & 43 & 268 & 254 & 83,1 & 51 & 246 & 246 & 268 & 254 & 3,1 & 24 \\
+	alto-santo-2000-3 & 253 & 710 & 102 & 0 & 46 & 275 & 260 & 82,3 & 53 & 251 & 251 & 275 & 260 & 3,5 & 26 \\
+	alto-santo-2000-4 & 253 & 710 & 102 & 0 & 50 & 282 & 267 & 81,3 & 29 & 258 & 258 & 282 & 267 & 3,4 & 24 \\
+	alto-santo-2000-5 & 253 & 710 & 102 & 0 & 61 & 300 & 284 & 78,5 & 51 & 275 & 275 & 300 & 284 & 3,2 & 26 \\
+	alto-santo-2000-6 & 253 & 710 & 102 & 0 & 79 & 364 & 337 & 76,6 & 52 & 324 & 324 & 364 & 337 & 3,9 & 32 \\
+	alto-santo-3000-1 & 353 & 964 & 128 & 0 & 13 & 41 & 41 & 68,3 & 26 & 39 & 39 & 41 & 41 & 4,9 & 26 \\
+	alto-santo-3000-2 & 353 & 964 & 128 & 0 & 54 & 296 & 254 & 78,7 & 28 & 246 & 246 & 296 & 254 & 3,1 & 26 \\
+	alto-santo-3000-3 & 353 & 964 & 128 & 0 & 54 & 303 & 260 & 79,2 & 28 & 251 & 251 & 303 & 260 & 3,5 & 25 \\
+	alto-santo-3000-4 & 353 & 964 & 128 & 0 & 57 & 310 & 267 & 78,7 & 28 & 258 & 258 & 310 & 267 & 3,4 & 25 \\
+	alto-santo-3000-5 & 353 & 964 & 128 & 0 & 70 & 330 & 284 & 75,4 & 28 & 275 & 275 & 330 & 284 & 3,2 & 25 \\
+	alto-santo-3000-6 & 353 & 964 & 128 & 0 & 92 & 399 & 337 & 72,7 & 26 & 323 & 323 & 399 & 337 & 4,2 & 25 \\
+	limoeiro-1000-1 & 400 & 1260 & 231 & 0 & 8 & 57 & 57 & 86,0 & 26 & 51 & 51 & 57 & 57 & 10,5 & 26 \\
+	limoeiro-1000-2 & 400 & 1260 & 231 & 0 & 13 & 79 & 74 & 82,4 & 27 & 65 & 65 & 79 & 74 & 12,2 & 28 \\
+	limoeiro-1000-3 & 400 & 1260 & 231 & 0 & 27 & 139 & 118 & 77,1 & 28 & 108 & 108 & 139 & 118 & 8,5 & 29 \\
+	limoeiro-1000-4 & 400 & 1260 & 231 & 0 & 27 & 145 & 120 & 77,5 & 27 & 110 & 110 & 145 & 120 & 8,3 & 28 \\
+	limoeiro-1000-5 & 400 & 1260 & 231 & 0 & 28 & 189 & 151 & 81,5 & 30 & 136 & 136 & 189 & 151 & 9,9 & 29 \\
+	limoeiro-1000-6 & 400 & 1260 & 231 & 0 & 63 & 671 & 441 & 85,7 & 29 & 389 & 389 & 671 & 441 & 11,8 & 29 \\
+	limoeiro-1000-7 & 400 & 1260 & 231 & 0 & 70 & 719 & 468 & 85,0 & 30 & 415 & 415 & 719 & 468 & 11,3 & 30 \\
+	limoeiro-2000-1 & 1008 & 3112 & 549 & 0 & 8 & 110 & 77 & 89,6 & 52 & 59 & 59 & 110 & 77 & 23,4 & 50 \\
+	limoeiro-2000-2 & 1008 & 3112 & 549 & 0 & 16 & 184 & 114 & 86,0 & 54 & 87 & 87 & 184 & 114 & 23,7 & 49 \\
+	limoeiro-2000-3 & 1008 & 3112 & 549 & 0 & 23 & 274 & 159 & 85,5 & 54 & 129 & 129 & 274 & 159 & 18,9 & 48 \\
+	limoeiro-2000-4 & 1008 & 3112 & 549 & 0 & 23 & 288 & 163 & 85,9 & 51 & 132 & 132 & 288 & 163 & 19,0 & 52 \\
+	limoeiro-2000-5 & 1008 & 3112 & 549 & 0 & 28 & 404 & 204 & 86,3 & 55 & 157 & 157 & 404 & 204 & 23,0 & 49 \\
+	limoeiro-2000-6 & 1008 & 3112 & 549 & 0 & 63 & 1467 & 603 & 89,6 & 56 & 471 & 471 & 1467 & 603 & 21,9 & 54 \\
+	limoeiro-2000-7 & 1008 & 3112 & 549 & 0 & 79 & 1564 & 642 & 87,7 & 52 & 496 & 496 & 1564 & 642 & 22,7 & 54 \\
+	limoeiro-3000-1 & 1240 & 3798 & 660 & 0 & 7 & 121 & 78 & 91,0 & 55 & 58 & 58 & 121 & 78 & 25,6 & 68 \\
+	limoeiro-3000-2 & 1240 & 3798 & 660 & 0 & 16 & 199 & 114 & 86,0 & 68 & 89 & 89 & 199 & 114 & 21,9 & 57 \\
+	limoeiro-3000-3 & 1240 & 3798 & 660 & 0 & 27 & 294 & 159 & 83,0 & 59 & 127 & 127 & 294 & 159 & 20,1 & 67 \\
+	limoeiro-3000-4 & 1240 & 3798 & 660 & 0 & 27 & 312 & 163 & 83,4 & 69 & 130 & 130 & 312 & 163 & 20,2 & 67 \\
+	limoeiro-3000-5 & 1240 & 3798 & 660 & 0 & 33 & 446 & 205 & 83,9 & 69 & 156 & 156 & 446 & 205 & 23,9 & 67 \\
+	limoeiro-3000-6 & 1240 & 3798 & 660 & 0 & 63 & 1593 & 611 & 89,7 & 69 & 457 & 457 & 1593 & 611 & 25,2 & 62 \\
+	limoeiro-3000-7 & 1240 & 3798 & 660 & 0 & 79 & 1712 & 652 & 87,9 & 59 & 493 & 493 & 1712 & 652 & 24,4 & 69
+	\end{tabular}%
+	}
+\end{table}
+
+\begin{table}[ht!]
+	\centering
+	\caption{Results of Lagrangean Relaxations - Multipliers starting with Barrier Method.}
+	\label{tab:results-lagrange-relax-mult-barrier}
+	\resizebox{\textwidth}{!}{%
+	\begin{tabular}{llllrrrrrrrrrrrr}
+	\textbf{} & \textbf{} & \textbf{} & \textbf{} & \multicolumn{6}{c}{\textbf{LR-BM}} & \multicolumn{6}{c}{\textbf{LR-Heuristic-BM}} \\
+	\multicolumn{1}{c}{\textbf{Instance}} & \multicolumn{1}{c}{\textbf{|V|}} & \multicolumn{1}{c}{\textbf{|A|}} & \multicolumn{1}{c}{\textbf{|B|}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}First\\ LB\end{tabular}}} & \multicolumn{1}{c}{\textbf{LB}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}First\\ UB\end{tabular}}} & \multicolumn{1}{c}{\textbf{UB}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Gap\\ (\%)\end{tabular}}} & \multicolumn{1}{c}{\textbf{Time (s)}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}First\\ LB\end{tabular}}} & \multicolumn{1}{c}{\textbf{LB}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}First\\ UB\end{tabular}}} & \multicolumn{1}{c}{\textbf{UB}} & \multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Gap\\ (\%)\end{tabular}}} & \multicolumn{1}{c}{\textbf{Time (s)}} \\
+	alto-santo-1000-1 & 179 & 524 & 84 & 0 & 13 & 39 & 39,0 & 66,7 & 32 & 39 & 39 & 39 & 39,0 & 0,0 & 0 \\
+	alto-santo-1000-2 & 179 & 524 & 84 & 0 & 43 & 246 & 243,7 & 82,4 & 33 & 238 & 238 & 246 & 243,7 & 2,3 & 26 \\
+	alto-santo-1000-3 & 179 & 524 & 84 & 0 & 46 & 253 & 250,7 & 81,7 & 31 & 245 & 245 & 253 & 250,7 & 2,3 & 26 \\
+	alto-santo-1000-4 & 179 & 524 & 84 & 0 & 50 & 260 & 257,7 & 80,6 & 33 & 252 & 252 & 260 & 257,7 & 2,2 & 29 \\
+	alto-santo-1000-5 & 179 & 524 & 84 & 0 & 61 & 277 & 273,7 & 77,7 & 29 & 268 & 268 & 277 & 273,7 & 2,1 & 32 \\
+	alto-santo-1000-6 & 179 & 524 & 84 & 0 & 79 & 338 & 328,1 & 75,9 & 39 & 318 & 318 & 338 & 328,1 & 3,1 & 31 \\
+	alto-santo-2000-1 & 253 & 710 & 102 & 0 & 13 & 39 & 39,0 & 66,7 & 49 & 39 & 39 & 39 & 39,0 & 0,0 & 0 \\
+	alto-santo-2000-2 & 253 & 710 & 102 & 0 & 43 & 268 & 252,4 & 83,0 & 32 & 246 & 246 & 268 & 252,4 & 2,6 & 25 \\
+	alto-santo-2000-3 & 253 & 710 & 102 & 0 & 46 & 275 & 258,9 & 82,2 & 30 & 251 & 251 & 275 & 258,9 & 3,1 & 51 \\
+	alto-santo-2000-4 & 253 & 710 & 102 & 0 & 50 & 282 & 265,9 & 81,2 & 53 & 258 & 258 & 282 & 265,9 & 3,0 & 51 \\
+	alto-santo-2000-5 & 253 & 710 & 102 & 0 & 61 & 300 & 282,9 & 78,4 & 54 & 275 & 275 & 300 & 282,9 & 2,8 & 27 \\
+	alto-santo-2000-6 & 253 & 710 & 102 & 0 & 79 & 364 & 335,1 & 76,4 & 36 & 324 & 324 & 364 & 335,1 & 3,3 & 33 \\
+	alto-santo-3000-1 & 353 & 964 & 128 & 0 & 13 & 41 & 41,0 & 68,3 & 31 & 39 & 39 & 41 & 41,0 & 4,8 & 30 \\
+	alto-santo-3000-2 & 353 & 964 & 128 & 0 & 49 & 296 & 252,4 & 80,6 & 35 & 246 & 246 & 296 & 252,4 & 2,5 & 28 \\
+	alto-santo-3000-3 & 353 & 964 & 128 & 0 & 49 & 303 & 258,9 & 81,1 & 34 & 251 & 251 & 303 & 258,9 & 3,1 & 28 \\
+	alto-santo-3000-4 & 353 & 964 & 128 & 0 & 57 & 310 & 265,9 & 78,6 & 34 & 258 & 258 & 310 & 265,9 & 3,0 & 28 \\
+	alto-santo-3000-5 & 353 & 964 & 128 & 0 & 61 & 330 & 282,9 & 78,4 & 33 & 275 & 275 & 330 & 282,9 & 2,8 & 29 \\
+	alto-santo-3000-6 & 353 & 964 & 128 & 0 & 92 & 399 & 335,1 & 72,5 & 32 & 323 & 323 & 399 & 335,1 & 3,6 & 29 \\
+	limoeiro-1000-1 & 400 & 1260 & 231 & 0 & 8 & 57 & 57,0 & 86,0 & 28 & 51 & 51 & 57 & 57,0 & 10,5 & 28 \\
+	limoeiro-1000-2 & 400 & 1260 & 231 & 0 & 13 & 79 & 72,7 & 82,1 & 32 & 65 & 65 & 79 & 72,7 & 10,6 & 32 \\
+	limoeiro-1000-3 & 400 & 1260 & 231 & 0 & 24 & 139 & 117,0 & 79,5 & 31 & 108 & 108 & 139 & 117,0 & 7,7 & 32 \\
+	limoeiro-1000-4 & 400 & 1260 & 231 & 0 & 24 & 145 & 118,3 & 79,7 & 33 & 110 & 110 & 145 & 118,3 & 7,0 & 31 \\
+	limoeiro-1000-5 & 400 & 1260 & 231 & 0 & 33 & 189 & 149,2 & 77,9 & 31 & 136 & 136 & 189 & 149,2 & 8,9 & 30 \\
+	limoeiro-1000-6 & 400 & 1260 & 231 & 0 & 63 & 671 & 431,5 & 85,4 & 32 & 389 & 389 & 671 & 431,5 & 9,9 & 32 \\
+	limoeiro-1000-7 & 400 & 1260 & 231 & 0 & 70 & 719 & 458,5 & 84,7 & 33 & 415 & 415 & 719 & 458,5 & 9,5 & 32 \\
+	limoeiro-2000-1 & 1008 & 3112 & 549 & 0 & 8 & 110 & 75,3 & 89,4 & 73 & 59 & 59 & 110 & 75,3 & 21,6 & 62 \\
+	limoeiro-2000-2 & 1008 & 3112 & 549 & 0 & 16 & 184 & 111,4 & 85,6 & 71 & 87 & 87 & 184 & 111,4 & 21,9 & 65 \\
+	limoeiro-2000-3 & 1008 & 3112 & 549 & 0 & 27 & 274 & 155,8 & 82,7 & 69 & 129 & 129 & 274 & 155,8 & 17,2 & 66 \\
+	limoeiro-2000-4 & 1008 & 3112 & 549 & 0 & 27 & 288 & 160,0 & 83,1 & 67 & 132 & 132 & 288 & 160,0 & 17,5 & 63 \\
+	limoeiro-2000-5 & 1008 & 3112 & 549 & 0 & 33 & 404 & 199,8 & 83,5 & 70 & 157 & 157 & 404 & 199,8 & 21,4 & 65 \\
+	limoeiro-2000-6 & 1008 & 3112 & 549 & 0 & 63 & 1467 & 587,6 & 89,3 & 64 & 471 & 471 & 1467 & 587,6 & 19,8 & 68 \\
+	limoeiro-2000-7 & 1008 & 3112 & 549 & 0 & 79 & 1564 & 626,3 & 87,4 & 66 & 496 & 496 & 1564 & 626,3 & 20,8 & 66 \\
+	limoeiro-3000-1 & 1240 & 3798 & 660 & 0 & 8 & 121 & 76,0 & 89,5 & 89 & 58 & 58 & 121 & 76,0 & 23,7 & 83 \\
+	limoeiro-3000-2 & 1240 & 3798 & 660 & 0 & 16 & 199 & 111,5 & 85,6 & 82 & 89 & 89 & 199 & 111,5 & 20,2 & 80 \\
+	limoeiro-3000-3 & 1240 & 3798 & 660 & 0 & 27 & 294 & 156,1 & 82,7 & 89 & 127 & 127 & 294 & 156,1 & 18,6 & 85 \\
+	limoeiro-3000-4 & 1240 & 3798 & 660 & 0 & 27 & 312 & 160,3 & 83,2 & 73 & 130 & 130 & 312 & 160,3 & 18,9 & 84 \\
+	limoeiro-3000-5 & 1240 & 3798 & 660 & 0 & 33 & 446 & 200,7 & 83,6 & 77 & 156 & 156 & 446 & 200,7 & 22,3 & 97 \\
+	limoeiro-3000-6 & 1240 & 3798 & 660 & 0 & 63 & 1593 & 595,5 & 89,4 & 91 & 457 & 457 & 1593 & 595,5 & 23,3 & 88 \\
+	limoeiro-3000-7 & 1240 & 3798 & 660 & 0 & 79 & 1712 & 635,4 & 87,6 & 75 & 493 & 493 & 1712 & 635,4 & 22,4 & 88
+	\end{tabular}%
+	}
+\end{table}
+
 \subsubsection{Greedy Heuristic}\label{subsec:greedy-heuristic}
+
+
+
 
 \subsubsection{Lower and Upper Bounds Analysis}\label{subsec:lower-and-upper-bounds-analysis}
 
