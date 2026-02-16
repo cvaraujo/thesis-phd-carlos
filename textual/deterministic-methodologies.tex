@@ -2282,7 +2282,7 @@ Comparing the best-performing configurations from each table, LR-RCSP-KN-HR-BM a
 
 \paragraph{Comparison between LR-RCSP-KN-HR-BM-Prep and Linear Relaxation}
 
-To validate the quality of a \gls{lr}, the most common approach is to compare it with the linear relaxation of the original problem. This relaxation is obtained by flexibilizing the integer variables to real-valued. The linear relaxation is a much easier problem to solve than the original problem, since is a \gls{lp} problem.
+To validate the quality of a Lagrangean Relaxation, a valid approach is to compare it with the Linear Relaxation of the complete original problem. The Linear Relaxation is obtained by flexibilizing the integer variables of the original problem to be real-valued. The Linear Relaxation is a much easier problem to solve than the original problem and is a good approximation.
 
 Since the comparison consider the \gls{ub}s and the \gls{lr} with and without preprocessing achieved the same values, the selected version to compare is LR-RCSP-KN-HR-BM-Prep. Table~\ref{tab:results-lagrange-vs-linear} presents a comparison between LR-RCSP-KN-HR-BM-Prep and the linear relaxation of Walk-CBRP-Prep with the addition of the route and block attending time constraints.
 LR-RCSP-KN-HR-BM-Prep achieves better values in 36 instances, while both methods are equal in 3 instances.
@@ -2293,7 +2293,7 @@ Considering the execution time, the linear relaxation is significantly faster th
 	\centering
 	\caption{Comparison between LR-RCSP-KN-HR-BM-Prep and Walk-CBRP-Prep - Linear Relaxation.}
 	\label{tab:results-lagrange-vs-linear}
-	\resizebox{\textwidth}{!}{%
+	{\tiny%
 		\begin{tabular}{lrrr|rr|rr}
 			\toprule
 			\multicolumn{1}{c}{\textbf{Instance}} &
@@ -2356,12 +2356,14 @@ Considering the execution time, the linear relaxation is significantly faster th
 
 \subsubsection{Lower and Upper Bounds Analysis}\label{subsec:lower-and-upper-bounds-analysis}
 
+This section provides an analysis of the lower and upper bounds across all approaches that generate walk solutions. Table~\ref{tab:results-all-lower-bounds} presents a comparison of the \gls{lb}s for the Greedy Heuristic, the best Lagrangean Relaxation and the Walk-Based Formulations.
+
 \begin{table}[ht!]
 	\centering
 	\caption{Comparison of Lower Bounds across all approaches.}
 	\label{tab:results-all-lower-bounds}
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{l|rrrrrr}
+	{\tiny%
+		\begin{tabular}{lrrrrrr}
 			\toprule
 			\multicolumn{1}{c}{\textbf{Instance}} &
 			\multicolumn{1}{c}{\textbf{\begin{tabular}[c]{@{}c@{}}Greedy\\ Heuristic\end{tabular}}} &
@@ -2416,16 +2418,21 @@ Considering the execution time, the linear relaxation is significantly faster th
 	}
 \end{table}
 
+Considering the results presented in Table~\ref{tab:results-all-lower-bounds}, both the Greedy Heuristic and the best Lagrangean Relaxation achieve the same, or very similar, \gls{lb}s for all instances. This result reforces the quality on generating strong \gls{lb}s for the Greedy Heuristic.
+The Walk-Based Formulations (with and without preprocessing) achieved \gls{lb}s that are better than the Greedy Heuristic for the majority of Alto Santo instances (11 out of 18), however as the size of the instances increases, the quality of the \gls{lb}s achieved by the Walk-Based Formulations decreases. For the 21 instances of Limoeiro, the walk-based formulations achieved \gls{lb}s inferior to the Greedy Heuristic and consequently the \gls{lr}s. The Walk-CBRP-MTZ achieve inferior bounds for all the instances. 
+
+The Figure~\ref{fig:cd-walk-lb} presents the Iman-Davenport and Nemenyi tests for the lower bounds across all approaches. The test indicates that the Greedy Heuristic, \gls{lr}s and the Walk-CBRP-Prep are statistically equivalent (lowest average ranks). For those four approaches, the tiebreaker is the win count, presented in Table~\ref{tab:wins-equiv-lb}. Based on the win count, the LR-RCSP-KN-HR-BM-Prep achieved the best results, with 37 wins, followes by the Greedy Heuristic and the LR-RCSP-KN-HR-BM, with 32 wins.
+
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[scale=0.5]{images/deterministic-experiments/cd_csv_walk_lb.pdf}
+	\includegraphics[scale=0.35]{images/deterministic-experiments/cd_csv_walk_lb.pdf}
 	\caption{Iman-Davenport and Nemenyi tests for Lower Bounds: ID = 29,16; CV = 2,26; CD = 1,21} \label{fig:cd-walk-lb}
 \end{figure}
 
 \begin{table}[ht!]
 	\centering
-	\caption{Pairwise win counts for statistically equivalent CSV lower bounds approaches.} 
-	\label{tab:csv_pairwise_wins_equiv}
+	\caption{Win counts for statistically equivalent \gls{lb} approaches.} 
+	\label{tab:wins-equiv-lb}
 	\resizebox{\textwidth}{!}{%
 	\centering
 	\begin{tabular}{lrrrr}
@@ -2441,12 +2448,15 @@ Considering the execution time, the linear relaxation is significantly faster th
 	}
 \end{table}
 
+Table~\ref{tab:results-all-upper-bounds} presents a comparison of the \gls{ub}s for the the best \gls{lr} and the Walk-Based Formulations. The Iman-Davenport and Nemenyi tests are presented in Figure~\ref{fig:cd-walk-ub}, which indicated that the Walk-CBRP-Prep and the Walk-CBRP are statisticall equivalents as the best approaches to generate \gls{ub}s.
+Based on the win count, Walk-CBRP achieved better results for 6 instances, Walk-CBRP-Prep achieved better results for other 17 and for 16 instances both approaches achieved the same \gls{ub}s. Based on this results, the Walk-CBRP-Prep could be considered the best approach to generate \gls{ub}s for the Walk-Based methodologies.
+
 \begin{table}[ht!]
 	\centering
 	\caption{Comparison of Upper Bounds across all approaches.}
 	\label{tab:results-all-upper-bounds}
-	\resizebox{\textwidth}{!}{%
-		\begin{tabular}{l|rrrr}
+	{\tiny%
+		\begin{tabular}{lrrrr}
 			\toprule
 			\multicolumn{1}{c}{\textbf{Instance}} &
 			\multicolumn{1}{c}{\textbf{LR-RCSP-KN-HR-BM-Prep}} &
@@ -2501,8 +2511,86 @@ Considering the execution time, the linear relaxation is significantly faster th
 
 \begin{figure}[ht!]
 	\centering
-	\includegraphics[scale=0.5]{images/deterministic-experiments/cd_csv_walk_ub.pdf}
+	\includegraphics[scale=0.35]{images/deterministic-experiments/cd_csv_walk_ub.pdf}
 	\caption{Iman-Davenport and Nemenyi tests for Upper Bounds: ID = 28,27; CV = 2,26; CD = 1,21} \label{fig:cd-walk-ub}
 \end{figure}
 
 \subsection{Path vs Walk Analysis}\label{subsec:path-vs-walk-analysis}
+
+Since the Walk-Based Formulations are a generalization of the Path-Based Formulations, allowing the use of more flexible paths considering repetitions of arcs, the goal is to identify the gain of using the Walk-Based Formulations compared to the Path-Based Formulations. For this analysis, the best bounds were considered, independent of the approach used to generate them.
+
+Table~\ref{tab:all-bounds-analysis} presents a comparison of the \gls{lb}s and \gls{ub}s for the Path-Based and Walk-Based Formulations. 
+The first three columns present the bounds and GAP for the Trail-based approaches, the next three columns present the bounds and GAP for the Walk-Based approaches and the last two columns present the gap between the \gls{lb} (\gls{ub}) of the Trail-Based Formulations and the \gls{lb} (\gls{ub}) of the Walk-Based Formulations.
+
+\begin{table}[ht!]
+	\centering
+	\caption{All Bounds Analysis - Trail and Walk Comparison}
+	\label{tab:all-bounds-analysis}
+	{\tiny%
+	\begin{tabular}{lrrrrrrrr}
+	\hline
+	 &
+	  \multicolumn{3}{c}{\textbf{Trail}} &
+	  \multicolumn{3}{c}{\textbf{Walk}} &
+	  \multicolumn{1}{l}{} &
+	  \multicolumn{1}{l}{} \\ \cline{2-7}
+	\multicolumn{1}{c}{\textbf{Instance}} &
+	  \multicolumn{1}{l}{Best LB} &
+	  \multicolumn{1}{l}{Best UB} &
+	  \multicolumn{1}{l}{GAP (\%)} &
+	  \multicolumn{1}{l}{Best LB} &
+	  \multicolumn{1}{l}{Best UB} &
+	  \multicolumn{1}{l}{GAP (\%)} &
+	  \multicolumn{1}{l}{LB GAP (\%)} &
+	  \multicolumn{1}{l}{UB GAP (\%)} \\ \hline
+	alto-santo-1000-1 & 39  & 39  & 0,00 & 39  & 39  & 0,00  & 0,00   & 0,00  \\
+	alto-santo-1000-2 & 240 & 240 & 0,00 & 238 & 241 & 1,24  & -0,84  & 0,41  \\
+	alto-santo-1000-3 & 247 & 247 & 0,00 & 246 & 248 & 0,81  & -0,41  & 0,40  \\
+	alto-santo-1000-4 & 254 & 254 & 0,00 & 253 & 255 & 0,78  & -0,40  & 0,39  \\
+	alto-santo-1000-5 & 270 & 270 & 0,00 & 269 & 271 & 0,74  & -0,37  & 0,37  \\
+	alto-santo-1000-6 & 321 & 321 & 0,00 & 319 & 323 & 1,24  & -0,63  & 0,62  \\
+	alto-santo-2000-1 & 39  & 39  & 0,00 & 39  & 39  & 0,00  & 0,00   & 0,00  \\
+	alto-santo-2000-2 & 248 & 248 & 0,00 & 247 & 249 & 0,80  & -0,40  & 0,40  \\
+	alto-santo-2000-3 & 253 & 253 & 0,00 & 252 & 255 & 1,18  & -0,40  & 0,78  \\
+	alto-santo-2000-4 & 260 & 260 & 0,00 & 259 & 262 & 1,15  & -0,39  & 0,76  \\
+	alto-santo-2000-5 & 277 & 277 & 0,00 & 276 & 279 & 1,08  & -0,36  & 0,72  \\
+	alto-santo-2000-6 & 327 & 327 & 0,00 & 325 & 330 & 1,52  & -0,62  & 0,91  \\
+	alto-santo-3000-1 & 39  & 39  & 0,00 & 39  & 40  & 2,50  & 0,00   & 2,50  \\
+	alto-santo-3000-2 & 248 & 248 & 0,00 & 247 & 249 & 0,80  & -0,40  & 0,40  \\
+	alto-santo-3000-3 & 253 & 253 & 0,00 & 251 & 255 & 1,57  & -0,80  & 0,78  \\
+	alto-santo-3000-4 & 260 & 260 & 0,00 & 259 & 265 & 2,26  & -0,39  & 1,89  \\
+	alto-santo-3000-5 & 277 & 277 & 0,00 & 275 & 279 & 1,43  & -0,73  & 0,72  \\
+	alto-santo-3000-6 & 327 & 327 & 0,00 & 326 & 330 & 1,21  & -0,31  & 0,91  \\ \hline
+	limoeiro-1000-1   & 53  & 53  & 0,00 & 51  & 56  & 8,93  & -3,92  & 5,36  \\
+	limoeiro-1000-2   & 67  & 68  & 1,47 & 65  & 69  & 5,80  & -3,08  & 1,45  \\
+	limoeiro-1000-3   & 110 & 111 & 0,90 & 108 & 113 & 4,42  & -1,85  & 1,77  \\
+	limoeiro-1000-4   & 111 & 112 & 0,89 & 110 & 114 & 3,51  & -0,91  & 1,75  \\
+	limoeiro-1000-5   & 139 & 141 & 1,42 & 137 & 146 & 6,16  & -1,46  & 3,42  \\
+	limoeiro-1000-6   & 398 & 403 & 1,24 & 390 & 413 & 5,57  & -2,05  & 2,42  \\
+	limoeiro-1000-7   & 424 & 430 & 1,40 & 415 & 438 & 5,25  & -2,17  & 1,83  \\
+	limoeiro-2000-1   & 63  & 67  & 5,97 & 59  & 71  & 16,90 & -6,78  & 5,63  \\
+	limoeiro-2000-2   & 95  & 101 & 5,94 & 89  & 107 & 16,82 & -6,74  & 5,61  \\
+	limoeiro-2000-3   & 136 & 143 & 4,90 & 132 & 149 & 11,41 & -3,03  & 4,03  \\
+	limoeiro-2000-4   & 138 & 146 & 5,48 & 132 & 159 & 16,98 & -4,55  & 8,18  \\
+	limoeiro-2000-5   & 173 & 183 & 5,46 & 157 & 191 & 17,80 & -10,19 & 4,19  \\
+	limoeiro-2000-6   & 500 & 534 & 6,37 & 471 & 560 & 15,89 & -6,16  & 4,64  \\
+	limoeiro-2000-7   & 527 & 569 & 7,38 & 496 & 601 & 17,47 & -6,25  & 5,32  \\
+	limoeiro-3000-1   & 63  & 68  & 7,35 & 58  & 76  & 23,68 & -8,62  & 10,53 \\
+	limoeiro-3000-2   & 94  & 101 & 6,93 & 89  & 106 & 16,04 & -5,62  & 4,72  \\
+	limoeiro-3000-3   & 135 & 144 & 6,25 & 127 & 149 & 14,77 & -6,30  & 3,36  \\
+	limoeiro-3000-4   & 138 & 147 & 6,12 & 132 & 160 & 17,50 & -4,55  & 8,13  \\
+	limoeiro-3000-5   & 170 & 184 & 7,61 & 156 & 192 & 18,75 & -8,97  & 4,17  \\
+	limoeiro-3000-6   & 498 & 542 & 8,12 & 457 & 568 & 19,54 & -8,97  & 4,58  \\
+	limoeiro-3000-7   & 539 & 581 & 7,23 & 493 & 606 & 18,65 & -9,33  & 4,13  \\ \hline
+	\end{tabular}%
+	}
+\end{table}
+
+The results presented in Table~\ref{tab:all-bounds-analysis} reveal important differences between the Trail-Based and Walk-Based Formulations. Across all 39 instances, the Walk-Based approaches consistently produce weaker bounds than their Trail-Based counterparts. The average \gls{lb} GAP is $-3.05\%$, indicating that the best Walk \gls{lb} is, on average, $3.05\%$ lower than the best Trail \gls{lb}. Similarly, the average \gls{ub} GAP is $2.77\%$, meaning the Walk \gls{ub} exceeds the Trail \gls{ub} by $2.77\%$ on average. Notably, in no instance does the Walk-Based Formulation achieve a better (higher) \gls{lb} or a tighter (lower) \gls{ub} than the Trail-Based Formulation. As a consequence, the average optimality GAP increases from $2.52\%$ for the Trail-Based Formulations to $7.75\%$ for the Walk-Based Formulations. The Trail-Based approaches achieve proven optimality on 19 out of 39 instances, whereas the Walk-Based approaches achieve this on only 2 instances.
+
+A clear scalability tendency emerges when analyzing the results by instance size. For the limoeiro instances, the average Trail GAP grows from $1.05\%$ (-1000- instances) to $5.93\%$ (-2000- instances) and $7.09\%$ (-3000- instances), while the Walk GAP increases more steeply from $5.66\%$ to $16.18\%$ and $18.42\%$, respectively. This indicates that the Walk-Based Formulation's relaxation weakens at a faster rate as instances grow in size. A similar pattern is observed for alto-santo, where the Walk GAP increases from $0.80\%$ (-1000- instances) to $0.96\%$ (-2000- instances) and $1.63\%$ (-3000- instances), even though the Trail-Based Formulation maintains optimality across all sizes.
+
+These results are consistent with the theoretical expectation that generalizing from trails to walks enlarges the feasible region, thereby increase the difficulty of the problem, fact comproved by the increase in the GAP and the reduction in the average value of the \gls{lb}.
+Since every trail is also a walk, the walk methodologies admit additional solutions yielding higher possibilities reforced by the \gls{ub} values for this maximization problem, thus yelding the possibility of increase the solution, on average, $0.72\%$ for the alto-santo and $4.53\%$ for the limoeiro instances, which also tends to scale with the size of the instances.
+Furthermore, the larger solution space makes it more challenging for primal heuristics to identify high-quality feasible walk solutions, which explains the systematic degradation in \gls{lb}s. 
+Despite these limitations, the Walk-Based Formulation remains of interest because it offers modeling flexibility for scenarios where arc repetitions may be necessary or beneficial in practice, which is the case of block attending. 
