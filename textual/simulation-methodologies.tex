@@ -1,6 +1,6 @@
 \chapter{Dengue Virus Spread Simulation}\label{chp:dengue-virus-spread-simulation}
 
-This chapter details the design and implementation of the proposed \gls{mabs}, grounded in compartmental theory~\citep{amaku:2014}. Human agents follow the SIR process, while mosquito agents follow the SEI process. We model birth–death dynamics for the mosquito population. The human population is held constant over all simulations because demographic changes are negligible over the short-term horizon considered here (up to three months), particularly in small and mid-sized cities such as Alto Santo and Limoeiro.
+This chapter details the design and implementation of the proposed \gls{mabs}, grounded in compartmental theory~\citep{amaku:2014}. Human agents follow the SIR process, while mosquito agents follow the SEI process. The model includes birth–death dynamics for the mosquito population. The human population is held constant over all simulations because demographic changes are negligible over the short-term horizon considered here (up to three months), particularly in small and mid-sized cities such as Alto Santo and Limoeiro.
 
 State transitions are driven by vector–host interactions: a susceptible human becomes infected ($S\!\to\!I$) after an effective bite from an infectious mosquito, and a susceptible mosquito becomes exposed ($S\!\to\!E$) after biting an infectious human. Exposed mosquitoes progress to infectious ($E\!\to\!I$) following the extrinsic incubation period, and infectious humans recover to $R$ without waning immunity within the simulated horizon.
 
@@ -22,7 +22,7 @@ $\gamma_M$   & Mosquito latency rate per day     & 0.143  & \citenum{da-silva:20
 $c$      & Mosquito susceptibility to dengue     & 0.526  & \citenum{da-silva:2020} \\ \hline
 $\rho$   & The percentage of eggs that produce female mosquitoes & 0.125 & \citenum{dwivedi:2022} \\ \hline
 $\phi$   & Mosquito daily oviposition rate       & 0.020  & Fitted \\ \hline
-$\omega$ & Carrying capacity of the mosquito     & 3.000  & \citenum{dwivedi:2022}     \\ \hline
+$\omega$ & Maximum eggs per oviposition event     & 3.000  & \citenum{dwivedi:2022}     \\ \hline
 $\delta$ & Mosquito daily mortality rate in aquatic phase & 0.066 & Fitted \\ \hline
 $\sigma$ & Mosquito daily maturation rate        & 0.100  & \citenum{dwivedi:2022} \\ \hline
 $\mu_M$  & Mosquito daily mortality rate in adult phase   & 0.020  & Fitted \\ 
@@ -31,15 +31,15 @@ $\mu_M$  & Mosquito daily mortality rate in adult phase   & 0.020  & Fitted \\
 }
 \end{table}
 
-Each value in Table~\ref{tab:parameters-mabs} represents the probability applied to the agents in the simulation in each cycle. The parameter $\gamma_H$ denotes the likelihood that a human will transition from Infected to Recovered. The parameter $a$ indicates the probability that a human being bitten by a nearby mosquito, while $b$ represents the probability that a bite from an infected mosquito is infectious. The transition of a mosquito from exposed to infected depends on $\gamma_M$. If a mosquito bites an infected human, the probability of the mosquito becoming infected is given by $c$. The parameter $\rho$ indicates the number of eggs that hatch in female mosquitoes, $\phi$ means that a mosquito lays eggs due to an interaction with a breeding site, and $\omega$ represents the maximum number of eggs deposited per interaction. The parameter $\delta$ indicates the probability that an egg will die, while $\sigma$ is the probability that it will develop into an adult susceptible mosquito. Finally, $\mu_M$ is the mortality rate of an adult mosquito.
+Each value in Table~\ref{tab:parameters-mabs} represents the probability applied to the agents in the simulation in each cycle. The parameter $\gamma_H$ denotes the likelihood that a human will transition from Infected to Recovered. The parameter $a$ indicates the probability of a human being bitten by a nearby mosquito, while $b$ represents the probability that a bite from an infected mosquito is infectious. The transition of a mosquito from exposed to infected depends on $\gamma_M$. If a mosquito bites an infected human, the probability of the mosquito becoming infected is given by $c$. The parameter $\rho$ indicates the fraction of eggs that produce female mosquitoes, $\phi$ means that a mosquito lays eggs due to an interaction with a breeding site, and $\omega$ represents the maximum number of eggs deposited per oviposition event. The parameter $\delta$ indicates the probability that an egg will die, while $\sigma$ is the probability that it will develop into an adult susceptible mosquito. Finally, $\mu_M$ is the mortality rate of an adult mosquito.
 
 \section{MABS Agents} \label{sec:agents}
 
-The model includes four agent types that may interact: \emph{mosquito}, \emph{human}, \emph{egg}, and \emph{breeding site}. The sizes of the human and breeding-site populations are held constant throughout the simulation. We explicitly represent two life stages of \emph{Aedes}: an \emph{egg} agent for the aquatic phase and a \emph{mosquito} agent for the adult phase.
+The model includes four agent types that may interact: \emph{mosquito}, \emph{human}, \emph{egg}, and \emph{breeding site}. The sizes of the human and breeding-site populations are held constant throughout the simulation. The model explicitly represents two life stages of \emph{Aedes}: an \emph{egg} agent for the aquatic phase and a \emph{mosquito} agent for the adult phase.
 
 A \emph{breeding-site} agent denotes a mapped location where adult mosquitoes may oviposit (regardless of their infection state), producing egg agents that later emerge as adult mosquitoes. Each mosquito in the initial population, and every mosquito generated during the simulation, is associated with a breeding site (its origin), which anchors local reproduction and supports the spatial distribution of the population.
 
-This work does not consider vertical transmission; in other words, infected female mosquitoes do not pass the virus to their eggs at breeding sites. Consequently, every mosquito emerging from the aquatic phase into adulthood is assumed to start in the susceptible state. Figure~\ref{fig:simplified-agent-interaction} shows a simplified flowchart of agent interactions, and a more detailed description follows.
+This thesis does not consider vertical transmission; in other words, infected female mosquitoes do not pass the virus to their eggs at breeding sites. Consequently, every mosquito emerging from the aquatic phase into adulthood is assumed to start in the susceptible state. Figure~\ref{fig:simplified-agent-interaction} shows a simplified flowchart of agent interactions, and a more detailed description follows.
 
 \begin{figure}[!ht]
     \begin{tikzpicture}[
@@ -131,9 +131,9 @@ This work does not consider vertical transmission; in other words, infected fema
   \end{itemize}
 \end{itemize}
 
-The flow of time in the simulation is based on cycles. Each cycle represents a moment in time during which all agents perform their specific actions. In this work, each cycle represents a time skip of 12 hours. Since the simulation runs over real dates, the starting hour of the initial date of the simulation is 05:30 AM. This decision ensures that all cycles occur at 05:30 AM/PM, which are moments of thermal inversions known as the most active time for mosquitoes. In addition, these hours divide the human population into work and home locations. 
+The flow of time in the simulation is based on cycles. Each cycle represents a moment in time during which all agents perform their specific actions. In this thesis, each cycle represents a time skip of 12 hours. Since the simulation runs over real dates, the starting hour of the initial date of the simulation is 05:30 AM. This decision ensures that all cycles occur at 05:30 AM/PM, which are moments of thermal inversions known as the most active time for mosquitoes. In addition, these hours divide the human population into work and home locations. 
 
-The model was developed in the GAMA Platform\footnote{\url{https://gama-platform.org/}}~\citep{taillandier:2019}, a tool designed specifically for \gls{mabs}. GAMA operates using the GAma Modeling Language (GAML), which is an agent-oriented language. This means that everything active in the model can be represented in GAMA as an agent. GAMA provides an interface to manipulate input/output data from the simulation, which enables integration with other tools that interact with the agents of the simulation. Figure~\ref{fig:example-gama} illustrates a geospatial agent-based simulation of dengue transmission dynamics in \textit{Alto Santo}, Brazil, modeled in GAMA using data from \gls{osm}. Human populations are represented as yellow dots, red dots denote \textit{Aedes aegypti} mosquito population, and black nodes are breeding sites. Potential breeding sites are excluded from this visualization layer as their simulated locations are confined to street blocks. This simplification ensures visual clarity while retaining the focus of the model on the human-mosquito spatial interactions.
+The model was developed in the GAMA Platform\footnote{\url{https://gama-platform.org/}}~\citep{taillandier:2019}, a tool designed specifically for \gls{mabs}. GAMA operates using the GAma Modeling Language (GAML), which is an agent-oriented language. This means that everything active in the model can be represented in GAMA as an agent. GAMA provides an interface to manipulate input/output data from the simulation, which enables integration with other tools that interact with the agents of the simulation. Figure~\ref{fig:example-gama} illustrates a geospatial agent-based simulation of dengue transmission dynamics in Alto Santo, Brazil, modeled in GAMA using data from \gls{osm}. Human populations are represented as yellow dots, red dots denote \textit{Aedes aegypti} mosquito population, and black nodes are breeding sites. Potential breeding sites are excluded from this visualization layer as their simulated locations are confined to street blocks. This simplification ensures visual clarity while retaining the focus of the model on the human-mosquito spatial interactions.
 
 \begin{figure}[!ht]
     \centering
@@ -144,7 +144,7 @@ The model was developed in the GAMA Platform\footnote{\url{https://gama-platform
 
 \section{Computational Experiments} \label{sec:computational-experiments}
 
-The experiments were carried out on an Intel(R) Xeon(R)  CPU E5-2630 v4  processor with 10 cores of 2.20 GHz each and 64Gb of RAM. The implementation uses GAMA Platform version 1.9.2, the OSMnx Python Library~\citep{boeing:2017} 1.9.3 was used to extract the map from \gls{osm}, and the street blocks are computed using the procedure described in Section~\ref{sec:instance-generation}. Considering the robustness of the model, during the experiments, the GAMA managed to run simulations with around 80,000 agents and 500 independent simulations in the same batch in less than 4 hours with parallelism and without terminating the process due to lack of memory.
+The experiments were carried out on an Intel(R) Xeon(R)  CPU E5-2630 v4  processor with 10 cores of 2.20 GHz each and 64~GB of RAM. The implementation uses GAMA Platform version 1.9.2, the OSMnx Python Library~\citep{boeing:2017} 1.9.3 was used to extract the map from \gls{osm}, and the street blocks are computed using the procedure described in Section~\ref{sec:instance-generation}. Considering the robustness of the model, during the experiments, the GAMA managed to run simulations with around 80,000 agents and 500 independent simulations in the same batch in less than 4 hours with parallelism and without terminating the process due to lack of memory.
 The code is available in this public repository on Github\footnote{\url{https://github.com/cvaraujo/dengue-cbrp-mabs}}.
 
 This study explores different combinations of parameters from Table~\ref{tab:initial-pop-params} to identify the optimal configuration for each city based on the average number (min and max) of cases per week in multiple simulation runs. The precision and reliability of the results are assessed through the Pearson correlation coefficient ($r$), \gls{mae}, and the analysis of the simulated endemic channel.
@@ -173,10 +173,9 @@ $BS$ & Number of potential Breeding Sites & 50 - 500 \\
 \subsection{Data Processing}\label{subsec:data-processing}
 
 First, the objective is to establish the initial population size by computing the $p$ values.
-This work calculates the area of each block of streets as a polygon using the Shapely\footnote{\url{https://shapely.readthedocs.io/en/stable/}} and Geopandas\footnote{\url{https://geopandas.org/en/stable/}} Python libraries with data imported from \gls{osm}. Since the investigation in this work focuses mainly on urban areas, and both cities have vast territorial extensions that are predominantly composed of rural areas, their overall population densities reported in \gls{ibge} are low. 
-Because this study focuses on urban areas, while both municipalities have large territories predominantly composed of rural zones, their overall population densities reported by the \gls{ibge} are too low. To address this, we restrict the calculation of population density to the city center and its immediately adjacent areas. However, no population data are available at the level of blocks or neighborhoods. Therefore, we approximate the number of residents in the city centers using the number of registered electors\footnote{\url{https://international.tse.jus.br/en}} and combine this with \gls{osm}-based measurements of the urban footprint to estimate people per square meter. These estimates are used both to refine the resident population size and to define the initial population parameters for the simulation.
+This thesis calculates the area of each block of streets as a polygon using the Shapely\footnote{\url{https://shapely.readthedocs.io/en/stable/}} and Geopandas\footnote{\url{https://geopandas.org/en/stable/}} Python libraries with data imported from \gls{osm}. Since the investigation in this thesis focuses mainly on urban areas, and both cities have vast territorial extensions that are predominantly composed of rural areas, their overall population densities reported by the \gls{ibge} are low. To address this, the calculation of population density is restricted to the city center and its immediately adjacent areas. However, no population data are available at the level of blocks or neighborhoods. Therefore, the number of residents in the city centers is approximated using the number of registered electors\footnote{\url{https://international.tse.jus.br/en}} and combine this with \gls{osm}-based measurements of the urban footprint to estimate people per square meter. These estimates are used both to refine the resident population size and to define the initial population parameters for the simulation.
 
-The choice of using a parameter ($p$) defined as persons per square meter (m\textsuperscript{2}) ensures a good level of generalization for the simulation, as the presence of this value allows the population to remain proportionally adjusted for different experiments changing the size of the city map. This can be particularly useful, for example, if we wish to simulate the evolution of dengue cases in a single neighborhood.
+The choice of using a parameter ($p$) defined as persons per square meter (m\textsuperscript{2}) ensures a good level of generalization for the simulation, as the presence of this value allows the population to remain proportionally adjusted for different experiments changing the size of the city map. This can be particularly useful, for example, when simulating the evolution of dengue cases in a single neighborhood.
 
 Based on data provided by \gls{osm}, the urban area considered in Alto Santo covers approximately 0.9~km\textsuperscript{2}, with an estimated population of 9,000 people living in the city centers. This yields a population density of $p = 0.01$ people per m\textsuperscript{2}. For Limoeiro, the approximate urban area has 8~km\textsuperscript{2} and a population of 32000, which corresponds to a value of \( p = 0.004 \) people per m\textsuperscript{2}. Since this \gls{mabs} positions the individuals within blocks, the starting human population consists of the sum of $p$ multiplied by the area of the corresponding block. For Alto Santo, using a radius of 700~m inside OSMnx, 73 street blocks are generated and the starting human population is $H_0 = 5688$. In Limoeiro, with a large urban area, the radius of 2000~m provides 563 blocks and an initial population $H_0 = 29914$. 
 
@@ -190,11 +189,11 @@ The parameters tested were $M_h = [0.5, 1, 2, 3]$, $M_b = [0.05, 0.1, 0.15, 0.2,
 
 An independent set of initial dates was defined for each city. 
 The objective of the parameter exploration is to determine the best configuration based on similarity with historical real-world data, which were mapped to the same map segment used in the simulation. 
-One set of parameters is considered better than another using the number of ``wins'' for the dates on which these three criteria, in the following order of precedence, were better: (1) higher correlation between the simulated mean and the real data; (2) lower \gls{mae} between the simulated mean and the historical data; (3) number of weeks in which the real case notifications fall within the Simulation Endemic Channel, that is, the range between the highest and lowest number of simulated cases in a given week. The concept of endemic channel is used by the public health departments to assess how the number of cases in the current \gls{ew} compares with the historical in previous years. 
+One set of parameters is considered better than another using the number of ``wins'' for the dates on which these three criteria, in the following order of precedence, were better: (1) higher correlation between the simulated mean and the real data; (2) lower \gls{mae} between the simulated mean and the historical data; (3) number of weeks in which the real case notifications fall within the Simulation Endemic Channel, that is, the range between the highest and lowest number of simulated cases in a given week. The concept of the endemic channel is used by the public health departments to assess how the number of cases in the current \gls{ew} compares with the historical in previous years. 
 
 \subsection{Results for Alto Santo}\label{subsec:results-alto-santo}
 
-To determine the start dates for the experiments, we selected the two years with the highest number of positive or pending notifications (2017 and 2021). The cases were then grouped by epidemiological week, as shown in Figure~\ref{fig:cases-per-week-as}. The objective is to focus on periods with the highest number of cases and consistency between adjacent weeks, while avoiding intervals with few or no cases. The experiments explore different starting dates within these periods to analyze the simulation's behavior when initiated at distinct moments along the endemic curve. Only historical notifications that can be assigned to a block in the simulation are considered, ensuring a fair comparison.
+To determine the start dates for the experiments, the two years with the highest number of positive or pending notifications (2017 and 2021) were selected. The cases were then grouped by epidemiological week, as shown in Figure~\ref{fig:cases-per-week-as}. The objective is to focus on periods with the highest number of cases and consistency between adjacent weeks, while avoiding intervals with few or no cases. The experiments explore different starting dates within these periods to analyze the simulation's behavior when initiated at distinct moments along the endemic curve. Only historical notifications that can be assigned to a block in the simulation are considered, ensuring a fair comparison.
 
 For better visualization of the results achieved by the simulator, Figure~\ref{fig:avg-result-2017-01-as} presents the results for the best configuration considering the following starting dates: \textit{(1)}~2017-01-08, \textit{(2)}~2017-01-15, \textit{(3)}~2017-01-22, \textit{(4)}~2017-01-29, \textit{(5)}~2021-05-30, and \textit{(6)}~2021-06-06. The X-axis represents the week number, the Y-axis represents the number of cases, the solid black line represents the total real notifications in the week, the dashed line represents the average number of cases across simulations with the same starting scenario, and the light gray ``$\times$'' markers represent the number of cases for a given simulation run.
 
@@ -234,16 +233,16 @@ For better visualization of the results achieved by the simulator, Figure~\ref{f
         \includegraphics[scale=0.4]{images/experiments-as/AS-2021-06-06.pdf}
         \subcaption{\label{subfig:as-f} 2021-06-06}
       \end{minipage}
-    \caption{\label{fig:avg-result-2017-01-as} Comparison of simulation and real cases from \textit{Alto Santo} for different starting dates.}
+    \caption{\label{fig:avg-result-2017-01-as} Comparison of simulation and real cases from Alto Santo for different starting dates.}
 \end{figure}
 
-The results represented in Figure~\ref{fig:avg-result-2017-01-as} correspond to the variable parameters $M_h = 1$, $BS = 50$, $M_b = 0.05$ and $M_b^{i} = 0.4$, which is the combination that achieved the best results considering the highest correlation values ($r$) among all configurations for \textit{Alto Santo}. More detailed information on these results is discussed later in this section.
+The results represented in Figure~\ref{fig:avg-result-2017-01-as} correspond to the variable parameters $M_h = 1$, $BS = 50$, $M_b = 0.05$ and $M_b^{i} = 0.4$, which is the combination that achieved the best results considering the highest correlation values ($r$) among all configurations for Alto Santo. More detailed information on these results is discussed later in this section.
 %
 Table~\ref{tab:statistical-data-as} shows the values of \gls{mae}, the correlation of the average simulated cases with the real notification ($r$) and the confidence interval (CI), in addition to the graphical results presented in Figure~\ref{fig:avg-result-2017-01-as}.
 
 \begin{table}[!ht]
 \centering
-\caption{Statistical values from the best configuration - \textit{Alto Santo} city.}
+\caption{Statistical values from the best configuration - Alto Santo city.}
 \label{tab:statistical-data-as}
 \small{%
 \begin{tabular}{lrrrr}
@@ -267,9 +266,9 @@ All experiments strongly correlate with real cases, achieving correlation coeffi
 
 \subsection{Results for Limoeiro}\label{subsec:results-limoeiro}
 
-The years 2019 and 2020 are selected for \textit{Limoeiro} city, and the number of cases per week is shown in Figure~\ref{fig:cases-per-week-limoeiro}. 
+The years 2019 and 2020 are selected for Limoeiro city, and the number of cases per week is shown in Figure~\ref{fig:cases-per-week-limoeiro}. 
 Figure~\ref{fig:avg-result-lim} presents the results for the following starting dates: \textit{(1)}~2019-04-14, \textit{(2)}~2019-05-05, \textit{(3)}~2020-06-21, \textit{(4)}~2020-07-05, \textit{(5)}~2020-07-19, and \textit{(6)}~2020-07-26. 
-Due to the extreme difference in the number of cases between the two years for \textit{Limoeiro}, where 2020 has more than 1000 notifications than 2019, it was not possible to define a set of parameters that fit well for both years with such different samples and behavior.
+Due to the extreme difference in the number of cases between the two years for Limoeiro, where 2020 has over 1000 more notifications than 2019, it was not possible to define a set of parameters that fit well for both years with such different samples and behavior.
 Figures~\ref{subfig:lim-a} and~\ref{subfig:lim-b} show the best results obtained with the parameters $M_h = 0.5$, $BS = 100$, $M_b = 0.05$ and $M_b^{i} = 0.4$. Figures~\ref{subfig:lim-c} to~\ref{subfig:lim-f} present the results with the following parameters set $M_h = 1$, $BS = 500$, $M_b = 0.20$ and $M_b^{i} = 0.9$.
 
 \begin{figure}[!ht]
@@ -308,14 +307,14 @@ Figures~\ref{subfig:lim-a} and~\ref{subfig:lim-b} show the best results obtained
         \includegraphics[scale=0.4]{images/experiments-lim/LIM-2020-07-26.pdf} \\
         \subcaption{\label{subfig:lim-f} 2020-07-26}
       \end{minipage}
-    \caption{\label{fig:avg-result-lim} Comparison of simulation and real cases from \textit{Limoeiro} for different starting dates.}
+    \caption{\label{fig:avg-result-lim} Comparison of simulation and real cases from Limoeiro for different starting dates.}
 \end{figure}
 
 Table~\ref{tab:statistical-data-lim} shows the values of \gls{mae}, the correlation of the average simulated cases with the real notification ($r$), and the confidence interval of the results presented in Figures~\ref{fig:avg-result-lim}.
 
 \begin{table}[!ht]
 \centering
-\caption{Statistical values from the best configuration - \textit{Limoeiro} city.}
+\caption{Statistical values from the best configuration - Limoeiro city.}
 \label{tab:statistical-data-lim}
 \small{%
 \begin{tabular}{lrrrr}
@@ -335,26 +334,26 @@ Table~\ref{tab:statistical-data-lim} shows the values of \gls{mae}, the correlat
 }
 \end{table}
 
-In 2019, the analysis of \textit{Limoeiro} City’s epidemiological data revealed a weak correlation (values approaching zero), as indicated by the experimental results. However, the associated \gls{mae} metrics were modest, ranging from $2.99$ to $3.28$. Figures~\ref{subfig:lim-a} and~\ref{subfig:lim-b} illustrate the weekly case distribution, highlighting irregular temporal patterns despite the low overall incidence (with a peak of 12 notifications in the highest week). In particular, only 4 of the 14 analyzed \gls{ew} exceeded the boundaries of the simulated endemic channel.
+In 2019, the analysis of Limoeiro City’s epidemiological data revealed a weak correlation (values approaching zero), as indicated by the experimental results. However, the associated \gls{mae} metrics were modest, ranging from $2.99$ to $3.28$. Figures~\ref{subfig:lim-a} and~\ref{subfig:lim-b} illustrate the weekly case distribution, highlighting irregular temporal patterns despite the low overall incidence (with a peak of 12 notifications in the highest week). In particular, only 4 of the 14 analyzed \gls{ew} exceeded the boundaries of the simulated endemic channel.
 
 Discrepancies between observed and expected case counts were predominantly minor (1-2 cases), except for the $10^{th}$ and $13^{th}$ weeks, which each recorded 12 notifications and deviated by 9 cases from the channel’s upper limit. This suggests that while the statistical correlation was weak, most of the weekly case counts aligned with or remained close to the endemic channel. The results show that even in low-incidence settings, localized fluctuations can occur without systematically breaching expected epidemiological thresholds.
 
 Figures~\ref{subfig:lim-c} and~\ref{subfig:lim-d} represent two simulations started two weeks apart. In the first scenario, starting in 2020-06-21, the model yields a weak correlation $(r = 0.3)$, as it anticipates a case peak in the initial weeks, while the observed data show a delayed surge in the sixth week. This temporal misalignment probably reflects limitations in model calibration, including insufficient historical data and an inability to integrate time-dependent variables that influence case trajectories.
 
-In contrast, the second simulation, initialized on 2020-07-19, two weeks after the outbreak start date of 2020-07-05, achieved a much stronger correlation with observed data ($r = 0.76$) and a positive confidence interval (CI), indicating substantially improved alignment with real trends. The later start likely allowed the model to capture critical early-phase information, enhancing predictive accuracy. This outcome illustrates the sensitivity of our dengue spread model to the choice of initial conditions: applying the same parameter set with starting dates only 15 days apart shifted the correlation from $0.30$ to $0.76$ during a continuous outbreak season. It also suggests the value of extending the framework to incorporate dynamic seasonal behaviors.
+In contrast, the second simulation, initialized on 2020-07-19, two weeks after the outbreak start date of 2020-07-05, achieved a much stronger correlation with observed data ($r = 0.76$) and a positive confidence interval (CI), indicating substantially improved alignment with real trends. The later start likely allowed the model to capture critical early-phase information, enhancing predictive accuracy. This outcome illustrates the sensitivity of the proposed dengue spread model to the choice of initial conditions: applying the same parameter set with starting dates only 15 days apart shifted the correlation from $0.30$ to $0.76$ during a continuous outbreak season. It also suggests the value of extending the framework to incorporate dynamic seasonal behaviors.
 
 
 Figures~\ref{subfig:lim-e}--\ref{subfig:lim-f}  demonstrate near-perfect correlation coefficients ($r = 0.97$ and $r = 0.96$, respectively), reflecting an exceptional alignment between simulated and observed case trends. These simulations were initialized during peak cases in incidence periods for both cities, the highest recorded in the notification dataset. The proximity of these starting dates to the epidemiological peak likely allowed the model to capture critical transmission dynamics, resulting in highly accurate projections. This outcome confirms robustness when calibrated during periods of increased disease activity, where the underlying patterns may be more pronounced and predictable.
 
 \subsection{Sensitivity Analysis}
 
-This experiment evaluated the influence of a subset of simulation parameters, identified as fitted in Table~2, by assessing their isolated impact on disease propagation. In each test, all parameters were held at their default values except for the one under analysis, which was systematically varied. Specifically, we considered the following sets of values: $\delta = \{0.03, 0.06, 0.12, 0.24, 0.48\}$ for the mortality rate in the aquatic phase, $\phi = \{0.01, 0.02, 0.16, 0.40, 0.80\}$ for the daily oviposition rate, and $\mu = \{0.01, 0.02, 0.16, 0.40, 0.80\}$ for the mortality rate in the adult phase. For each parameter value, we performed 100 independent runs of 180 cycles (approximately 14 weeks).
+This experiment evaluated the influence of a subset of simulation parameters, identified as fitted in Table~\ref{tab:parameters-mabs}, by assessing their isolated impact on disease propagation. In each test, all parameters were held at their default values except for the one under analysis, which was systematically varied. Specifically, the following sets of values were considered: $\delta = \{0.03, 0.06, 0.12, 0.24, 0.48\}$ for the mortality rate in the aquatic phase, $\phi = \{0.01, 0.02, 0.16, 0.40, 0.80\}$ for the daily oviposition rate, and $\mu = \{0.01, 0.02, 0.16, 0.40, 0.80\}$ for the mortality rate in the adult phase. For each parameter value, 100 independent runs of 180 cycles (approximately 14 weeks) were performed.
 
-The sensitivity analysis was conducted for both cities, using two distinct dates: 2017-01-15 for Alto Santo and 2020-07-19 for Limoeiro. These dates were chosen because they correspond to cases with the highest \gls{mae} in the previous experiment, thereby providing challenging conditions for model performance. The population parameters from Table~4 were set according to the configurations that had yielded the best correlation for each city and date in the earlier experiment.
+The sensitivity analysis was conducted for both cities, using two distinct dates: 2017-01-15 for Alto Santo and 2020-07-19 for Limoeiro. These dates were chosen because they correspond to cases with the highest \gls{mae} in the previous experiment, thereby providing challenging conditions for model performance. The population parameters from Table~\ref{tab:initial-pop-params} were set according to the configurations that had yielded the best correlation for each city and date in the earlier experiment.
 
 Figure~\ref{fig:sensitivity-analysis-delta} shows the results for the aquatic-phase mortality rate ($\delta$). The textured curves depict the weekly average of simulated cases for each $\delta$ value, and the solid black curve with markers is the observed series. The responses differ by city: in Limoeiro, the curves nearly overlap across the horizon, suggesting limited sensitivity of transmission to $\delta$ within the 14-week window. In Alto Santo, the curves are more distinct and non-monotonic. Higher $\delta$ does not consistently reduce cases: for example, $\delta=0.48$ produces a higher mid-season peak than $\delta \in \{0.06,0.12,0.24\}$. Although $\delta=0.03$ (lowest aquatic mortality) yields the largest first-week peak, it is subsequently overtaken by $\delta=0.48$, which later converges to among the lowest case counts near the end of the simulation.
 
-This counterintuitive pattern may suggest that containment measures related to eliminating breeding sites may not be as effective in the short-run as one might expect, as it is currently one of the most employed actions in Brazil municipalities. To rule out Monte-Carlo noise, we repeated the experiment with 500 runs instead of 100 and obtained similar averages, indicating that the effect is not due to insufficient sampling. The precise mechanism warrants further investigation, but these results caution against assuming a simple, monotonic relationship between larval-stage mortality and short-horizon case counts in this model.
+This counterintuitive pattern may suggest that containment measures related to eliminating breeding sites may not be as effective in the short-run as one might expect, as it is currently one of the most employed actions in Brazil municipalities. To rule out Monte-Carlo noise, the experiment was repeated with 500 runs instead of 100 and similar averages were obtained, indicating that the effect is not due to insufficient sampling. The precise mechanism warrants further investigation, but these results caution against assuming a simple, monotonic relationship between larval-stage mortality and short-horizon case counts in this model.
 
 
 \begin{figure}[h!]
@@ -372,7 +371,7 @@ This counterintuitive pattern may suggest that containment measures related to e
     \caption{\label{fig:sensitivity-analysis-delta} Results for the mortality rate in aquatic phase ($\delta$) parameter.}
 \end{figure}
 
-Figure~\ref{fig:sensitivity-analysis-phi} reports the sensitivity to the daily oviposition rate ($\phi$). The patterns largely mirror those observed for $\delta$: in Limoeiro, the average trajectories for different $\phi$ values are closely aligned across the 14-week window, indicating low short-horizon sensitivity. In Alto Santo, the responses are more spreaded and again non-monotonic, with higher $\phi$ not invariably producing larger case counts. As with the previous parameter, these unexpected dynamics indicate the need for further investigation to identify the factors that may be influencing such behavior.
+Figure~\ref{fig:sensitivity-analysis-phi} reports the sensitivity to the daily oviposition rate ($\phi$). The patterns largely mirror those observed for $\delta$: in Limoeiro, the average trajectories for different $\phi$ values are closely aligned across the 14-week window, indicating low short-horizon sensitivity. In Alto Santo, the responses are more dispersed and again non-monotonic, with higher $\phi$ not invariably producing larger case counts. As with the previous parameter, these unexpected dynamics indicate the need for further investigation to identify the factors that may be influencing such behavior.
 
 
 
@@ -398,7 +397,7 @@ By contrast, the results for the adult-phase mortality rate ($\mu$), shown in Fi
     \begin{minipage}[c]{.45\textwidth}
       \centering
       \includegraphics[scale=0.3]{images/parameters-experiments/AS_2017-01-15_mosquitoes_death_rate.pdf} \\
-      \subcaption{\label{fig:sensitivity-analysis-mu-ln}Results for Alto Santo}
+      \subcaption{\label{fig:sensitivity-analysis-mu-as}Results for Alto Santo}
     \end{minipage}
     \hspace{0.5cm}
     \begin{minipage}[c]{.45\textwidth}
@@ -411,7 +410,7 @@ By contrast, the results for the adult-phase mortality rate ($\mu$), shown in Fi
 
 
 \subsection{Results Aggregated by City Block}
-We evaluate block-level accuracy for Alto Santo and Limoeiro over the same 90-day horizon used in Sections~\ref{subsec:results-alto-santo}–\ref{subsec:results-limoeiro}. For each start date, Table~\ref{tab:cases-per-block} reports: (i) the city, (ii) the start date, (iii) the Mean Absolute Error (MAE) between observed cases and the average simulated cases per block at day 90, and (iv) the share of blocks whose observed cases lie within the simulated endemic channel (“Correct Blocks”). To avoid degenerate comparisons, blocks with no dengue notifications across the historical record were excluded.
+This section evaluates block-level accuracy for Alto Santo and Limoeiro over the same 90-day horizon used in Sections~\ref{subsec:results-alto-santo}–\ref{subsec:results-limoeiro}. For each start date, Table~\ref{tab:cases-per-block} reports: (i) the city, (ii) the start date, (iii) the Mean Absolute Error (MAE) between observed cases and the average simulated cases per block at day 90, and (iv) the share of blocks whose observed cases lie within the simulated endemic channel (“Correct Blocks”). To avoid degenerate comparisons, blocks with no dengue notifications across the historical record were excluded.
 
 In Alto Santo, MAE ranges from 1.52 to 2.75, with 86–94\% of blocks correctly captured by the endemic channel; in Limoeiro, MAE ranges from 0.80 to 2.01, with at least 85\% of blocks correctly captured. These results indicate that the model delivers useful block-level envelopes of plausible outcomes even when point estimates per block retain some error, supporting prioritization for near-term operations (see Table~\ref{tab:cases-per-block}). 
 
@@ -444,7 +443,7 @@ In Alto Santo, MAE ranges from 1.52 to 2.75, with 86–94\% of blocks correctly 
 
 
 \subsection{Results for Emergency Intervention}
-Motivated by the model’s quality and block-level accuracy, we evaluate a simple emergency vector-control action based on vehicle–mounted fogging (ULV nebulization).  We apply the intervention once, on the simulation start day, to emulate an emergency action rather than a sustained campaign. Following local health-department practice, we prioritize blocks using the most recent seven days of notifications and then select the highest-risk blocks that can be serviced within a short operational window. The selection is performed by Algorithm~\ref{alg:naive-block-selection}, which ranks blocks by simulated burden and admits them greedily until the time budget is exhausted.
+Motivated by the model’s quality and block-level accuracy, a simple emergency vector-control action based on vehicle-mounted fogging (ULV nebulization) is evaluated.  The intervention is applied once, on the simulation start day, to emulate an emergency action rather than a sustained campaign. Following local health-department practice, blocks are prioritized using the most recent seven days of notifications and then select the highest-risk blocks that can be serviced within a short operational window. The selection is performed by Algorithm~\ref{alg:naive-block-selection}, which ranks blocks by simulated burden and admits them greedily until the time budget is exhausted.
 
 \begin{algorithm}[h!]
 \caption{Basic Block Selection Procedure}\label{alg:naive-block-selection}
@@ -468,11 +467,11 @@ $visited \gets \emptyset$, \ $time \gets 0$\;
 \Return $visited$
 \end{algorithm}
 
-In implementation, we set the fogging speed to $10$~km/h~\cite{brasil-dept-helth:2009}, estimate per–block risk as the average of $N\!=\!100$ simulations, sort blocks in descending order of risk, and service as many as fit within a $1.5$-hour window. To keep the decision rule transparent, we ignore inter-block travel time inside this window (typical of short fogging operations during the daily thermal inversion). For more robust routing–aware policies, integer programming approaches from the literature can be coupled to the simulator~\cite{araujo:2022,andrade:2021}. We model a single fogging pass as an immediate $80\%$ reduction in adult mosquitoes in treated blocks, consistent with~\cite{brasil-dept-helth:2009}.
+In implementation, the fogging speed is set to $10$~km/h~\cite{brasil-dept-helth:2009}, per-block risk is estimated as the average of $N\!=\!100$ simulations, blocks are sorted in descending order of risk, and as many as fit within a $1.5$-hour window are serviced. To keep the decision rule transparent, inter-block travel time inside this window is ignored (typical of short fogging operations during the daily thermal inversion). For more robust routing-aware policies, integer programming approaches from the literature can be coupled to the simulator~\cite{araujo:2022,andrade:2021}. A single fogging pass is modeled as an immediate $80\%$ reduction in adult mosquitoes in treated blocks, consistent with~\cite{brasil-dept-helth:2009}.
 
 Figures~\ref{fig:emergency-action-impact-as} and~\ref{fig:emergency-action-impact-lm} summarize two dates for each city, using the same parameter settings and horizon as in Sections~\ref{subsec:results-alto-santo}–\ref{subsec:results-limoeiro}. The black line shows observed weekly notifications. For each week, two boxplots are displayed: the gray boxplot with circle markers represents simulations \emph{without} intervention; the green boxplot with “X” markers represents simulations \emph{with} a single fogging action applied on day~0 to the blocks selected by Algorithm~\ref{alg:naive-block-selection}.
 
-In \textit{Alto Santo} (Figures~\ref{fig:alto-santo-15-nebulized} and~\ref{fig:alto-santo-29-nebulized}), the simple selection rule yields a rapid, robust reduction by the second week: the average weekly notifications drop from roughly 40 to fewer than 10, then continue trending toward near zero. In \textit{Limoeiro do Norte} (Figures~\ref{fig:limoeiro-05-nebulized} and~\ref{fig:limoeiro-19-nebulized}), the intervention approximately halves the weekly average, yet absolute counts remain high, consistent with a single pass (1.5 hours) spread over a city with nearly eight times as many blocks as Alto Santo. These results suggest that larger urban areas may require repeated and/or better-routed operations and more deliberate resource allocation, potentially guided by decision-support and optimization methods, to achieve comparable impact.
+In Alto Santo (Figures~\ref{fig:alto-santo-15-nebulized} and~\ref{fig:alto-santo-29-nebulized}), the simple selection rule yields a rapid, robust reduction by the second week: the average weekly notifications drop from roughly 40 to fewer than 10, then continue trending toward near zero. In Limoeiro (Figures~\ref{fig:limoeiro-05-nebulized} and~\ref{fig:limoeiro-19-nebulized}), the intervention approximately halves the weekly average, yet absolute counts remain high, consistent with a single pass (1.5 hours) spread over a city with nearly eight times as many blocks as Alto Santo. These results suggest that larger urban areas may require repeated and/or better-routed operations and more deliberate resource allocation, potentially guided by decision-support and optimization methods, to achieve comparable impact.
 
 \begin{figure}[h!]
     \begin{minipage}[c]{.45\textwidth}
@@ -493,31 +492,31 @@ In \textit{Alto Santo} (Figures~\ref{fig:alto-santo-15-nebulized} and~\ref{fig:a
     \begin{minipage}[c]{.45\textwidth}
       \centering
       \includegraphics[scale=0.25]{images/action-experiments/lm_2020-07-05_weekly_nebulized.pdf} \\
-      \subcaption{\label{fig:limoeiro-05-nebulized}Limoeiro do Norte - 2020-07-05}
+      \subcaption{\label{fig:limoeiro-05-nebulized}Limoeiro - 2020-07-05}
     \end{minipage}
     \hfill
     \begin{minipage}[c]{.45\textwidth}
         \centering
         \includegraphics[scale=0.25]{images/action-experiments/lm_2020-07-19_weekly_nebulized.pdf} \\
-        \subcaption{\label{fig:limoeiro-19-nebulized}Limoeiro do Norte - 2020-07-15}
+        \subcaption{\label{fig:limoeiro-19-nebulized}Limoeiro - 2020-07-19}
     \end{minipage}
-    \caption{\label{fig:emergency-action-impact-lm} Estimated Impact of Basic Block Selection Procedure in Limoeiro do Norte notifications.}
+    \caption{\label{fig:emergency-action-impact-lm} Estimated Impact of Basic Block Selection Procedure in Limoeiro notifications.}
 \end{figure}
 
 \subsection{Model Performance and Assumptions}
 
-Taking into account all the results presented, it is possible to highlight the strengths of our \gls{mabs} that achieve good results for all simulations in \textit{Alto Santo}. These outcomes present a strong correlation for all cases and a good fit of the real data inside the simulated endemic channel.
-The \gls{mabs} also presents a strong correlation for half of the simulations for \textit{Limoeiro} and a good adjustment of the endemic channel to contain the historical progression of notifications. 
+Taking into account all the results presented, it is possible to highlight the strengths of the proposed \gls{mabs}, which achieves good results for all simulations in Alto Santo. These outcomes present a strong correlation for all cases and a good fit of the real data inside the simulated endemic channel.
+The \gls{mabs} also presents a strong correlation for half of the simulations for Limoeiro and a good adjustment of the endemic channel to contain the historical progression of notifications. 
 
 In some instances, the simulation's inability to accurately capture real-world data may be attributed to unmodeled factors. For example, the model currently does not account for the influence of climate, vector control efforts, under-reporting, population density, and geographic features like vacant land and proximity to water bodies. These factors can significantly impact disease transmission dynamics, however, may not be fully represented in the current simulation model.
 
 Although the current \gls{mabs} framework cannot dynamically adapt parameters in response to real-time data, it remains a robust analytical tool when combined with the calibration of strategic parameters and domain expertise. By integrating the principles of \gls{mabs} with epidemiological insights specific to dengue transmission, researchers can identify optimal parameter configurations that produce highly accurate simulations. Inclusion of real-time data streams or detailed geographic information could further improve the precision of the model. However, such enhancements are not prerequisites for generating meaningful results.
 
-Thus, it is possible to claim that the proposed \gls{mabs} is a reliable and accurate simulation methodology, capable of generating scenarios that account for both casual disease spread and endemic seasons in the cities of \textit{Alto Santo} and \textit{Limoeiro}, even with limitations in accurate and essential information. The methodology can be further enhanced with additional data, and the simplified programming language facilitates the integration of new features and information into the \gls{mabs}. This approach can be used as a visualization and decision support tool, primarily considering the generated endemic channel and the fact that it is easy to simulate for other cities assuming the existence of basic geographic information and historical data to improve the best fit of the variable parameters.
+Thus, it is possible to claim that the proposed \gls{mabs} is a reliable and accurate simulation methodology, capable of generating scenarios that account for both casual disease spread and endemic seasons in the cities of Alto Santo and Limoeiro, even with limitations in accurate and essential information. The methodology can be further enhanced with additional data, and the simplified programming language facilitates the integration of new features and information into the \gls{mabs}. This approach can be used as a visualization and decision support tool, primarily considering the generated endemic channel and the fact that it is easy to simulate for other cities assuming the existence of basic geographic information and historical data to improve the best fit of the variable parameters.
 
 \section{Final Remarks}\label{sec:final-remarks}
 
-We developed a Multi-Agent-Based Simulation (\gls{mabs}) to model dengue transmission and evaluated it in the Brazilian cities of \textit{Alto Santo} and \textit{Limoeiro do Norte}. The study sought configurations that best matched historical notifications by exploring parameter combinations and assessing performance over multiple runs using average (min–max) weekly cases, Pearson’s correlation ($r$), Mean Absolute Error (\gls{mae}), and the simulated endemic channel.
+This chapter presented a Multi-Agent-Based Simulation (\gls{mabs}) to model dengue transmission, evaluated in the Brazilian cities of Alto Santo and Limoeiro. The study sought configurations that best matched historical notifications by exploring parameter combinations and assessing performance over multiple runs using average (min–max) weekly cases, Pearson’s correlation ($r$), Mean Absolute Error (\gls{mae}), and the simulated endemic channel.
 
 The proposed \gls{mabs} achieved strong temporal correlations, indicating an ability to capture trends under varied initial conditions. The model proved effective for scenario-based projections that mirror observed epidemiological patterns while quantifying uncertainty. This capability supports public-health decision-making where budgets are constrained: visualizing plausible outbreak trajectories helps prioritize high-risk areas, allocate resources (e.g., insecticides, medical supplies, community interventions), and adapt strategies dynamically. Coupling the simulation with optimization methods can further structure trade-off analysis and scheduling, maximizing the impact of vector-control actions~\cite{araujo:2022,andrade:2021}.
 

@@ -180,6 +180,8 @@
 \newacronym{sop}{SOP}{Set Orienteering Problem}
 \newacronym{lb}{LB}{Lower Bound}
 \newacronym{ub}{UB}{Upper Bound}
+\newacronym{sa}{SA}{Simulated Annealing}
+\newacronym{sh}{SH}{Simheuristic}
 
 
 \begin{document}
@@ -189,10 +191,10 @@
 %\autora{Nome da Autora}
 
 % Sempre deve haver um título em português:
-% \titulo{Dengue Control}
+\titulo{O Problema de Roteamento de Quadras: Otimização, Simulação e Abordagens Estocásticas para o Controle Vetorial da Dengue}
 
 % Se a língua for o inglês ou o espanhol defina:
-\title{Decisions Support Tools for Dengue Control Actions}
+\title{The City Block Routing Problem: Optimization, Simulation, and Stochastic Approaches for Dengue Vector Control}
 
 % Escolha entre orientador ou orientadora. Inclua os títulos acadêmicos:
 \orientador{Prof. Dr. Fábio Luiz Usberti}
@@ -255,13 +257,103 @@ Os agradecimentos devem ocupar uma única página.
 
 % Sempre deve haver um resumo em português:
 \begin{resumo}
-	O resumo deve ter no máximo 500 palavras e deve ocupar uma única página.
+	A dengue é uma doença transmitida por mosquitos que representa um desafio
+	significativo à saúde pública, particularmente no Brasil, que registrou mais de
+	10 milhões de casos somente em 2024. Uma estratégia fundamental para o controle
+	da transmissão da dengue é a aplicação de inseticidas por meio de veículos
+	nebulizadores que percorrem as ruas urbanas. No entanto, as autoridades de saúde
+	enfrentam o desafio de selecionar quais quadras devem ser atendidas e determinar
+	rotas eficientes para os veículos sob recursos operacionais limitados.
+
+	Esta tese introduz o Problema de Roteamento por Quadras Urbanas (\textit{City
+	Block Routing Problem} -- CBRP), um novo problema de otimização combinatória que
+	modela a seleção de quadras para aplicação de inseticida e o planejamento das
+	rotas dos veículos para atendê-las. O CBRP combina características de Problemas
+	de Roteamento de Veículos e Problemas de Roteamento por Arcos, uma vez que cada
+	quadra deve ser completamente contornada pelo veículo nebulizador, e apenas um
+	subconjunto de quadras pode ser atendido dentro de um orçamento de tempo.
+
+	Para o CBRP determinístico, duas famílias de formulações de Programação Linear
+	Inteira Mista (MILP) são propostas: uma baseada em caminho e outra baseada em
+	passeio, cada uma com variantes compactas. Técnicas de pré-processamento para
+	redução do grafo são introduzidas, juntamente com quatro variantes de Relaxação
+	Lagrangeana que decompõem o problema em subproblemas de caminho mínimo e
+	mochila. Uma heurística construtiva gulosa que combina busca binária com seleção
+	de quadras baseada em mochila e um procedimento de conexão de rotas é também
+	desenvolvida.
+
+	Para capturar a dinâmica espaço-temporal da propagação da dengue, uma Simulação
+	Baseada em Multi-Agentes (MABS), fundamentada em teoria epidemiológica
+	compartimental (SIR/SEI), é desenvolvida. O simulador é calibrado e validado com
+	dados históricos de notificação das cidades de Alto Santo e Limoeiro do Norte,
+	no Ceará. O CBRP é estendido para sua versão estocástica, o Problema de
+	Roteamento por Quadras Urbanas Estocástico (SCBRP), formulado como um programa
+	estocástico de dois estágios. Formulações MILP baseadas em caminho e passeio são
+	propostas para o SCBRP, acompanhadas de heurísticas que incluem busca local com
+	múltiplas estruturas de vizinhança, uma meta-heurística \textit{Simulated
+	Annealing} e um \textit{framework} simheurístico que acopla uma heurística
+	\textit{multi-start} com o MABS para lidar com a incerteza por meio de cenários
+	gerados por simulação.
+
+	Dois conjuntos abrangentes de instâncias são construídos: um \textit{benchmark}
+	determinístico com 39 instâncias e um estocástico com 36 instâncias, cada uma
+	com 50 cenários, todos derivados de dados reais de notificação de dengue.
+	Experimentos computacionais extensivos demonstram a eficácia das metodologias
+	propostas, oferecendo contribuições relevantes para a tomada de decisão em saúde
+	pública no controle de doenças transmitidas por vetores.
+
+	\textbf{Palavras-chave:} Problema de Roteamento por Quadras Urbanas, Controle
+	de Dengue, Programação Linear Inteira Mista, Relaxação Lagrangeana, Simulação
+	Multi-Agente, Otimização Estocástica, Simheurística.
 \end{resumo}
 
 
 % Sempre deve haver um abstract:
 \begin{abstract}
-	The abstract must have at most 500 words and must fit in a single page.
+	Dengue is a mosquito-borne disease that poses a significant public health
+	challenge, particularly in Brazil, which reported over 10 million cases in 2024
+	alone. A key strategy for controlling Dengue transmission is the application of
+	insecticides via spraying vehicles that traverse urban streets. However, health
+	authorities face the challenge of selecting which city blocks to service and
+	determining efficient vehicle routes under limited operational resources.
+
+	This thesis introduces the City Block Routing Problem (CBRP), a new
+	combinatorial optimization problem that models the selection of city blocks for
+	insecticide spraying and the design of vehicle routes to service them. The CBRP
+	combines features of both Vehicle Routing Problems and Arc Routing Problems, as
+	each city block must be completely encircled by the spraying vehicle, and only a
+	subset of blocks can be serviced within a given time budget.
+
+	For the deterministic CBRP, two families of Mixed Integer Linear Programming
+	(MILP) formulations are proposed: a path-based formulation and a walk-based
+	formulation, each with compact variants. Preprocessing techniques for graph
+	reduction are introduced, along with four Lagrangean Relaxation variants that
+	decompose the problem into shortest-path and knapsack subproblems. A greedy
+	constructive heuristic combining binary search with knapsack-based block
+	selection and a block-connection routing procedure is also designed.
+
+	To capture the spatial-temporal dynamics of Dengue spread, a Multi-Agent-Based
+	Simulation (MABS) grounded in compartmental epidemiological theory (SIR/SEI) is
+	developed. The simulator is calibrated and validated against historical
+	notification data from the cities of Alto Santo and Limoeiro do Norte, in
+	Cear\'{a}, Brazil. The CBRP is extended to its stochastic counterpart, the
+	Stochastic City Block Routing Problem (SCBRP), formulated as a two-stage
+	stochastic program. Path-based and walk-based MILP formulations are proposed for
+	the SCBRP, together with tailored heuristics including a local search with
+	multiple neighborhood structures, a Simulated Annealing metaheuristic, and a
+	simheuristic framework that couples a multi-start heuristic with the MABS to
+	handle uncertainty through simulation-generated scenarios.
+
+	Two comprehensive benchmarks are constructed: a deterministic benchmark with 39
+	instances and a stochastic benchmark with 36 instances, each comprising 50
+	scenarios, all derived from real Dengue notification data. Extensive
+	computational experiments demonstrate the effectiveness of the proposed
+	methodologies, offering valuable insights for public health decision-making in
+	vector-borne disease control.
+
+	\textbf{Keywords:} City Block Routing Problem, Dengue Control, Mixed Integer
+	Linear Programming, Lagrangean Relaxation, Multi-Agent-Based Simulation,
+	Stochastic Optimization, Simheuristic.
 \end{abstract}
 
 

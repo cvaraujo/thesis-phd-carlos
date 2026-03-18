@@ -12,15 +12,7 @@ endemic in many regions, with approximately half of the world's population
 currently living in areas at risk~\citep{fares:2015,negreiros-2020}. Factors
 such as rapid population growth, unplanned urban development, inadequate
 sanitation, and healthcare inequality play a central role in the persistence and
-resurgence of dengue.
-
-% In 2021, the Pan American Health Organization (PAHO) reported more than $1.3$
-% million cases of arboviral diseases in the Americas, with Dengue alone
-% accounting for $1.1$ million cases, approximately 89\% of the total. Despite
-% occupying about 45\% of Latin America's landmass, Brazil contributed to more
-% 60\% of Dengue cases in the region~\citep{BardachEtal2019}. In 2022, Brazil
-% reported 2,363,490 Dengue cases, representing 84.11\% of global cases and
-% 99.65\% of those in South America; 1,210,760 of these were laboratory confirmed.
+resurgence of Dengue.
 
 In the last year, 2024, Brazil reported approximately $10.239.883$ cases of
 Dengue, accounting for $78,62\%$ of the world's cases and $92,10\%$ of the South
@@ -29,7 +21,7 @@ confirmed in the laboratory, $8.191$ were classified as severe, and $6.161$
 resulted in death. According to the epidemiological report of the Brazil Health
 Departments up to April 20, 2024, more than 11 states and 465 cities declared a
 state of emergency~\citep{health-dp-1}. By 28 February 2025, Brazil had reported
-$662.224$ cases of Dengue, which represents $86.43\%$ of the World's cases.
+$662.224$ cases of Dengue, which represents $86.43\%$ of the world's cases.
 Figure~\ref{fig:dengue_reported_cases_graphic} displays a graph that shows
 the number of Dengue cases in the world, South America, and Brazil from 1980 to
 2024.
@@ -107,7 +99,7 @@ the number of Dengue cases in the world, South America, and Brazil from 1980 to
 					(2023, 4594823)
 					(2024, 13036652)
 				};
-			\addlegendentry{Americas}
+			\addlegendentry{World}
 
 			\addplot[
 				color=red,
@@ -264,11 +256,11 @@ developing resistance in mosquitoes~\citep{WHO2009,WHO2020}.
 	\label{fig:nebulizer}
 \end{figure}
 
-The sprayed insecticide has no residual  effect and it is strongly influenced by
-wind  and obstacles  along the  streets. The  best effect  is achieved  when the
-densest  insecticide cloud  is at  a distance  of at  most 100  meters from  the
-equipment~\citep{brasil-dept-helth:2009}.  As this  distance  is  crossed, the
-effectiveness  decreases, as a consequence of droplet drift influenced by
+The sprayed insecticide has no residual effect and it is strongly influenced by
+wind and obstacles along the streets. The best effect is achieved when the
+densest insecticide cloud is at a distance of at most 100 meters from the
+equipment~\citep{brasil-dept-helth:2009}. As this distance is crossed, the
+effectiveness decreases, as a consequence of droplet drift influenced by
 factors of the environment. The cloud dispersion is illustrated in
 Figure~\ref{fig:dispersion}.
 
@@ -279,10 +271,10 @@ Figure~\ref{fig:dispersion}.
 	\label{fig:dispersion}
 \end{figure}
 
-Insecticide application instructions are generally based on ideal topology
+Insecticide application instructions are generally based on ideal topography
 conditions, locality structure, and favorable winds. The operation is often
-affected by unpaved roads, the presence of high walls,  and  high   vegetation,
-in  addition  to   headwinds.  The application methodology must consider these
+affected by unpaved roads, the presence of high walls, and high vegetation,
+in addition to headwinds. The application methodology must consider these
 limitations to obtain a good impact on the vector population. Once a spraying
 vehicle begins to service a city block, it must sequentially cover all
 surrounding streets in a clockwise direction. The traversal ensures that the
@@ -324,8 +316,8 @@ are conducted along edges (or arcs), they are categorized as
 exhibits the characteristics of both \gls{vrp} and \gls{arp}. Each city block
 can be represented as a \textit{super-node} (similar to a \gls{vrp}), while
 spraying occurs along the surrounding arcs, aligning with \gls{arp} features.
-Given this hybrid structure, we introduce and explore a new problem, titled the
-\gls{cbrp}.
+Given this hybrid structure, a new problem is introduced and explored in this
+thesis, titled the \gls{cbrp}.
 
 The \gls{cbrp} aims to optimize the servicing of city blocks within an urban
 street network by assigning spraying vehicles. However, due to limited
@@ -336,14 +328,14 @@ the primary objective of the \gls{cbrp} is to identify the subset of blocks
 whose servicing yields the highest aggregate benefit, alongside determining the
 optimal vehicle routes to achieve this objective within the available resources.
 
-The Figure~\ref{fig:ex1} illustrates an example of an input graph (city map) and
+Figure~\ref{fig:ex1} illustrates an example of an input graph (city map) and
 a corresponding \gls{cbrp} feasible solution. In Figure~\ref{subfig:a}, the
 circles represent the graph nodes, while the labels from A to H indicate the
 city blocks. Figure~\ref{subfig:b} depicts a feasible solution to the
 \gls{cbrp}. In this solution, the nodes used in the route are marked as squares
 and connected by black arrows (nodes 4, 5, 3, and 9). Squares with a double
 border denote nodes that act as starting points to serve at least one block. The
-atended blocks are represented by the arcs connected to the double square with
+attended blocks are represented by the arcs connected to the double square with
 the same color, for example: node 4 (blue) serves blocks A (arcs
 4$\rightarrow$8, 8$\rightarrow$1 and 1$\rightarrow$4) and B (arcs
 4$\rightarrow$6, 6$\rightarrow$8 and 8$\rightarrow$4). Node 5 (red) serves
@@ -510,18 +502,6 @@ H.
 	\caption{\label{fig:ex1} CBRP instance (a) and solution (b).}
 \end{figure}
 
-Given the complex and dynamic nature of urban environments, particularly in
-public health scenarios like Dengue control, incorporating stochastic elements
-into the \gls{cbrp} is essential to enhance the realism and applicability of the
-solution. Some unpredictable behavior of mosquitoes and the spread of Dengue
-cases during seasons of the years highlight the need for a stochastic version of
-the \gls{cbrp}. This leads to solutions that better reflect the variability of
-actual deployment scenarios, improving the adherence of the model to real-world
-challenges. Moreover, by accounting for probabilistic factors, stochastic
-approaches can prioritize the most critical city blocks under uncertain resource
-availability, thereby increasing the effectiveness and resilience of vector
-control interventions.
-
 The \gls{cbrp} extends beyond its application in vector control, providing a
 robust framework to address a variety of urban logistics challenges. These
 challenges include waste collection, postal delivery, and reading of utility
@@ -530,6 +510,18 @@ managing both spatial and resource constraints. The flexibility of the
 \gls{cbrp} makes it particularly valuable in densely populated urban
 environments, where the efficiency of routing decisions significantly affects
 both service effectiveness and operational costs.
+
+% Given the complex and dynamic nature of urban environments, particularly in
+% public health scenarios like Dengue control, incorporating stochastic elements
+% into the \gls{cbrp} is essential to enhance the realism and applicability of the
+% solution. Some unpredictable behavior of mosquitoes and the spread of Dengue
+% cases during seasons of the years highlight the need for a stochastic version of
+% the \gls{cbrp}. This leads to solutions that better reflect the variability of
+% actual deployment scenarios, improving the adherence of the model to real-world
+% challenges. Moreover, by accounting for probabilistic factors, stochastic
+% approaches can prioritize the most critical city blocks under uncertain resource
+% availability, thereby increasing the effectiveness and resilience of vector
+% control interventions.
 
 Besides the definition of control actions~\citep{gomez-2009,jing2019dengue}, it
 is important to develop visualization and decision support tools to assist the
@@ -543,56 +535,81 @@ and infection rate, the timing and location of insecticide application,
 frequency of rainfall, various climate conditions, and the interactions between
 mosquitoes, breeding sites, and human populations.
 
-In this thesis, we developed a complete set of methodologies focused in the
-application of \gls{cbrp} to optimize insecticide-spraying routes for Dengue
-control. Those methodologies compreend exact and heuristic approaches for
-deterministic and stochastic versions of the \gls{cbrp}, instances based on real
-data, robust simulation based on multi-agent systems and a
-simulation-optimization framework that could assist health departments. This
-application is particularly pertinent to many Brazilian cities, where seasonal
-outbreaks of mosquito-borne diseases demand resource-efficient, targeted vector
-control strategies. By optimizing spray routes, the \gls{cbrp} not only improves
-operational efficiency but also maximizes coverage of high-risk areas,
-ultimately supporting public health initiatives aimed at reducing Dengue
-transmission.
+Addressing the \gls{cbrp} and its extensions requires a combination of
+complementary methodological approaches, each targeting a different facet of the
+problem. Deterministic optimization, formulated through \gls{milp} models,
+provides exact or near-optimal solutions by exploiting the combinatorial
+structure of the routing problem, enabling rigorous performance guarantees and
+tight bounds on the solution quality. However, deterministic models assume
+perfect knowledge of the input data, which rarely holds in practice for Dengue
+control, where the progression and spatial distribution of cases are inherently
+uncertain. Stochastic optimization overcomes this limitation by explicitly
+modeling uncertainty through scenario-based formulations, allowing the
+decision-maker to hedge against multiple plausible future outcomes and produce
+solutions that are robust across a range of conditions. To generate realistic
+scenarios, a \gls{mabs} is particularly well suited, as it captures the
+spatial-temporal dynamics of Dengue spread at the city-block level by modeling
+the interactions among mosquitoes, humans, and breeding sites, something that
+aggregate analytical models cannot reproduce with the same granularity. Finally,
+a simheuristic framework bridges simulation and optimization by coupling a
+multi-start heuristic with the \gls{mabs}, enabling the exploration of a large
+solution space while evaluating candidates under simulated stochastic conditions.
+This integration allows decision-makers to obtain high-quality solutions that
+account for uncertainty without the computational burden of solving large-scale
+stochastic programs to optimality.
 
-% The \gls{mabs} have become increasingly popular in various fields due to their
-% ability to capture the complexity and dynamics of real-world
-% systems~\citep{siebers-2008}. Unlike traditional simulations that rely on a set
-% of predetermined rules and assumptions, multi-agent simulations allow for
-% interactions between agents to emerge organically, leading to the emergence of
-% unexpected and emergent behaviors. This makes them an effective tool for
-% understanding and predicting the behavior of complex systems, such as social and
-% economic systems, ecological systems, and even biological
-% systems~\citep{ballet-2020}. Additionally, multi-agent simulations provide a
-% flexible and adaptable approach that can be easily modified and scaled to
-% simulate different scenarios and environments. With the increasing availability
-% of computing resources, multi-agent simulations have become an important tool
-% for modeling and simulating complex systems, providing valuable insights into
-% the behavior and evolution of these systems~\citep{selvaratnam-1995}.
+\paragraph{Contributions.} This thesis develops a comprehensive set of
+methodologies centered on the \gls{cbrp} to optimize insecticide-spraying
+routes for Dengue control. The main contributions are summarized as follows.
+First, the \gls{cbrp} is formally defined as a new combinatorial optimization
+problem, and two families of \gls{milp} formulations are proposed: a path-based
+formulation and a walk-based formulation, each with its particularities.
+Preprocessing techniques that reduce the graph size without losing optimality are
+introduced. To strengthen the bounds obtained from these formulations, four
+\gls{lr} variants are derived, which decompose the problem into shortest-path
+and knapsack subproblems. On the heuristic side, a greedy constructive algorithm
+that combines binary search with knapsack-based block selection and a
+block-connection routing heuristic is designed.
+Second, a \gls{mabs} grounded in
+compartmental epidemiological theory (SIR/SEI) is developed to simulate the
+spatial-temporal progression of Dengue cases at the city-block level. The
+simulator is calibrated and validated against historical notification data from
+the cities of Alto Santo and Limoeiro do Norte, in Cear\'{a}, Brazil.
+Third, the \gls{cbrp} is extended to its stochastic counterpart, the \gls{scbrp},
+modeled as a two-stage stochastic program in which the first stage selects
+blocks to spray under current conditions and the second stage accounts for
+uncertain future scenarios. For the \gls{scbrp}, path-based and walk-based
+\gls{milp} formulations analogous to the deterministic case are proposed,
+together with tailored heuristics that include a local search with multiple
+neighborhood structures, a \gls{sa} metaheuristic, and a \gls{sh}
+framework that couples a multi-start heuristic with the \gls{mabs} to handle
+uncertainty through simulation-generated scenarios. 
+Fourth, two comprehensive benchmarks are constructed: a deterministic benchmark with 39~instances derived from real Dengue notification data spanning multiple years in Alto Santo and Limoeiro, and a stochastic benchmark with 36~instances, each comprising
+50~scenarios generated by the \gls{mabs}. Extensive computational experiments
+demonstrate the effectiveness of the proposed methodologies across both
+benchmarks, providing valuable insights to public health authorities and
+policymakers working on vector-borne disease control. Moreover, the generality
+of the \gls{cbrp} framework makes it a promising approach for optimizing vehicle
+routing strategies in other city-block service applications.
 
-
-%\paragraph{Our contributions.} The contributions of this study are three-fold.
-% First, it advances vector control strategies by proposing novel methodologies
-% for the optimal routing of spraying vehicles. Our approaches are based on
-% mixed-integer linear programming (MILP) formulations and biased-random key
-% genetic algorithms (BRKGA). Second, we introduce a systematic procedure for
-% generating realistic problem instances by mapping city blocks and their
-% surrounding street arcs. Third, through extensive computational experiments
-% utilizing seven years of Dengue case data from two Brazilian cities, we
-% demonstrate that our proposed methodologies significantly improve vector
-% control effectiveness, potentially reducing Dengue transmission rates and
-% improving public health outcomes. These findings offer valuable insights to
-% public health authorities, policymakers, and researchers working on complex
-% vector-borne disease challenges. Moreover, the generality of the CBRP
-% framework makes it a promising approach for optimizing vehicle routing
-% strategies in other city-block service applications.
-
-% \paragraph{Text organization.}
-% The remainder of this thesis is organized as follows.
-% Chapter~\ref{chp:preliminary-concepts} formally defines the City Block Routing Problem (CBRP).
-% Chapter~\ref{chp:literature_review} reviews existing operations research, \gls{ml} and simulation approaches relevant to Dengue vector control.
-% Section~\ref{sec:models} introduces and describes the proposed mathematical formulations for the CBRP.
-% Section~\ref{sec:data} explains the datasets and experimental setups employed to evaluate the proposed methodologies.
-% Section~\ref{sec:results} discusses computational results and assesses the methodologies' performance.
-% Finally, Section~\ref{sec:conclusions} summarizes the findings and provides concluding remarks.
+\paragraph{Text organization.} The remainder of this thesis is organized as
+follows. Chapter~\ref{chp:preliminary-concepts} introduces the foundational
+concepts underlying the methodologies developed in this work, including integer
+linear programming, \gls{lr}, stochastic optimization, multi-agent-based
+simulation, and simheuristics. Chapter~\ref{chp:literature-review} reviews the
+related literature on optimization and decision support approaches for Dengue
+vector control and on Dengue spread modeling and simulation.
+Chapter~\ref{chp:historical-notifications-data-analysis-validation} describes
+the historical notification data from Alto Santo and Limoeiro do Norte, the
+instance generation procedure, and the statistical methods used to validate the
+computational results. Chapter~\ref{chp:dengue-virus-spread-simulation}
+presents the proposed \gls{mabs} for simulating Dengue virus spread, including
+agent design, computational experiments, and model validation.
+Chapter~\ref{chp:deterministic-methodologies-and-results} details the
+deterministic \gls{cbrp} formulations, \gls{lrs}, heuristics,
+and the corresponding computational experiments.
+Chapter~\ref{chp:uncertainty-methodologies-and-results} addresses the
+stochastic setting, presenting the \gls{scbrp} formulations, heuristics, the
+Simulated Annealing metaheuristic, and the simheuristic framework. Finally,
+Chapter~\ref{chap:conclusions} summarizes the findings and provides concluding
+remarks.

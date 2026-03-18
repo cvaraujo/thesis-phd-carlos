@@ -1,38 +1,60 @@
 \chapter{Uncertainty Methodologies and Results}\label{chp:uncertainty-methodologies-and-results}
 
-This section presents the methodologies applied to solve the \gls{cbrp} in its stochastic version, called in this work as \gls{scbrp}. This section presents two approaches to apply stochasticity to the problem: the first one makes use of the simulation component presented in Section~\ref{chp:dengue-virus-spread-simulation} to generate scenarios for the stochastic model, and the second one use a simulation-optimization framework.
+This chapter presents the methodologies developed to solve the \gls{cbrp} in its stochastic version, referred to in this thesis as the \gls{scbrp}. Two approaches are considered to incorporate uncertainty into the problem: the first relies on the simulation component presented in Chapter~\ref{chp:dengue-virus-spread-simulation} to generate scenarios for the stochastic model, and the second employs a simulation-optimization framework.
 
-\section{Stochastic Optimization Models}\label{sec:cbrp-stochastic-models}
+\section{Stochastic Notations}\label{sec:stochastic-notations}
 
-The \gls{scbrp}, computes, in the first-stage, a route to nebulize the blocks in the scenario $0$
-(present), in which the objective is to maximize the profit considering a bonus
-related to the impact on the reduction of future cases for each scenario in the
-second-stage. The second-stage represents a set of independent routes that
-nebulize independent blocks in each future scenario.
+This section introduces the additional notation required for \gls{scbrp}. All definitions and notation from Section~\ref{sec:notations-and-definitions} for the underlying graph $G = (V, A, B)$, the dummy depot, and the augmented graph $G'$ remain valid. The \gls{scbrp} extends the deterministic framework by incorporating a two-stage stochastic programming structure, where the first-stage computes a route in the present scenario and the second-stage addresses a set of future scenarios.
 
-In addition to the deterministic data, a set of $k$ future scenarios $\Omega =
-	\{\omega_1, \dots, \omega_k\}$, with $\xi^{\omega}$ being the probability of
-scenario $\omega \in \Omega$ to occur. The profit of block $b$ in the
-present is $p_{b}^{0}$, and the profit in each future scenario is
-$p_{b}^{\omega}$. This value represents the number of cases predicted for
-that city block in the scenario $\omega$. However, the profit of each block
-is affected by the first-stage, with a parameter $\alpha$ being a reduction
-factor in the number of cases in a block nebulized in the first-stage. For
-example, if $\alpha = 1$, then for all block $\{b \in B: y_{b}^{0} = 1\}$
-will have a $0$ profit in all second-stage scenarios.
-
-Let $\Omega' = \{0, \omega_1, \dots, \omega_k\}$ be the augmented set of
-scenarios, with $0$ representing the present scenario and $\omega_1, \dots,
-	\omega_k$ representing the $k$ future scenarios. The following binary decision
-variables are introduced for the \gls{scbrp} model:
+In addition to the deterministic input, the following elements are introduced:
 
 \begin{itemize}
-	\item $y_{b}^{\omega} \in \{0, 1\}$: binary variable valued as 1 if the block $b \in B$ is nebulized in the scenario $\omega \in \Omega'$ ($y_{b}^{\omega} = 1$) or not ($y_{b}^{\omega} = 0$).
-	\item $x_{a}^{\omega} \in \{0, 1\}$: binary variable valued as 1 if the arc $a \in A'$ is used in the route in the scenario $\omega \in \Omega'$ ($x_{a}^{\omega} = 1$) or not ($x_{a}^{\omega} = 0$).
-	\item $z_{b}^{\omega} \in \mathbb{R}$: real variable that represents the maximum profit of a block $b \in B$ in a scenario $\omega \in \Omega'$ ($z_{b}^{\omega} \in \mathbb{R}_{+}$).
+	\item $\Omega = \{\omega_1, \dots, \omega_k\}$ is the set of $k$ future
+	      scenarios;
+	\item $\xi^{\omega}$ is the probability of scenario $\omega \in \Omega$
+	      occurring;
+	\item $\Omega' = \{0, \omega_1, \dots, \omega_k\}$ is the augmented set of
+	      scenarios, where $0$ represents the present scenario;
+	\item $p_{b}^{0}$ is the profit of block $b \in B$ in the present scenario;
+	\item $p_{b}^{\omega}$ is the profit of block $b \in B$ in the future
+	      scenario $\omega \in \Omega$, representing the predicted number of
+	      cases for that block;
+	\item $\alpha \in [0, 1]$ is the reduction factor applied to the profit of
+	      blocks serviced in the first-stage, representing the effectiveness of
+	      nebulization in reducing future cases.
 \end{itemize}
 
-The \gls{scbrp} formulation is defined as follows:
+The \gls{scbrp} computes, in the first-stage, a route to nebulize blocks in
+scenario $0$ (present), where the objective is to maximize the profit
+considering a bonus related to the impact on the reduction of future cases for
+each scenario in the second-stage. The second-stage represents a set of
+independent routes that nebulize blocks in each future scenario. When a block is
+nebulized in the first-stage, its profit in each future scenario is reduced by
+the factor $\alpha$. For instance, if $\alpha = 1$, then all blocks serviced in
+the first-stage ($\{b \in B : y_{b}^{0} = 1\}$) will have zero residual profit
+in all second-stage scenarios.
+
+\section{Formulations}\label{sec:stochastic-formulations}
+
+Given an instance for the \gls{scbrp}, consider a path-based solution in which
+no arc or vertex is visited more than once within each scenario. The following
+decision variables are introduced for the model:
+
+\begin{itemize}
+	\item $x_{i,j}^{\omega} \in \{0, 1\}$ is a binary variable that indicates
+	      whether the arc $(i, j) \in A'$ is included in the route of scenario
+	      $\omega \in \Omega'$ ($x_{i,j}^{\omega} = 1$) or not
+	      ($x_{i,j}^{\omega} = 0$);
+	\item $y_{b}^{\omega} \in \{0, 1\}$ is a binary variable that indicates
+	      whether block $b \in B$ is serviced in scenario $\omega \in \Omega'$
+	      ($y_{b}^{\omega} = 1$) or not ($y_{b}^{\omega} = 0$);
+	\item $z_{b}^{\omega} \in \mathbb{R}_{+}$ is a real-valued variable that
+	      represents the effective profit of block $b \in B$ in scenario
+	      $\omega \in \Omega$, accounting for the first-stage reduction.
+\end{itemize}
+
+The Path-SCBRP formulation is defined as follows:
+\allowdisplaybreaks
 
 \begin{align}
 	\text{(Path-SCBRP)} & \max \overbrace{\sum_{b \in B} y_{b}^{0}(p_{b}^{0} + \alpha \sum_{\omega \in \Omega} \xi^{\omega} p_{b}^{\omega})}^{\text{First-Stage}} + \overbrace{\sum_{\omega \in \Omega} \xi^{\omega} \sum_{b \in B} z_{b}^{\omega}}^{\text{Second-Stage}} & \label{eq:sof}
@@ -46,43 +68,72 @@ The \gls{scbrp} formulation is defined as follows:
 	                             & \sum_{j \in \delta^{-}(i)} x_{i,j}^{\omega} \geq y_{b}^{\omega}                                         & \forall b \in B, i \in V(b), \omega \in \Omega' \label{eq:stochastic-in-path}       \\
 	                             & \sum_{(i, j) \in A} x_{i,j}^{\omega}t_{i,j} + \sum_{b \in B} y_{b}^{\omega}t^{'}_{b} \leq T             & \forall \omega \in \Omega' \label{eq:stochastic-max-time}                           \\
 	                             & \sum_{(i, j) \in A(C)} x_{i,j}^{\omega} \leq |V(C)| - 1                                                 & \forall C \subseteq V, \omega \in \Omega' \label{eq:stochastic-subtour-elimination} \\
-	                             & x \in \mathbb{B}^{|A'| * |\Omega'|}                                                                     & \label{eq:stochastic-dom-x}                                                         \\
-	                             & y \in \mathbb{B}^{|B| * |\Omega'|}                                                                      & \label{eq:stochastic-dom-y}                                                         \\
-	                             & z \in \mathbb{R}_{+}^{|B| * |\Omega|}                                                                   & \label{eq:stochastic-dom-z}
+	                             & x \in \mathbb{B}^{|A'| \times |\Omega'|}                                                                & \label{eq:stochastic-dom-x}                                                         \\
+	                             & y \in \mathbb{B}^{|B| \times |\Omega'|}                                                                 & \label{eq:stochastic-dom-y}                                                         \\
+	                             & z \in \mathbb{R}_{+}^{|B| \times |\Omega|}                                                              & \label{eq:stochastic-dom-z}
 \end{align}
 
-The objective function~\eqref{eq:sof} maximizes the total profit. When a block
-is attended in the first-stage, the final value is the profit of the block in
-scenario $0$ plus $\alpha$ times the profit for all scenarios multiplied by the
-probability of the scenario $\omega$ to occur. Besides the profit associated in
-first-stage, the second-stage maximizes the profit for the residual number of
-cases (after the $\alpha$ reduction for apply the route in scenario $0$) in each
-block and for every future scenario $\omega \in \Omega$.
+The objective function~\eqref{eq:sof} maximizes the total profit across both
+stages. The first-stage component accounts for the direct profit $p_{b}^{0}$ of
+each serviced block plus a bonus of $\alpha$ times the expected future profit
+across all scenarios, weighted by their respective probabilities. The
+second-stage component maximizes the expected residual profit across all future
+scenarios.
 
-Constraints~\eqref{eq:stochastic-z-value} ensure that the profit of a block $b$
-in the scenario $\omega$ is $(1 - \alpha) p_{b}^{\omega}$, if $y_{b}^{0} = 1$ or
-$p_{b}^{\omega}$ when $y_{b}^{0} = 0$.
-Constraints~\eqref{eq:stochastic-z-y-value}  guarantee that the value of
-$z_{b}^{\omega}$ is $0$ when $y_{b}^{\omega} = 0$ and $p_{b}^{\omega}$
-otherwise. The Constraints from~\eqref{eq:stochastic-s-t-all}
-to~\eqref{eq:stochastic-subtour-elimination} are the same as the constraints
-from~\eqref{eq:s-t-all} to~\eqref{eq:circuit-subtour-elimination} of the
-Path-CBRP formulation, but for independent routes for all scenario $\omega \in
-	\Omega'$. Constraints~\eqref{eq:stochastic-dom-x}-\eqref{eq:stochastic-dom-z}
-define the domain of the decision variables.
+Constraints~\eqref{eq:stochastic-z-value} ensure that the effective profit
+$z_{b}^{\omega}$ of block $b$ in scenario $\omega$ is reduced to $(1 -
+	\alpha)p_{b}^{\omega}$ when the block was also serviced in the first-stage
+($y_{b}^{0} = 1$), and remains $p_{b}^{\omega}$ otherwise.
+Constraints~\eqref{eq:stochastic-z-y-value} guarantee that $z_{b}^{\omega} = 0$
+when block $b$ is not serviced in scenario $\omega$ ($y_{b}^{\omega} = 0$).
+Constraints~\eqref{eq:stochastic-s-t-all}--\eqref{eq:stochastic-subtour-elimination}
+replicate the structural
+constraints~\eqref{eq:s-t-all}--\eqref{eq:circuit-subtour-elimination} of the
+Path-CBRP formulation, applied independently to each scenario $\omega \in
+	\Omega'$: depot connectivity~\eqref{eq:stochastic-s-t-all}, flow
+conservation~\eqref{eq:stochastic-flow-conservation}, block-to-route
+linking~\eqref{eq:stochastic-in-path}, time
+budget~\eqref{eq:stochastic-max-time}, and subtour
+elimination~\eqref{eq:stochastic-subtour-elimination}. Finally,
+constraints~\eqref{eq:stochastic-dom-x}--\eqref{eq:stochastic-dom-z} define the
+domain of the decision variables.
 
-Considering the Path-SCBRP formulation, with the changes to consider the
-stochastic nature of the problem, it is also possible to adapt the deterministic
-models from Section~\ref{sec:cbrp-deterministic-models} to generate feasible
-solutions for the \gls{scbrp}, i.e., creating the $k$ routes to nebulize the
-blocks in the scenario $0$ and each future scenario. The further references for
-the \gls{scbrp} will follow the same pattern presented for the deterministic
-formulations: Path-SCBRP, Path-SCBRP-MTZ, Walk-SCBRP and Walk-SCBRP-MTZ.
+As in the deterministic case, the subtour elimination
+constraints~\eqref{eq:stochastic-subtour-elimination} are exponential in number.
+The same two approaches apply: lazy separation during branch-and-bound, or
+replacement by the \gls{mtz} compact formulation. For the \gls{mtz} approach,
+the following additional variable is introduced:
 
+\begin{itemize}
+	\item $w_{i,j}^{\omega} \in \mathbb{R}$ is a real-valued variable
+	      representing the accumulated time along the arc $(i, j) \in A'$ in
+	      scenario $\omega \in \Omega'$.
+\end{itemize}
 
-\section{Stochastic CBRP Heuristics}\label{sec:stochastic-heuristics}
+Using this variable, constraints~\eqref{eq:stochastic-subtour-elimination} can
+be replaced by:
 
-This section presents the heuristics approaches developed to solve the \gls{scbrp}. The first step is to highlight the similarities between the deterministic and stochastic versions. Considering the formulation Path-SCBRP, presented in Section~\ref{sec:cbrp-stochastic-models}, the first relevant property is that the stochastic version of the problem is a set of $k = |S|$ independent \gls{cbrp} instances, one for each scenario $s \in S$ in the second stage considering a fixed first stage solution. Therefore, it is possible to use deterministic approaches to solve stages and scenarios independently. Besides the profit update that will be discussed in more detais latter in this section, the main steps to solve the \gls{scbrp} using a heuristic method are presented in Figure~\ref{fig:stochastic-local-search-heuristic}. The initial solution is generated using a variation of the constructive heuristic presented in Section~\ref{sec:greedy-constructive-algorithm}. The local search heuristic is then applied to the initial solution to improve the solutions of first and second stage, the heuristic considers a set of major criteria to explore seeking for improvements in the solution. At the end of a iterations, if some route improvement is found, there is an option to propagate this improvement to other routes in the solution.
+\begin{align}
+	 & w_{j,k}^{\omega} \geq w_{i,j}^{\omega} + x_{i,j}^{\omega}t_{i,j} - (2 - x_{j,k}^{\omega} - x_{i,j}^{\omega})T & \forall (i, j) \in A, (j, k) \in A, j \in V, \omega \in \Omega' \label{eq:stochastic-mtz-leq} \\
+	 & w_{i,0}^{\omega} \leq T                                                                                       & \forall i \in V, \omega \in \Omega'.                              \label{eq:stochastic-mtz}
+\end{align}
+
+Constraints~\eqref{eq:stochastic-mtz-leq} compute the accumulated time at each
+arc per scenario, while constraints~\eqref{eq:stochastic-mtz} enforce an upper
+bound on the accumulated time. This formulation, referred to as Path-SCBRP-MTZ,
+maintains an equivalent set of integer feasible solutions to Path-SCBRP while
+reducing the constraint count from exponential to polynomial per scenario.
+However, as in the deterministic Path-CBRP-MTZ, the fractional feasible space
+may widen.
+
+The walk-based stochastic formulation extends the formulations Walk-CBRP and Walk-CBRP-MTZ (Section~\ref{sec:cbrp-walk-based-formulation}) to the two-stage stochastic setting. The walk-based stochastic formulations are referred to as Walk-SCBRP and Walk-SCBRP-MTZ, respectively.
+
+\section{Heuristic Approaches}\label{sec:heuristic-approaches}
+
+This section presents the heuristic approaches developed to solve the \gls{scbrp} producing a walk-based solution. 
+The first step is to highlight the similarities between the gls{cbrp} and the \gls{scbrp}, the first relevant property is that the stochastic version of the problem consists of $k = |\Omega|$ independent \gls{cbrp} instances, one for each scenario $\omega \in \Omega$ in the second stage, given a fixed first-stage solution. 
+Therefore, deterministic approaches can be used to solve stages and scenarios independently. Besides the profit update discussed later in this section, the main steps to solve the \gls{scbrp} using a heuristic method are presented in Figure~\ref{fig:stochastic-local-search-heuristic}. The initial solution uses a variation of the constructive procedure presented in Section~\ref{sec:greedy-constructive-algorithm}. The local search heuristic is then applied to the initial solution to improve both first-stage and second-stage solutions. 
+The heuristic considers a set of major criteria seeking improvements and, at the end of each iteration, if a route improvement is found, there is an option to propagate this improvement to other routes in the solution.
 
 \begin{figure}[h!]
 	\centering
@@ -155,20 +206,18 @@ This section presents the heuristics approaches developed to solve the \gls{scbr
 
 \subsection{Initial Solution Heuristic}
 
-Considering that the first stage and the scenarios of the second stage could be solve independently, the initial solution for the \gls{scbrp} could use the constructive heuristic presented in Section~\ref{sec:greedy-constructive-algorithm}.
-
-The initial solution heuristic for the \gls{scbrp} is based on a two-stage approach that leverages deterministic greedy algorithms. In the first stage, all blocks are assigned adjusted profit values that combine both the nominal (first-stage) and scenario-based (second-stage) profits for each block, weighted by the reduction factor $\alpha$ and scenario probabilities. The greedy constructive algorithm is used to generate a feasible first-stage route that maximizes the aggregated profit while respecting the time constraint. Subsequently, for each scenario, the algorithm solves an independent routing problem where the profits associated with first-stage-visited blocks are appropriately reduced, reflecting the fact that those blocks have already been serviced. The greedy constructive algorithm is applied to each scenario with these adjusted profit values, producing scenario-specific routes. The overall solution consists of the first-stage routing plan together with a collection of scenario-dependent second-stage routes, thus providing a complete and feasible plan for the \gls{scbrp} as described in Algorithm~\ref{alg:greedy-constructive-algorithm}.
+The initial solution heuristic for the \gls{scbrp} is based on a two-stage approach that leverages deterministic greedy algorithms. In the first stage, all blocks are assigned adjusted profit values that combine both the nominal (first-stage) and scenario-based (second-stage) profits for each block, weighted by the reduction factor $\alpha$ and scenario probabilities. The greedy constructive algorithm is used to generate a feasible first-stage route that maximizes the aggregated profit while respecting the time constraint. Subsequently, for each scenario, the algorithm solves an independent routing problem where the profits associated with first-stage-visited blocks are appropriately reduced, reflecting the fact that those blocks have already been serviced. The greedy constructive algorithm is applied to each scenario with these adjusted profit values, producing scenario-specific routes. The overall solution consists of the first-stage routing plan together with a collection of scenario-dependent second-stage routes, thus providing a complete and feasible plan for the \gls{scbrp} as described in Algorithm~\ref{alg:create-initial-solution}.
 
 \begin{algorithm}[h!]
-	\caption{Create Initial Solution}
+	\caption{Create Initial Solution} \label{alg:create-initial-solution}
 	\SetAlgoLined
-	\KwData{graph $G$, scenarios $S$, time limit $T$, blocks $B$, reduction factor $\alpha$, first-stage profit $p_b^{0}$, scenario profit $p_b^{\omega}$}
+	\KwData{Graph $G$, scenario set $\Omega$, time limit $T$, blocks $B$, reduction factor $\alpha$, first-stage profit $p_b^{0}$, scenario profit $p_b^{\omega}$}
 	\KwResult{Solution with first-stage route and scenario-specific routes}
 
 	$solution \leftarrow \text{new Solution}(Input)$\;
 
 	$cases\_per\_block \leftarrow \text{vector of size } |B|$\;
-	$time\_per\_block \leftarrow \text{vector of size } B$\;
+	$time\_per\_block \leftarrow \text{vector of size } |B|$\;
 
 	\tcp{Set first-stage profit values for all blocks}
 	\For{$b = 1$ \textbf{to} $|B|$}{
@@ -179,29 +228,29 @@ The initial solution heuristic for the \gls{scbrp} is based on a two-stage appro
 	$first\_stage\_of \leftarrow \Call{GreedyConstructiveAlgorithm}{cases\_per\_block, T, y_0}$\;
 	Add first-stage allocation and route to solution\;
 
-	\tcp{Solve Second Stage Problems for each scenario}
-	\For{$s = 1$ \textbf{to} $S$}{
-	\tcp{Adjust scenario costs based on first-stage solution}
-	\For{$b = 1$ \textbf{to} $|B|$}{
-	\uIf{$y_b^{0} = 1$}{
-	$cases\_per\_block[b] \leftarrow (1 - \alpha) p_{b}^{s}$\;
-	}\Else{
-		$cases\_per\_block[b] \leftarrow p_{b}^{s}$\;
-	}
-	}
-	$scn\_of \leftarrow \Call{GreedyConstructiveAlgorithm}{cases\_per\_block, T, y_s}$\;
-	Add scenario allocation and route to solution\;
-	$scn\_of \leftarrow \xi^{s} \times scn\_of$\;
+	\tcp{Solve second-stage problems for each scenario}
+	\For{each scenario $\omega \in \Omega$}{
+		\tcp{Adjust scenario profits based on first-stage solution}
+		\For{$b = 1$ \textbf{to} $|B|$}{
+			\uIf{$y_b^{0} = 1$}{
+				$cases\_per\_block[b] \leftarrow (1 - \alpha) p_{b}^{\omega}$\;
+			}\Else{
+				$cases\_per\_block[b] \leftarrow p_{b}^{\omega}$\;
+			}
+		}
+		$scn\_of \leftarrow \Call{GreedyConstructiveAlgorithm}{cases\_per\_block, T, y_{\omega}}$\;
+		Add scenario allocation and route to solution\;
+		$scn\_of \leftarrow \xi^{\omega} \times scn\_of$\;
 	}
 	\Return{$solution$}\;
 \end{algorithm}
 
 \subsection{Local Search Heuristic}
 
-The local search is based on a set of major criterias to explore seeking for improvements in the initial solution. The criterias are presented in Figure~\ref{fig:stochastic-local-search-heuristic}. The starting point for swaps and other changes is the first stage route, then for each change in the blocks attended in the first stage route, the algorithm considers a set of possible swaps and other changes in the second stage routes.
-Two swap changes in the objective function could be considered when a block in the first stage is changed, the first and simplier is to swap the block then only update the slice of profit for each second stage solution that is affected by the change, this objective evaluation is called ``weak''. The second option is to swap the block and also update the attended blocks in the second stage routes that are affected by the change, this objective evaluation is called ``moderate''.
+The local search is based on a set of major criteria to explore seeking improvements in the initial solution. These criteria are presented in Figure~\ref{fig:stochastic-local-search-heuristic}. The starting point for swaps and other changes is the first-stage route; for each change in the blocks attended in the first-stage route, the algorithm considers a set of possible swaps and other changes in the second-stage routes.
+Two evaluation modes can be considered when a block in the first stage is changed. The first and simpler mode swaps the block and updates only the profit slice for each affected second-stage solution; this evaluation is called ``weak.'' The second mode swaps the block and also updates the attended blocks in the affected second-stage routes; this evaluation is called ``moderate.''
 
-The Algorithm~\ref{alg:run-default-perturbation} implements a hierarchical perturbation strategy for local search procedures. The algorithm attempts multiple types of neighborhood moves in a sequential manner, starting with less disruptive swaps and progressively exploring more aggressive perturbations until a feasible improving move is found. This multi-level approach balances solution quality with diversification needs.
+Algorithm~\ref{alg:run-default-perturbation} implements a hierarchical perturbation strategy for local search procedures. The algorithm attempts multiple types of neighborhood moves sequentially, starting with less disruptive swaps and progressively exploring more aggressive perturbations until a feasible improving move is found. This multi-level approach balances solution quality with diversification needs.
 
 \begin{algorithm}[h!]
 	\caption{Local Search Default Perturbation} \label{alg:run-default-perturbation}
@@ -235,7 +284,7 @@ The Algorithm~\ref{alg:run-default-perturbation} implements a hierarchical pertu
 
 The algorithm implements a three-level hierarchical perturbation mechanism designed to systematically explore different neighborhood structures. At the first level, the algorithm attempts in-route block swaps, which exchange blocks that are already part of the current route but may have different attendance statuses. This represents the least disruptive perturbation and is often sufficient to escape local optima. If the random strategy flag is enabled, the algorithm randomly selects one of three initial strategies to enhance diversification. At the second level, if the first level fails to produce a valid change (either because it was skipped or returned an empty change), the algorithm explores out-route block swaps. These swaps exchange blocks currently in the route with blocks not yet included, representing a more aggressive perturbation that can significantly alter the solution structure. If both swap-based perturbations fail to generate valid moves, the algorithm proceeds to the third level, which applies random block modifications through the \textsc{RandomBlockChange} procedure. This final level includes random swap operations, block insertions, and block removals, providing the most aggressive diversification mechanism. The hierarchical structure ensures that the algorithm first attempts conservative moves that preserve solution quality, only resorting to more disruptive perturbations when necessary to escape stagnation.
 
-The Algorithm~\ref{alg:compute-swap-blocks} identifies the best block swap operation in the first-stage solution by evaluating all feasible exchanges between attended blocks and candidate replacement blocks. The algorithm supports both in-route swaps (exchanging blocks within the current route) and out-route swaps (replacing route blocks with external blocks), using either weak or moderate delta evaluation strategies to assess solution quality changes.
+Algorithm~\ref{alg:compute-swap-blocks} identifies the best block swap operation in the first-stage solution by evaluating all feasible exchanges between attended blocks and candidate replacement blocks. The algorithm supports both in-route swaps (exchanging blocks within the current route) and out-route swaps (replacing route blocks with external blocks), using either weak or moderate delta evaluation strategies to assess solution quality changes.
 
 \begin{algorithm}[h!]
 	\caption{Compute Swap Blocks} \label{alg:compute-swap-blocks}
@@ -287,7 +336,7 @@ The algorithm explores the swap neighborhood by iterating through all attended b
 
 The algorithm maintains the best swap found during the search, tracking both the improvement value $\Delta^*$ and the associated block pair $(b_1^*, b_2^*)$. When the moderate evaluation strategy is used, the algorithm also stores secondary swaps that should be applied to second-stage solutions to maintain consistency. The search can operate in two modes: best-improve mode, which exhaustively evaluates all swaps to find the best available move, or first-improve mode, which returns immediately upon finding any improving swap, trading solution quality for computational efficiency. This flexibility allows the algorithm to adapt to different computational budgets and optimization requirements.
 
-The delta evaluation functions compute the change in objective value when swapping two blocks in the first-stage solution. The Algorithm~\ref{alg:get-weak-delta-swap-blocks} provides a fast approximation by considering only direct profit changes, while Algorithm~\ref{alg:get-moderate-delta-swap-blocks} performs a comprehensive analysis that accounts for cascading effects in second-stage scenarios, including potential block substitutions to maintain solution quality.
+The delta evaluation functions compute the change in objective value when swapping two blocks in the first-stage solution. Algorithm~\ref{alg:get-weak-delta-swap-blocks} provides a fast approximation by considering only direct profit changes, while Algorithm~\ref{alg:get-moderate-delta-swap-blocks} performs a comprehensive analysis that accounts for cascading effects in second-stage scenarios, including potential block substitutions to maintain solution quality.
 
 \begin{algorithm}[h!]
 	\caption{Get Weak Delta Swap Blocks} \label{alg:get-weak-delta-swap-blocks}
@@ -300,28 +349,27 @@ The delta evaluation functions compute the change in objective value when swappi
 	$\alpha \leftarrow$ reduction factor\;
 
 	\tcp{Evaluate second-stage impacts:}
-	\For{each scenario $s = 1$ \textbf{to} $S$}{
-		$\xi^{s} \leftarrow$ probability of scenario $s$\;
-		$p_{b_1}^s \leftarrow$ profit in block $b_1$ for scenario $s$\;
-		$p_{b_2}^s \leftarrow$ profit in block $b_2$ for scenario $s$\;
+	\For{each scenario $\omega \in \Omega$}{
+		$p_{b_1}^{\omega} \leftarrow$ profit of block $b_1$ in scenario $\omega$\;
+		$p_{b_2}^{\omega} \leftarrow$ profit of block $b_2$ in scenario $\omega$\;
 		\tcp{Account for first-stage reduction effect}
-		$\Delta \leftarrow \Delta + \xi^{s} \cdot \alpha \cdot (p_{b_2}^s - p_{b_1}^s)$\;
+		$\Delta \leftarrow \Delta + \xi^{\omega} \cdot \alpha \cdot (p_{b_2}^{\omega} - p_{b_1}^{\omega})$\;
 		\tcp{Block $b_1$ leaving first-stage}
-		\If{$b_1$ is attended in scenario $s$}{
-			$\Delta \leftarrow \Delta + \alpha \cdot \xi^{s} \cdot p_{b_1}^s$\;
+		\If{$b_1$ is attended in scenario $\omega$}{
+			$\Delta \leftarrow \Delta + \alpha \cdot \xi^{\omega} \cdot p_{b_1}^{\omega}$\;
 		}
 		\tcp{Block $b_2$ entering first-stage}
-		\If{$b_2$ is attended in scenario $s$}{
-			$\Delta \leftarrow \Delta - \alpha \cdot \xi^{s} \cdot p_{b_2}^s$\;
+		\If{$b_2$ is attended in scenario $\omega$}{
+			$\Delta \leftarrow \Delta - \alpha \cdot \xi^{\omega} \cdot p_{b_2}^{\omega}$\;
 		}
 	}
 	\Return{$\Delta$}\;
 \end{algorithm}
 
-The Algorithm~\ref{alg:get-weak-delta-swap-blocks} provides a computationally efficient way to compute the objective function change by evaluating only direct effects of the swap. The algorithm begins by computing the first-stage profit difference between the inserted block $b_2$ and removed block $b_1$.
-It then iterates through all scenarios to account for second-stage impacts. The reduction factor $\alpha$ represents the fraction of cases that can be addressed in the second stage after being partially handled in the first stage. For each scenario, the algorithm adds the expected change in recaptured cases weighted by scenario probability. Additionally, if block $b_1$ was being attended in a scenario from second stage, its removal from the first stage allows those cases to be fully addressed in the second stage, contributing positively to the delta. Conversely, if block $b_2$ was attended in a second stage scenario, its promotion to the first stage reduces the second-stage profit, contributing negatively. This weak evaluation assumes no compensatory adjustments occur in second-stage solutions.
+Algorithm~\ref{alg:get-weak-delta-swap-blocks} provides a computationally efficient way to compute the objective function change by evaluating only the direct effects of the swap. The algorithm begins by computing the first-stage profit difference between the inserted block $b_2$ and the removed block $b_1$.
+It then iterates through all scenarios to account for second-stage impacts. The reduction factor $\alpha$ represents the fraction of cases that can be addressed in the second stage after being partially handled in the first stage. For each scenario $\omega$, the algorithm adds the expected change in recaptured cases weighted by the scenario probability $\xi^{\omega}$. Additionally, if block $b_1$ was being attended in a second-stage scenario, its removal from the first stage allows those cases to be fully addressed in the second stage, contributing positively to the delta. Conversely, if block $b_2$ was attended in a second-stage scenario, its promotion to the first stage reduces the second-stage profit, contributing negatively. This weak evaluation assumes no compensatory adjustments occur in second-stage solutions.
 
-The Algorithm~\ref{alg:get-moderate-delta-swap-blocks} performs a more sophisticated analysis by identifying and evaluating potential compensatory swaps in second-stage scenarios. After computing the same first-stage and reduction effects as the weak evaluation, the algorithm examines each scenario for opportunities to maintain solution quality through block substitutions. When block $b_1$ leaves the first stage, if it was present but unattended in a scenario route and still has positive profit, the algorithm calls \textsc{GetBestSecondStageOptionIfB1Leaves} to identify the best currently-attended block that could be swapped out in favor of attending $b_1$. This substitution is recorded in the $swaps$ structure and its impact is added to the delta calculation. Similarly, when block $b_2$ enters the first stage, if it was being attended in a scenario from second stage, the algorithm calls \textsc{GetBestSecondStageOptionIfB2Enters} to find the best unattended block that could replace $b_2$ in the second-stage solution. This function considers the previous swap (if any) to avoid conflicts and ensure time feasibility. If a suitable replacement is found, the swap is recorded and its impact included in the delta. Otherwise, the algorithm accounts for the direct loss of $b_2$ second-stage contribution. This moderate evaluation provides a more accurate estimate of the true objective function change by anticipating rational adjustments to second-stage solutions.
+Algorithm~\ref{alg:get-moderate-delta-swap-blocks} performs a more sophisticated analysis by identifying and evaluating potential compensatory swaps in second-stage scenarios. After computing the same first-stage and reduction effects as the weak evaluation, the algorithm examines each scenario for opportunities to maintain solution quality through block substitutions. When block $b_1$ leaves the first stage, if it was present but unattended in a scenario route and still has positive profit, the algorithm calls \textsc{GetBestSecondStageOptionIfB1Leaves} to identify the best currently-attended block that could be swapped out in favor of attending $b_1$. This substitution is recorded in the $swaps$ structure and its impact is added to the delta calculation. Similarly, when block $b_2$ enters the first stage, if it was being attended in a scenario from second stage, the algorithm calls \textsc{GetBestSecondStageOptionIfB2Enters} to find the best unattended block that could replace $b_2$ in the second-stage solution. This function considers the previous swap (if any) to avoid conflicts and ensure time feasibility. If a suitable replacement is found, the swap is recorded and its impact included in the delta. Otherwise, the algorithm accounts for the direct loss of $b_2$ second-stage contribution. This moderate evaluation provides a more accurate estimate of the true objective function change by anticipating rational adjustments to second-stage solutions.
 
 \begin{algorithm}[h!]
 	\caption{Get Moderate Delta Swap Blocks} \label{alg:get-moderate-delta-swap-blocks}
@@ -333,45 +381,44 @@ The Algorithm~\ref{alg:get-moderate-delta-swap-blocks} performs a more sophistic
 	$\alpha \leftarrow$ reduction factor\;
 	$swaps \leftarrow \emptyset$\;
 
-	\For{each scenario $s = 1$ \textbf{to} $S$}{
-		$\xi^{s} \leftarrow$ probability of scenario $s$\;
-		$R_s \leftarrow$ route for scenario $s$\;
-		$p_{b_1}^s \leftarrow$ profit in block $b_1$ for scenario $s$\;
-		$p_{b_2}^s \leftarrow$ profit in block $b_2$ for scenario $s$\;
+	\For{each scenario $\omega \in \Omega$}{
+		$R_{\omega} \leftarrow$ route for scenario $\omega$\;
+		$p_{b_1}^{\omega} \leftarrow$ profit of block $b_1$ in scenario $\omega$\;
+		$p_{b_2}^{\omega} \leftarrow$ profit of block $b_2$ in scenario $\omega$\;
 
-		$\Delta \leftarrow \Delta + \xi^{s} \cdot \alpha \cdot (p_{b_2}^s - p_{b_1}^s)$; \tcp{First-stage reduction effect}
+		$\Delta \leftarrow \Delta + \xi^{\omega} \cdot \alpha \cdot (p_{b_2}^{\omega} - p_{b_1}^{\omega})$; \tcp{First-stage reduction effect}
 
 		\tcp{Handle block $b_1$ leaving first-stage}
-		\eIf{$b_1$ is attended in $R_s$}{
-			$\Delta \leftarrow \Delta + \alpha \cdot \xi^{s} \cdot p_{b_1}^s$\;
+		\eIf{$b_1$ is attended in $R_{\omega}$}{
+			$\Delta \leftarrow \Delta + \alpha \cdot \xi^{\omega} \cdot p_{b_1}^{\omega}$\;
 		}{
-			\If{$b_1$ is in route $R_s$ \textbf{and} $p_{b_1}^s > 0$}{
-				$b_{low} \leftarrow$ \Call{GetBestSecondStageOptionIfB1Leaves}{$s, b_1, b_2$}\;
+			\If{$b_1$ is in route $R_{\omega}$ \textbf{and} $p_{b_1}^{\omega} > 0$}{
+				$b_{low} \leftarrow$ \Call{GetBestSecondStageOptionIfB1Leaves}{$\omega, b_1, b_2$}\;
 				\If{$b_{low} \neq -1$}{
-					$p_{low}^s \leftarrow$ updated profit for $b_{low}$ in $s$\;
-					$\Delta \leftarrow \Delta + \xi^{s} \cdot (p_{b_1}^s - p_{low}^s)$\;
-					Add $(s, (b_{low}, b_1))$ to $swaps$\;
+					$p_{low}^{\omega} \leftarrow$ updated profit for $b_{low}$ in $\omega$\;
+					$\Delta \leftarrow \Delta + \xi^{\omega} \cdot (p_{b_1}^{\omega} - p_{low}^{\omega})$\;
+					Add $(\omega, (b_{low}, b_1))$ to $swaps$\;
 				}
 			}
 		}
 
 		\tcp{Handle block $b_2$ entering first-stage}
-		\If{$b_2$ is attended in $R_s$}{
-			$b_{high} \leftarrow$ \Call{GetBestSecondStageOptionIfB2Enters}{$s, b_1, b_2, time\_diff$}\;
+		\If{$b_2$ is attended in $R_{\omega}$}{
+			$b_{high} \leftarrow$ \Call{GetBestSecondStageOptionIfB2Enters}{$\omega, b_1, b_2, time\_diff$}\;
 			\eIf{$b_{high} \neq -1$}{
-				$p_{high}^s \leftarrow$ updated profit for $b_{high}$ in $s$\;
-				$p_{b_2}^s \leftarrow$ updated profit for $b_2$ considering first-stage\;
-				$\Delta \leftarrow \Delta + \xi^{s} \cdot (p_{high}^s - p_{b_2}^s)$\;
-				Add $(s, (b_2, b_{high}))$ to $swaps$\;
+				$p_{high}^{\omega} \leftarrow$ updated profit for $b_{high}$ in $\omega$\;
+				$p_{b_2}^{\omega} \leftarrow$ updated profit for $b_2$ considering first-stage\;
+				$\Delta \leftarrow \Delta + \xi^{\omega} \cdot (p_{high}^{\omega} - p_{b_2}^{\omega})$\;
+				Add $(\omega, (b_2, b_{high}))$ to $swaps$\;
 			}{
-				$\Delta \leftarrow \Delta - \alpha \cdot \xi^{s} \cdot p_{b_2}^s$\;
+				$\Delta \leftarrow \Delta - \alpha \cdot \xi^{\omega} \cdot p_{b_2}^{\omega}$\;
 			}
 		}
 	}
 	\Return{$(\Delta, swaps)$}\;
 \end{algorithm}
 
-The diversification strategy referred in Algorithm~\ref{alg:run-default-perturbation} is described in Algorithm~\ref{alg:random-block-change}, which implements a randomized perturbation mechanism that selects and applies one of three block modification strategies: random swaps, insertions, or removals. This approach provides diversification in the search process by randomly choosing between different neighborhood structures, with each strategy employing specific selection criteria to identify promising moves.
+The diversification strategy referred to in Algorithm~\ref{alg:run-default-perturbation} is described in Algorithm~\ref{alg:random-block-change}, which implements a randomized perturbation mechanism that selects and applies one of three block modification strategies: random swaps, insertions, or removals. This approach provides diversification in the search process by randomly choosing between different neighborhood structures, with each strategy employing specific selection criteria to identify promising moves.
 
 \begin{algorithm}[h!]
 	\caption{Random Block Change} \label{alg:random-block-change}
@@ -397,11 +444,11 @@ The diversification strategy referred in Algorithm~\ref{alg:run-default-perturba
 	\Return{\Call{SelectRemoveBlock}{$option$}}\;
 \end{algorithm}
 
-The Algorithm~\ref{alg:random-block-change} serves as a high-level dispatcher that randomly selects one of three perturbation strategies to diversify the current solution. The algorithm first generates two random values: one to determine the strategy type (swap, insert, or remove) and another to specify the selection criterion within insertion and removal operations (highest time, lowest profit, lowest profit-to-time ratio, or random selection). If the randomly selected strategy fails to produce a valid change, the algorithm defaults to attempting a block removal, ensuring that some perturbation is always considered.
+Algorithm~\ref{alg:random-block-change} serves as a high-level dispatcher that randomly selects one of three perturbation strategies to diversify the current solution. The algorithm first generates two random values: one to determine the strategy type (swap, insert, or remove) and another to specify the selection criterion within insertion and removal operations (highest time, lowest profit, lowest profit-to-time ratio, or random selection). If the randomly selected strategy fails to produce a valid change, the algorithm defaults to attempting a block removal, ensuring that some perturbation is always considered.
 
-The Algorithm~\ref{alg:select-random-swap-blocks} implements a swap strategy by randomly selecting a feasible swap pair from the solution space. It shuffles both attended and unattended blocks to identify a valid exchange that satisfies time and feasibility constraints. This randomization provides strong diversification without bias toward specific block characteristics. The delta evaluation follows the same weak or moderate strategy used throughout the local search framework. The swaps between blocks that already belong to a route are easy to evaluate and check feasibility, since there are no routing changes involved, only check if the the time change from removing the block and inserting the new one is feasible. The out-route swaps are more complex, since they involve routing changes, and need to be checked if the swap is feasible.
+Algorithm~\ref{alg:select-random-swap-blocks} implements a swap strategy by randomly selecting a feasible swap pair from the solution space. It shuffles both attended and unattended blocks to identify a valid exchange that satisfies time and feasibility constraints. This randomization provides strong diversification without bias toward specific block characteristics. The delta evaluation follows the same weak or moderate strategy used throughout the local search framework. The swaps between blocks that already belong to a route are easy to evaluate and check feasibility, since there are no routing changes involved, only check if the time change from removing the block and inserting the new one is feasible. The out-route swaps are more complex, since they involve routing changes, and need to be checked if the swap is feasible.
 
-The function that determines whether swapping an attended block $b_1$ with a block $b_2$, that is not currently in the route, is feasible with respect to time constraints considers the complexity of taking account for both the removal of block $b_1$ (which may allow removal of a route node) and the insertion of block $b_2$ (which require adding a new node to the route).
+The function that determines whether swapping an attended block $b_1$ with a block $b_2$, that is not currently in the route, is feasible with respect to time constraints considers the complexity of taking account for both the removal of block $b_1$ (which may allow removal of a route node) and the insertion of block $b_2$ (which may require adding a new node to the route).
 The function begins by evaluating the time gain by removing the block $(b_1)$ from the solution, including both the block attendance time and any potential routing time savings if the node attending $b_1$ can be removed from the route when no other attended blocks depend on it.
 The next time change is then calculated by subtracting this possible time gain from the time required to attend block $b_2$.
 If this preliminary check indicates that even the best-case scenario would violate the time limit, the function immediately returns false.
@@ -445,7 +492,7 @@ The insertion and removal functions employ four distinct selection strategies to
 
 \subsection{Simulated Annealing Heuristic}
 
-The Algorithm~\ref{alg:simulated-annealing-heuristic} implements a temperature-based stochastic local search that accepts both improving and non-improving moves with a probability that decreases as the temperature increases. This approach enables the algorithm to escape local optima by occasionally accepting worse solutions, with the acceptance probability controlled. The algorithm progressively increases the temperature, reducing the likelihood of accepting deteriorating moves as the search advances toward convergence.
+Algorithm~\ref{alg:simulated-annealing-heuristic} implements a temperature-based stochastic local search that accepts both improving and non-improving moves. The acceptance probability for deteriorating moves decreases as the temperature increases. This approach enables the algorithm to escape local optima by occasionally accepting worse solutions. The algorithm progressively increases the temperature, reducing the likelihood of accepting deteriorating moves as the search advances toward convergence.
 
 \begin{algorithm}[h!]
 	\caption{Simulated Annealing} \label{alg:simulated-annealing-heuristic}
@@ -496,7 +543,324 @@ The Algorithm~\ref{alg:simulated-annealing-heuristic} implements a temperature-b
 
 The Simulated Annealing algorithm implements a metaheuristic search strategy that balances intensification and diversification through a temperature-controlled acceptance mechanism. The algorithm maintains two solutions throughout the search: the current solution $S_{curr}$, which undergoes perturbations and may temporarily deteriorate, and the best solution $S^*$, which tracks the highest-quality solution encountered. The search operates through nested loops, with an outer loop that progressively increases the temperature from an initial value $T_{init}$ to a maximum value $T_{max}$, and an inner loop that performs a fixed number of iterations at each temperature level. At each iteration, the algorithm generates a perturbation using the \textsc{LocalSearchDefaultPerturbation} which applies one of several neighborhood operators (swaps, insertions, removals, or route improvement) to modify the current solution.
 
-The acceptance decision follows the criterion: improving changes(positive delta) are always accepted, while deteriorating changes are accepted with probability $p_{accept} = \exp(\Delta \cdot Temperature / OF^*)$, where $\Delta$ is the change in objective value, $Temperature$ is the current temperature, and $OF^*$ is the best objective value found so far. This formulation ensures that at higher temperatures (later in the search), the algorithm behaves more conservatively, accepting fewer deteriorating changes, while at lower temperatures (earlier in the search), it becomes more exploratory, accepting worse solutions more readily to escape local optima.
+The acceptance decision follows the criterion: improving changes (positive delta) are always accepted, while deteriorating changes are accepted with probability $p_{accept} = \exp(\Delta \cdot Temperature / OF^*)$, where $\Delta$ is the change in objective value, $Temperature$ is the current temperature, and $OF^*$ is the best objective value found so far. This formulation ensures that at higher temperatures (later in the search), the algorithm behaves more conservatively, accepting fewer deteriorating changes, while at lower temperatures (earlier in the search), it becomes more exploratory, accepting worse solutions more readily to escape local optima.
 When the current solution surpasses the best solution, both are updated to maintain the best-found solution.
 
-At the end of each temperature level, the algorithm \textsc{ImproveSecondStageRoutes} is applied to optimize the second-stage scenario solutions using a greedy heuristic, ensuring that the stochastic component of the problem is properly addressed. If the best solution improved during the temperature level, the current solution is reset to the best solution to intensify the search around promising regions, otherwise, only the current solution is improved to continue diversification. The temperature is then multiplied by a cooling factor $\alpha > 1$ (heating schedule) to increase the temperature for the next level. After completing all temperature levels, a final post-processing step refines the best solution by re-solving all scenario block selection subproblems to the best feasible know route, ensuring solution quality before returning the final result.
+At the end of each temperature level, the procedure \textsc{ImproveSecondStageRoutes} is applied to optimize the second-stage scenario solutions using the greedy heuristic, ensuring that the stochastic component of the problem is properly addressed. If the best solution improved during the temperature level, the current solution is reset to the best solution to intensify the search around promising regions; otherwise, only the current solution is improved to continue diversification. The temperature is then multiplied by a factor $\alpha > 1$ (heating schedule) to increase the temperature for the next level. After completing all temperature levels, a final post-processing step refines the best solution by re-solving all scenario block selection subproblems using the best feasible known route, ensuring solution quality before returning the final result.
+
+\section{Simheuristic}\label{sec:simheuristic}
+
+The simheuristic framework combines the multi-agent-based simulation (Chapter~\ref{chp:dengue-virus-spread-simulation}) with a multi-start heuristic to address the \gls{scbrp}. The optimization component runs as a server that communicates with the simulation via a message-passing protocol. In each iteration, new scenarios generated by the simulation are loaded and used to update the block-level statistics (accumulated cases and incidence). The multi-start heuristic then generates a new solution using these updated statistics along with the deterministic case data. This iterative process allows the simheuristic to progressively refine its solutions as more scenario information becomes available from the simulation.
+
+% ---------------------------------------------------------------------------
+% Algorithm: Multi-Start Solution Generation
+% ---------------------------------------------------------------------------
+
+The Multi-Start Solution Generation procedure, presented in Algorithm~\ref{alg:multi-start},
+is the core mechanism responsible for producing high-quality solutions within the simheuristic
+framework. Rather than relying on a single profit-estimation criterion, the algorithm
+systematically explores the solution space by constructing candidate solutions under multiple
+profit-assignment strategies. The procedure operates in two phases. In the first phase,
+each active strategy is evaluated once with an unperturbed profit vector to establish
+baseline solutions. In the second phase, the remaining iterations randomly select a strategy
+and apply a stochastic perturbation to the resulting profit vector
+(Algorithm~\ref{alg:perturb-profit-vector}), promoting diversification beyond the baseline
+solutions. The set of active strategies depends on whether simheuristic scenario data is
+available: when no scenarios have been loaded, only the \textsc{PureCurrent} and
+\textsc{BiasedCurrent} strategies are used; otherwise, the full portfolio of six strategies
+is activated. After all candidates have been generated and evaluated, the algorithm returns
+the one with the highest stochastic objective value, using a tiebreak criterion based on
+accumulated scenario cases and, subsequently, the deterministic objective value to
+discriminate among solutions with identical performance.
+
+\begin{algorithm}[h!]
+	\caption{Multi-Start Solution Generation} \label{alg:multi-start}
+	\SetAlgoLined
+	\KwData{Graph $G$, time limit $T$, scenario set $\Omega$, block data, max iterations $N_{iter}$}
+	\KwResult{Best solution with attended blocks $y^*$}
+
+	$n_B \leftarrow$ number of blocks in $G$\;
+	$t_{blk} \leftarrow$ service time per block from $G$\;
+	$p_{b} \leftarrow$ proportional cases per block from $G$\;
+
+	\If{$|\Omega| > 0$}{
+		$p_{acc} \leftarrow$ proportional accumulated cases from simheuristic scenarios\;
+		$p_{inc} \leftarrow$ proportional incidence from simheuristic scenarios\;
+	}
+
+	$\mathcal{S} \leftarrow \{\textsc{PureCurrent}\}$\;
+	\If{$|\Omega| > 0$}{
+		$\mathcal{S} \leftarrow \mathcal{S} \cup \{\textsc{SimAccCases}, \textsc{SimIncidence}, \textsc{FullCombined}\}$\;
+	}
+	$\mathcal{S} \leftarrow \mathcal{S} \cup \{\textsc{BiasedCurrent}\}$\;
+	\If{$|\Omega| > 0$}{
+		$\mathcal{S} \leftarrow \mathcal{S} \cup \{\textsc{BiasedFull}\}$\;
+	}
+
+	$best \leftarrow \emptyset$\;
+
+	\tcp{Phase 1: One unperturbed baseline per strategy}
+	\ForEach{strategy $\sigma \in \mathcal{S}$}{
+		$\pi \leftarrow$ \Call{BuildProfitVector}{$\sigma, n_B, G, p_{b}, p_{acc}, p_{inc}$}\;
+		$candidate \leftarrow$ \Call{BuildAndEvaluate}{$\pi, t_{blk}, T, n_B$}\;
+		\If{$candidate \neq \emptyset$ \textbf{and} \Call{IsBetter}{$candidate, best$}}{
+			$best \leftarrow candidate$\;
+		}
+	}
+
+	\tcp{Phase 2: Perturbed random iterations}
+	$remaining \leftarrow \max(N_{iter}, |\mathcal{S}|) - |\mathcal{S}|$\;
+	\For{$r = 1$ \textbf{to} $remaining$}{
+		$\sigma \leftarrow$ random strategy from $\mathcal{S}$\;
+		$intensity \leftarrow$ uniform random in $[0.15, 0.80]$\;
+		$\pi \leftarrow$ \Call{BuildProfitVector}{$\sigma, n_B, G, p_{b}, p_{acc}, p_{inc}$}\;
+		\Call{PerturbProfitVector}{$\pi, intensity$}\;
+		$candidate \leftarrow$ \Call{BuildAndEvaluate}{$\pi, t_{blk}, T, n_B$}\;
+		\If{$candidate \neq \emptyset$ \textbf{and} \Call{IsBetter}{$candidate, best$}}{
+			$best \leftarrow candidate$\;
+		}
+	}
+
+	\Return{$best$}\;
+\end{algorithm}
+
+% ---------------------------------------------------------------------------
+% Algorithm: Build Profit Vector
+% ---------------------------------------------------------------------------
+
+Algorithm~\ref{alg:build-profit-vector} details the construction of the profit vector
+$\pi$ that guides block selection for a given strategy $\sigma$. Six strategies are
+defined. \textsc{PureCurrent} assigns profits equal to the current deterministic case
+count, with a small fallback proportional to the accumulated simheuristic cases for
+blocks with zero current cases, ensuring they remain selectable when scenario evidence
+suggests future demand. \textsc{SimAccCases} and \textsc{SimIncidence} rely exclusively
+on simheuristic information, using the proportional accumulated cases and the proportional
+incidence across scenarios, respectively. \textsc{FullCombined} merges both sources by
+summing deterministic cases and scenario incidence proportions. Finally,
+\textsc{BiasedCurrent} and \textsc{BiasedFull} introduce controlled stochastic
+perturbations to the \textsc{PureCurrent} and \textsc{FullCombined} vectors,
+respectively. The perturbation is drawn from a $\mathrm{Beta}(2,5)$ distribution,
+implemented via the ratio of two Gamma variates, and scaled by a factor
+$\epsilon = 0.3$ relative to the maximum profit, producing diversified profit landscapes
+that help the multi-start framework escape local optima.
+
+\begin{algorithm}[h!]
+	\caption{Build Profit Vector} \label{alg:build-profit-vector}
+	\SetAlgoLined
+	\KwData{Strategy $\sigma$, number of blocks $n_B$, graph $G$, proportions $p_b$, $p_{acc}$, $p_{inc}$}
+	\KwResult{Profit vector $\pi$}
+
+	$\pi \leftarrow$ vector of size $n_B$\;
+	$\epsilon \leftarrow 0.3$ \tcp*{perturbation factor}
+
+	\uIf{$\sigma = \textsc{PureCurrent}$}{
+		\For{$b = 1$ \textbf{to} $n_B$}{
+			$\pi[b] \leftarrow \mathrm{cases}(b)$\;
+			\If{$\pi[b] \leq 0$ \textbf{and} $|\Omega| > 0$}{
+				$\pi[b] \leftarrow p_{acc}[b] \times 10^{-3}$\;
+			}
+		}
+	}
+	\uElseIf{$\sigma = \textsc{SimAccCases}$}{
+		$\pi[b] \leftarrow p_{acc}[b] \quad \forall\, b$\;
+	}
+	\uElseIf{$\sigma = \textsc{SimIncidence}$}{
+		$\pi[b] \leftarrow p_{inc}[b] \quad \forall\, b$\;
+	}
+	\uElseIf{$\sigma = \textsc{FullCombined}$}{
+		$\pi[b] \leftarrow \mathrm{cases}(b) + p_{inc}[b] \quad \forall\, b$\;
+	}
+	\uElseIf{$\sigma = \textsc{BiasedCurrent}$}{
+		$m \leftarrow \max_b \mathrm{cases}(b)$\;
+		$s \leftarrow \epsilon \cdot \max(m, 1)$\;
+		\For{$b = 1$ \textbf{to} $n_B$}{
+			$\beta \sim \mathrm{Beta}(2, 5)$\;
+			$\pi[b] \leftarrow \mathrm{cases}(b) + \beta \cdot s$\;
+		}
+	}
+	\Else{
+		\tcp{$\sigma = \textsc{BiasedFull}$}
+		$m \leftarrow \max_b \left(\mathrm{cases}(b) + p_{inc}[b]\right)$\;
+		$s \leftarrow \epsilon \cdot \max(m, 1)$\;
+		\For{$b = 1$ \textbf{to} $n_B$}{
+			$\beta \sim \mathrm{Beta}(2, 5)$\;
+			$\pi[b] \leftarrow \mathrm{cases}(b) + p_{inc}[b] + \beta \cdot s$\;
+		}
+	}
+
+	\Return{$\pi$}\;
+\end{algorithm}
+
+% ---------------------------------------------------------------------------
+% Algorithm: Perturb Profit Vector
+% ---------------------------------------------------------------------------
+
+In Phase~2 of the multi-start procedure, each profit vector is perturbed before evaluation
+to promote diversification. Algorithm~\ref{alg:perturb-profit-vector} applies a combination
+of multiplicative and additive noise to each entry of the profit vector $\pi$. The
+multiplicative component scales each profit by $\exp(\mathcal{N}(0, \eta))$, where $\eta$
+is the perturbation intensity drawn uniformly from $[0.15, 0.80]$. The additive component
+adds a uniform random value in $[0, \eta \cdot 0.05 \cdot \max(\pi_{\max}, 1)]$, where
+$\pi_{\max}$ is the largest profit in the vector. This two-component perturbation preserves
+the relative ordering of profits while introducing sufficient noise to generate distinct
+candidate solutions across iterations.
+
+\begin{algorithm}[h!]
+	\caption{Perturb Profit Vector} \label{alg:perturb-profit-vector}
+	\SetAlgoLined
+	\KwData{Profit vector $\pi$, perturbation intensity $\eta$}
+	\KwResult{Perturbed profit vector $\pi$}
+
+	\If{$\eta \leq 0$}{
+		\Return{$\pi$}\;
+	}
+
+	$\pi_{\max} \leftarrow \max_{b} \pi[b]$\;
+	$a \leftarrow \eta \cdot 0.05 \cdot \max(\pi_{\max}, 1)$\;
+
+	\For{$b = 1$ \textbf{to} $|\pi|$}{
+		$\pi[b] \leftarrow \pi[b] \cdot \exp(\mathcal{N}(0, \eta)) + \mathcal{U}(0, a)$\;
+	}
+
+	\Return{$\pi$}\;
+\end{algorithm}
+
+% ---------------------------------------------------------------------------
+% Algorithm: Build and Evaluate Candidate Solution
+% ---------------------------------------------------------------------------
+
+Algorithm~\ref{alg:build-and-evaluate} describes the construction and evaluation of a
+single candidate solution given a profit vector $\pi$. First, the greedy constructive
+algorithm (Section~\ref{sec:greedy-constructive-algorithm}) selects a subset of blocks by
+solving a knapsack-based subproblem subject to the time limit $T$. If no feasible selection
+is found, the procedure returns an empty solution. Otherwise, a route connecting the
+selected blocks is constructed, and a local search procedure
+(Algorithm~\ref{alg:local-search}) is applied to improve both route efficiency and block
+selection quality. After the local search, the solution is evaluated on three metrics: the
+stochastic objective $OF_{st}$, which combines the real case count with the expected
+scenario-based case count weighted by the reduction factor $\alpha$; the deterministic
+objective $OF_{det}$, which sums only the real case count of attended blocks; and a tiebreak
+objective $OF_{tb}$, which accumulates scenario-based case counts for blocks that have zero
+deterministic cases. To reduce computational cost, the scenario-based evaluation samples a
+random subset of $\lfloor 0.3 \cdot |\Omega| \rfloor$ scenarios (at least one). Candidate
+ranking follows a lexicographic order: $OF_{st}$, then $OF_{tb}$, then $OF_{det}$.
+
+\begin{algorithm}[h!]
+	\caption{Build and Evaluate Candidate Solution} \label{alg:build-and-evaluate}
+	\SetAlgoLined
+	\KwData{Profit vector $\pi$, service times $t_{blk}$, time limit $T$, number of blocks $n_B$}
+	\KwResult{Candidate result $(y, OF_{st}, OF_{det}, OF_{tb})$}
+
+	$y \leftarrow \emptyset$\;
+
+	\tcp{Greedy construction via knapsack with feasibility check}
+	\Call{SolveScenario}{$\pi, t_{blk}, T, y$}\;
+
+	\If{$y = \emptyset$}{
+		\Return{$\emptyset$}\;
+	}
+
+	\tcp{Build route from selected blocks and improve via local search}
+	$r \leftarrow$ \Call{BuildRoute}{$y$}\;
+	\Call{LocalSearch}{$r, \pi$}\;
+	$y \leftarrow$ attended blocks in $r$\;
+
+	\tcp{Evaluation with scenario sampling}
+	$OF_{st} \leftarrow 0$, $OF_{det} \leftarrow 0$, $OF_{tb} \leftarrow 0$\;
+	$\Omega_{sample} \leftarrow$ random sample of $\max(1, \lfloor 0.3 \cdot |\Omega| \rfloor)$ scenarios\;
+
+	\For{each block $b \in y$}{
+		$c_b \leftarrow \mathrm{cases}(b)$; \tcp{Real deterministic cases}
+		$OF_{det} \leftarrow OF_{det} + c_b$\;
+
+		$\bar{c}_b^{\omega} \leftarrow \frac{1}{|\Omega_{sample}|} \sum_{\omega \in \Omega_{sample}} \mathrm{scenarioCases}(\omega, b)$\;
+		$OF_{st} \leftarrow OF_{st} + c_b + \alpha \cdot \bar{c}_b^{\omega}$\;
+
+		\If{$c_b \leq 0$}{
+			$OF_{tb} \leftarrow OF_{tb} + \sum_{\omega \in \Omega_{sample}} \mathrm{scenarioCases}(\omega, b)$\;
+		}
+	}
+
+	\Return{$(y, OF_{st}, OF_{det}, OF_{tb})$}\;
+\end{algorithm}
+
+% ---------------------------------------------------------------------------
+% Algorithm: Local Search
+% ---------------------------------------------------------------------------
+
+Algorithm~\ref{alg:local-search} presents the three-phase local search procedure applied
+to each candidate route. In Phase~1, the algorithm performs iterative \textit{node-swap}
+moves on the route sequence: for every pair of non-adjacent nodes $(i, j)$, the change in
+total travel time resulting from swapping their positions is computed using the connection
+cost function $c(a, b, d)= t(a,b) + t(b,d)$, where $t(\cdot,\cdot)$ denotes arc travel
+time. The swap yielding the largest time reduction is applied, and the process repeats
+until no improving move exists. If Phase~1 shortened the route, the freed time budget is
+exploited in Phase~2, which greedily inserts the most profitable unattended block whose
+inclusion remains feasible, repeating until no further insertion is possible. Phase~3
+performs \textit{block-swap} moves, systematically examining all pairs of attended and
+unattended blocks: when replacing an attended block $b_{out}$ with an unattended block
+$b_{in}$ is feasible and yields a strictly positive profit improvement
+$\pi[b_{in}] - \pi[b_{out}] > 0$, the best such exchange is executed. This phase iterates
+until no improving swap remains, or a maximum of 500 swap iterations is reached. The combination of route optimization (Phase~1),
+capacity exploitation (Phase~2), and profit-driven exchange (Phase~3) ensures that the
+final solution is locally optimal with respect to these three neighborhood structures.
+
+\begin{algorithm}[h!]
+	\caption{Local Search} \label{alg:local-search}
+	\SetAlgoLined
+	\KwData{Route $r$, profit vector $\pi$}
+	\KwResult{Improved route $r$}
+
+	\tcp{Phase 1: Route improvement via node swap}
+	$improved \leftarrow \textbf{true}$\;
+	\While{$improved$}{
+		$improved \leftarrow \textbf{false}$\;
+		$\Delta^* \leftarrow 0$\;
+		$(i^*, j^*) \leftarrow (-1, -1)$\;
+		\For{$i = 1$ \textbf{to} $|r| - 3$}{
+			\For{$j = i + 2$ \textbf{to} $|r| - 2$}{
+				$\Delta \leftarrow c(r_{i-1}, r_i, r_{i+1}) + c(r_{j-1}, r_j, r_{j+1}) - c(r_{i-1}, r_j, r_{i+1}) - c(r_{j-1}, r_i, r_{j+1})$\;
+				\If{$\Delta > \Delta^*$}{
+					$\Delta^* \leftarrow \Delta$\;
+					$(i^*, j^*) \leftarrow (i, j)$\;
+				}
+			}
+		}
+		\If{$\Delta^* > 0$}{
+			swap $r_{i^*}$ and $r_{j^*}$\;
+			update route time: $t_r \leftarrow t_r - \Delta^*$\;
+			$improved \leftarrow \textbf{true}$\;
+		}
+	}
+
+	\tcp{Phase 2: Insert unattended blocks if route was shortened}
+	\If{route was improved in Phase 1}{
+		$\mathcal{U} \leftarrow$ set of unattended blocks\;
+		\While{$\mathcal{U} \neq \emptyset$}{
+			$b^* \leftarrow \arg\max_{b \in \mathcal{U}} \{ \pi[b] \mid \text{insertion of } b \text{ is feasible} \}$\;
+			\lIf{$b^* = \texttt{null}$}{\textbf{break}}
+			insert $b^*$ into $r$\;
+			$\mathcal{U} \leftarrow \mathcal{U} \setminus \{b^*\}$\;
+		}
+	}
+
+	\tcp{Phase 3: Block swap for profit improvement}
+	$n_{swap} \leftarrow 0$\;
+	\While{$n_{swap} < 500$}{
+		$\delta^* \leftarrow 0$\;
+		$(b_{out}^*, b_{in}^*) \leftarrow (\texttt{null}, \texttt{null})$\;
+		\ForEach{attended block $b_{out} \in r$}{
+			\ForEach{unattended block $b_{in} \notin r$}{
+				\If{\textnormal{swap} $(b_{out}, b_{in})$ \textnormal{is feasible} \textbf{and} $\pi[b_{in}] - \pi[b_{out}] > \delta^*$}{
+					$\delta^* \leftarrow \pi[b_{in}] - \pi[b_{out}]$\;
+					$(b_{out}^*, b_{in}^*) \leftarrow (b_{out}, b_{in})$\;
+				}
+			}
+		}
+		\lIf{$\delta^* \leq 0$}{\textbf{break}}
+		swap $b_{out}^*$ with $b_{in}^*$ in $r$\;
+		$n_{swap} \leftarrow n_{swap} + 1$\;
+	}
+
+	\Return{$r$}\;
+\end{algorithm}

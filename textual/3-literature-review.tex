@@ -1,115 +1,74 @@
-\chapter{Literature Review}\label{sec:literature-review}
+\chapter{Literature Review}\label{chp:literature-review}
 
 \def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) --
 	cycle;}
 
-This section presents the existing literature related to the main topics
-considered in this paper. The focus is on methodologies that simulated the
+This chapter presents the existing literature related to the main topics
+considered in this thesis. The focus is on methodologies that simulated the
 spread and impact of Dengue and other arboviral diseases, along with
 computational methodologies for support decisions in vector control.
 
-\section{Operations Research}\label{sec:operations-research}
+\section{Optimization and Decision Support for Dengue Control}\label{sec:optimization-decision-support}
 
-An extensive number  of works in the  literature use \gls{ml} in  the context of
-Dengue~\citep{shakurat:2015,shakil:2015,hair:2019,sarma:2020,appice:2020}.  Some
-of  the main  problems addressed  are generating  Dengue diagnoses  based on
-the patient's symptoms and clinical patterns, distinguishing Dengue and its
-types in the early stage of disease progression  and, Dengue fever predictions
-in certain regions  based on  a  set of  factors, such  as  precipitation, rain,
-humidity, temperature, and others.
+An extensive number of works in the literature use \gls{ml} in the context of
+Dengue~\citep{shakurat:2015,shakil:2015,hair:2019,sarma:2020,appice:2020}. Some
+of the main problems addressed are generating Dengue diagnoses based on the
+patient's symptoms and clinical patterns, distinguishing Dengue and its types in
+the early stage of disease progression, and Dengue fever predictions in certain
+regions based on a set of factors, such as precipitation, humidity, temperature,
+and others.
 
-Lowe et al. \cite{lowe:2015}  presented a  modeling procedure  to quantify  the
-benefits  of including  climate  information in  a  Dengue  model  for  the 76
-provinces  of Thailand, from  1982-2013. The authors considered  a set of
-factors  that have a statistically  significant contribution  to  the relative
-risk  of Dengue.  The system provided  an advanced warning  that enabled  the
-implementation of a more effective surveillance system. According to  the
-authors, the proposed framework was flexible to be applied in any geographical
-setting, generating a more global approach to  assessing the impact of  climate
-variability and climate  change on Dengue risk.
+Lowe et al.~\cite{lowe:2015} presented a modeling procedure to quantify the
+benefits of including climate information in a Dengue model for the 76 provinces
+of Thailand, from 1982--2013. The authors considered a set of factors that have
+a statistically significant contribution to the relative risk of Dengue. The
+system provided an advanced warning that enabled the implementation of a more
+effective surveillance system. According to the authors, the proposed framework
+was flexible to be applied in any geographical setting, generating a more global
+approach to assessing the impact of climate variability and climate change on
+Dengue risk.
 
-Handam and Kilicman \cite{hamdan:2021} developed a mathematical model of Dengue
-transmission considering the effect of the temperature on the transmission
-dynamics. The work computes a primary reproduction number ($R_0$) considering
-the known aspects of the \textit{Aedes} mosquito population and the experimental
-data of the Dengue transmission in Malaysia. Ultimately, the authors provide
-numerical evidence that the Dengue virus can spread in temperate areas that are
-no longer limited to tropical and subtropical regions.
+Cantane et al.~\cite{cantane:2015} presented a mathematical model to estimate
+the rate of population growth of mosquitoes. The authors observed that, without
+a control action, the population of mosquitoes could rapidly increase in short
+periods. The results of the experiments provide estimates of the life cycle of
+the mosquitoes under ideal conditions in nature, and the model allows measuring
+an approximate number of mosquitoes for each scenario.
 
-Maneerat and Daudé \cite{maneerat:2016} presented the Model of Mosquito Aedes
-(MOMA), a spatial agent-based simulation model of the Aedes female mosquito.
-This model aims to produce statistical data on mosquito behaviors and population
-dynamics that are difficult to obtain through field surveys, such as population
-densities in various geographical and climatic conditions. The paper gives a
-detailed description of the multiple components of the model and the approach to
-calibrate and validate it. The data in the model represent a developing
-neighborhood in Delhi, India, processed using a Geographical Information System
-(GIS). The results indicate a significant relationship between urban topology,
-human densities, and adult mosquito flight.
-
-Some previous works have reported multi-agent system approaches in endemics. For
-example, in  \cite{amouroux:2008}, the author created a module able to trace a
-relationship between the spread of the Dengue virus and commercial routes in
-Asia. Likewise, Damien et al.  \cite{damien:2017} presented a model that
-encapsulated the characteristics of the north of Vietnam to describe the spread
-of the H1N5 virus. Hence, it seems reasonable to use the same approach for the
-study in Brazil, as in \cite{da-silva:2020}, that developed a \gls{mabs} and a
-classical model based on ordinary differential equations to simulate the Dengue
-virus propagation adopting some simplifying assumptions.
-
-% Bannwart et al. \cite{bannwart-sbpo:2013,bannwart:2013}  proposed  numeric
-% techniques  using  a genetic algorithm to solve the control model applied to
-% Dengue prevention. Their model  considered two  kinds  of  measures: the  cost
-% of  the chemical  control (insecticide) and  genetic (releasing sterile  males
-% in the  environment). These works assume  that the mortality rate  of the
-% mosquitoes is  strongly related to the investment in  control approaches. The
-% experiments considered a  time of 120 days and  the results  indicated that  the
-% amount of  insecticide used  was high considering the  other approaches cited
-% in the  work. The authors  presented an analysis considering each control and
-% its impact on the rate of reduction of the mosquito population.
-
-Cantane et al. \cite{cantane:2015}  presented a  mathematical  model to
-estimate  the rate  of population growth  of mosquitoes. The  authors observed
-that, without  a control action, the  population of mosquitoes  could rapidly
-increase in  short periods. The  results of  the experiments  provide  estimates
-of  the life  cycle of  the mosquitoes are in perfect condition in nature and
-the model allows to measure an approximate number of mosquitoes for each
-scenario.
-
-The authors of \cite{dosreis:2018},   \cite{florentino:2018},    and
-\cite{florentino-b:2018} presented methodologies  for Dengue control, including
-mathematical models that describe the population dynamics of the  Aedes aegypti.
-A Genetic Algorithm (GA) was developed  to obtain  optimal strategies using  an
-integration  of different types  of control.  A Variable  Neighborhood Search
-(VNS) determines  optimized control strategies for the aquatic phase, which is
-when the mosquitoes are larva and pupa.  The authors argue that  the control
-during the  aquatic phase reduces the environmental  impact and the  use of
-chemical  control on large  scale. The authors indicated that the presented
-methodologies  have the potential as a tool for supporting decision-makers
+The authors of \cite{dosreis:2018}, \cite{florentino:2018}, and
+\cite{florentino-b:2018} presented methodologies for Dengue control, including
+mathematical models that describe the population dynamics of the \textit{Aedes
+aegypti}. A Genetic Algorithm (GA) was developed to obtain optimal strategies
+using an integration of different types of control. A Variable Neighborhood
+Search (VNS) determines optimized control strategies for the aquatic phase,
+which is when the mosquitoes are larva and pupa. The authors argue that the
+control during the aquatic phase reduces the environmental impact and the use of
+chemical control on a large scale. The authors indicated that the presented
+methodologies have the potential as a tool for supporting decision-makers
 against arboviruses.
 
-The works of Negreiros et al.
-\cite{negreiros:2008,negreiros:2011,negreiros-2020}, to the best of our
-knowledge, are the first papers that apply optimization techniques for solving
-routing problems  in the context of mosquito control.  These works focus on the
-computational tool called Web Dengue, aimed at helping the Dengue control
-managers  by  providing  a  better visualization  and  coordination  of  control
-procedures.  Among  the  methodologies,   the  authors  developed  an  \gls{ilp}
-formulation to  compute a periodical  scheduling of vehicles. A  GRASP heuristic
-was also developed  to solve a real-life instance corresponding  to the location
+The works of Negreiros et
+al.~\cite{negreiros:2008,negreiros:2011,negreiros-2020} are, to the best of the
+authors' knowledge, the first papers that apply optimization techniques for
+solving routing problems in the context of mosquito control. These works focus
+on the computational tool called Web Dengue, aimed at helping the Dengue control
+managers by providing a better visualization and coordination of control
+procedures. Among the methodologies, the authors developed an \gls{ilp}
+formulation to compute a periodical scheduling of vehicles. A GRASP heuristic
+was also developed to solve a real-life instance corresponding to the location
 of Praia de Iracema, Fortaleza.
 
-To the best of our knowledge, Andrade et al. \cite{andrade:2021} are one of the
-first to present routes for spraying vehicles in Dengue control. The work
+To the best of the authors' knowledge, Andrade et al. \cite{andrade:2021} are
+among the first to present routes for spraying vehicles in Dengue control. The work
 developed an \gls{ip} formulation based on the rural postman problem, that is a
-routing problem that consider mandatory visit to a set of arcs. The instance set
-is based on Dengue outbreak locations reported for the city of Campinas, São
-Paulo, and the set of required arcs consider a complete region. The results show
+routing problem that considers mandatory visits to a set of arcs. The instance
+set is based on Dengue outbreak locations reported for the city of Campinas, São
+Paulo, and the set of required arcs considers a complete region. The results show
 that the methodology is effective to obtain optimal routes for instances with
 more than 2500 vertices and 5500 arcs in less than one hour of computational
 time.
 
-The work of \cite{araujo:2022} (accepted for publication),
+The work of Araújo, et al.~\cite{araujo:2022},
 proposed the Dengue Prize-collection Arc Routing Problem (Dengue-PARP), where
 the focus is to generate routes for spraying vehicles. In Dengue-PARP, each arc
 of a street block has a prize value related to the number of dengue cases. The
@@ -120,10 +79,19 @@ the cities of Alto Santo and Limoeiro do Norte, Ceará. The methodology achieved
 fast optimal results for 31 instances containing up to 1212 nodes and feasible
 solutions for the other 8.
 
-\section{Dengue Spread Simulation}\label{sec:dengue-spread-simulation}
+The work of Assis, et al.~\cite{assis:2024} presents a critical review of the
+literature on operational research for Dengue control. The authors identify
+the main challenges and opportunities in the field, and they propose a research
+agenda for the next decade. The work is a valuable contribution to the field,
+as it provides a comprehensive overview of the state of the art and the main
+directions for future research. 
+
+\section{Dengue Spread Modeling and Simulation}\label{sec:dengue-spread-simulation}
+
+Several works in the literature have employed multi-agent system approaches and mathematical models to study the spread and dynamics of Dengue and other arboviral diseases~\cite{amouroux:2008,damien:2017,da-silva:2020}. This section reviews the most relevant contributions in this area.
 
 In~\cite{Borges2015}, the authors propose a \gls{mabs} to assess the pupal
-productivity of the \textit{Aedes Aegypti} mosquito. The model considers the
+productivity of the \textit{Aedes aegypti} mosquito. The model considers the
 productivity of water-holding containers, defined as the number of adult
 mosquitoes each site can produce. The findings indicate that factoring in pupal
 productivity is crucial for effective dengue control and prevention strategies.
@@ -154,7 +122,7 @@ environment of Buenos Aires, Argentina. The models were employed to simulate
 killing larvae and/or adult mosquitoes. The results reveal considerable
 differences in the models' predictions regarding population recovery, likely
 attributable to differing assumptions about larval development and density
-dependence -- that is, the negative impact of higher larval density on
+dependence, that is, the negative impact of higher larval density on
 development time and survival due to resource competition.
 
 \cite{damien:2017} focuses on the East-West economic corridor in Southeast
@@ -215,7 +183,7 @@ early-stage vaccination of humans is more beneficial.
 
 \cite{hamdan:2021} developed a deterministic mathematical model of dengue
 transmission, incorporating the effect of temperature. The model exhibits a
-disease-free equilibrium (DFE),a state in which dengue eventually disappears
+disease-free equilibrium (DFE), a state in which dengue eventually disappears
 from the population, when the basic reproduction number (R0) is below 1.
 However, it also displays a backward bifurcation, meaning that even when R0 is
 less than 1, the disease may persist under certain conditions, such as high
@@ -231,7 +199,7 @@ transmission dynamics.
 
 In~\cite{Gramajo2022}, the authors propose a \gls{mabs} to simulate mosquito
 population dynamics by incorporating key biological and behavioral
-characteristics of Aedes aegypti. The model also introduces parameters to
+characteristics of \textit{Aedes aegypti}. The model also introduces parameters to
 represent human responses to awareness campaigns focused on eliminating water
 containers. These parameters include: the effectiveness of bucket-emptying
 actions, the frequency of these actions, and a delay parameter that models the
@@ -268,8 +236,8 @@ targeting only a fraction of households proves insufficient.
 \cite{Uribe2023} propose a comparative study of three implementations of a
 \gls{mabs} designed to simulate the dynamics of \textit{Aedes aegypti}
 mosquitoes and the transmission of vector-borne diseases. The models were
-implemented using different platforms -- Mesa-Geo, Repast Simphony and Repast
-HPC -- to evaluate their performance in terms of computational efficiency,
+implemented using different platforms (Mesa-Geo, Repast Simphony, and Repast
+HPC) to evaluate their performance in terms of computational efficiency,
 scalability, memory usage, and suitability for incorporating geospatial and
 epidemiological factors in an urban context. The authors conclude that while
 Mesa-Geo facilitates model development and visualization, Repast HPC offers
@@ -277,10 +245,10 @@ superior scalability and performance, making it more appropriate for large-scale
 simulations aimed at informing public health decision-making.
 
 This research introduces a Multi-Agent-Based Simulation (\gls{mabs}) approach
-with novel contributions compared to previous studies. Our model integrates
+with novel contributions compared to previous studies. The proposed model integrates
 geographical data to define population density, position agents within street
 blocks, and dynamically determine the initial population size. Using historical
-case notifications, we generate the simulation’s starting scenario by estimating
+case notifications, the simulation's starting scenario is generated by estimating
 the initial number of infected individuals and calibrating parameters based on
 the specific city. The objective is to project short- to mid-term future
 scenarios (up to 14 \gls{ews}), assisting cities of different scales in making
@@ -290,22 +258,21 @@ detailed insights into Dengue propagation, considering the specific dynamics and
 characteristics of smaller urban areas in Brazil.
 
 Table~\ref{tab:dengue-literature} highlights the key differences between the
-papers cited in this section, including our work. If a paper includes the
+papers cited in this section, including the present work. If a paper includes the
 specified property or data listed in a column, the corresponding cell in the
 table is marked with a \checkmark.
 
-The analysis of the table shows that our approach stands out in two key aspects:
-The location of agents in street blocks that contributes to the simulation
+The analysis of the table shows that the proposed approach stands out in two key
+aspects. First, the location of agents in street blocks brings the simulation
 environment closer to real urban settings. In this work, human agents have fixed
 home and work locations within specific blocks, enabling more realistic mobility
 patterns. This mapping also supports flexible spatial granularity, as the
 simulation can be adapted to different levels of detail by adjusting the number
-and size of blocks or by focusing on specific city regions or neighborhoods. The
-second element is the use of short-range historical notifications to define the
-initial simulation scenario. This decision replicates the current procedure
-adopted by the public health authorities to evaluate current epidemiological
-conditions, such as the number of dengue cases in recent weeks and take
-preventive actions accordingly.
+and size of blocks or by focusing on specific city regions or neighborhoods.
+Second, the use of short-range historical notifications to define the initial
+simulation scenario replicates the current procedure adopted by public health
+authorities to evaluate current epidemiological conditions, such as the number
+of dengue cases in recent weeks, and to take preventive actions accordingly.
 
 \begin{table}[!ht]
 	\caption{Summary of the literature on Dengue simulation.}
@@ -413,9 +380,31 @@ preventive actions accordingly.
 			                                                                    & \checkmark &
 			\checkmark                                                          &
 			---                                                                 & \checkmark & ---        & ---        \\
-			\midrule \textbf{This paper}                                        & \checkmark & \checkmark & \checkmark
+			\midrule \textbf{This thesis}                                        & \checkmark & \checkmark & \checkmark
 			                                                                    & \checkmark & \checkmark &
 			\checkmark
 			\\ \bottomrule\end{tabular}%
 	}
 \end{table}
+
+\section{Simulation-Optimization and Simheuristics}\label{sec:simheuristics-related-work}
+
+This section reviews works at the intersection of simulation and optimization, with particular focus on the \gls{sh} paradigm. Hybrid simulation-optimization approaches have gained increasing attention as a means to tackle stochastic combinatorial problems where analytical models alone are insufficient. The methodologies surveyed here provide the theoretical and applied foundations for the \gls{sh} framework developed in this thesis.
+
+The work of \cite{figueira2014hybrid} proposed a multidimensional taxonomy to unify the previously fragmented simulation and optimization communities. This framework classifies methods along four dimensions: simulation purpose, hierarchical structure, search method, and search scheme, allowing for a clear distinction between optimization for simulation and simulation for optimization. The analysis reveals a growing trend toward the autonomy of optimization procedures in solution generation and identifies structural gaps in existing methodologies, such as the limited integration between analytical model enhancement and progressive simulation-based refinement.
+
+To address the high computational costs and stochastic noise inherent in discrete-event simulations, \cite{barton2006metamodel} explored the use of metamodels (or surrogate models) as deterministic proxies. The central idea is to replace an implicitly represented stochastic response with an explicit, deterministic function (such as Kriging, smoothing splines, or radial basis functions) that is significantly faster to evaluate. This methodology facilitates the application of sophisticated mathematical programming techniques to complex black-box systems. The reported results demonstrate that metamodel-based optimization can achieve a substantial reduction in prediction variance by aggregating information across the design space, provided that the metamodel accurately captures the underlying response surface without significant bias.
+
+The \gls{sh} paradigm was formalized in~\cite{juan:2015} and further detailed in~\cite{juan:2022} as a specialized hybridization of metaheuristics and simulation for solving large-scale, NP-hard stochastic combinatorial optimization problems (COPs). A key concept underpinning this approach is the ``correlation assumption,'' which posits that high-quality solutions for a deterministic version of a problem are likely to remain promising candidates in a stochastic environment under moderate variance. This allows researchers to leverage efficient deterministic metaheuristics while using simulation primarily to assess solution quality and reliability. The reported findings demonstrate that \gls{sh} provide approximate solutions to accurate models of real-world systems, often outperforming the common practice of finding exact solutions for oversimplified deterministic models.
+
+In the industrial context of offshore oil and gas, \cite{abumarrul2023simheuristic} developed an Iterated Greedy simheuristic (SimIG) to solve a complex parallel machine scheduling problem involving stochastic processing times and release dates. The proposed method introduces an iterative confidence interval mechanism that dynamically controls the number of simulation replications, ensuring statistical precision without excessive computational overhead. The computational experiments yielded a significant improvement of up to 16.5\% in the expected total weighted completion time compared to traditional metaheuristics. Furthermore, a periodic re-planning strategy proved essential for maintaining operational efficiency as uncertainty evolves in real-time during schedule execution.
+
+Abdullahi et al.~\cite{abdullahi:2025} proposed a reliability-extended simheuristic for the sustainable vehicle routing problem (SVRP-STD), integrating social and environmental dimensions into stochastic routing. A distinguishing contribution of this work is the application of the Kaplan-Meier Estimator (KME) to evaluate the ``survival function'' of routing plans, providing a reliability metric beyond simple expected values. The findings indicate that scenarios balancing economic, environmental, and social dimensions achieve a superior operational equilibrium, and that ignoring stochasticity leads to highly unreliable routing plans, whereas the proposed approach identifies solutions resilient against failures with only marginal cost increases.
+
+\cite{chen2017development} addressed patient referral problems between collaborative imaging centers, illustrating the application of simulation-optimization to healthcare systems. The approach integrates Particle Swarm Optimization (PSO) with Discrete Event Simulation (DES) to model the uncertainty in patient arrivals and medical operation times. By evaluating three distinct referral mechanisms, the results validated that transferring patients to the hospital with the shortest cumulative waiting time significantly reduced average total wait times for MRI exams. This study highlights how simulation-optimization can mitigate resource disparities between hospitals of varying sizes and improve the overall quality of healthcare delivery.
+
+In the context of large-scale logistics, \cite{rabe:2021} utilized Reinforcement Learning (RL) and domain-specific information (DSI) to support decision-making in materials trading networks. The approach combines RL to learn from system states during idle times with biased metaheuristic search probabilities based on whether actions represent structural or parametric changes. The experimental results showed that identifying equivalent action plans (those with interchangeable or redundant actions) reduced the required number of simulation evaluations by up to 15\% without sacrificing solution quality, demonstrating a significant reduction in system response time for tactical decision-making in highly volatile environments.
+
+Finally, \cite{oliva2020fuzzy} expanded the simheuristic framework by introducing fuzzy simheuristics to handle scenarios involving both stochastic and non-stochastic (fuzzy) uncertainty. This extension employs Fuzzy Inference Systems (FIS) to model variables where historical data is scarce, relying instead on expert linguistic labels. When applied to the Team Orienteering Problem (TOP) with dual stochastic and fuzzy rewards, the approach demonstrated its ability to generate robust solutions that remain stable even as the degree of uncertainty increases, whereas deterministic solutions become suboptimal under such conditions.
+
+Despite the growing body of work on \gls{sh} and simulation-optimization, no prior study has applied these paradigms to routing problems arising in Dengue vector control operations. The stochastic nature of Dengue incidence, the spatial complexity of urban block traversal, and the need for efficient resource allocation under uncertainty make this domain a natural candidate for simulation-optimization approaches. This thesis addresses that gap by developing a \gls{sh} framework tailored to the \gls{scbrp}, combining multi-start heuristics with epidemiological simulation to generate solutions that are robust against the inherent uncertainty of disease progression.

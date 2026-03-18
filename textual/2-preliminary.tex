@@ -1,9 +1,8 @@
 \chapter{Preliminary Concepts}\label{chp:preliminary-concepts}
 
-In this chapter, we introduce the fundamental concepts necessary for
-understanding this thesis. In this work, we employ basic concepts from
-Combinatorial Optimization, which are assumed to be known. If the reader deems a
-review necessary, we recommend the textbook by Nemhauser and
+This chapter introduces the fundamental concepts necessary for understanding
+this thesis. Basic concepts from Combinatorial Optimization are assumed to be
+known. For a review, the reader is referred to the textbook by Nemhauser and
 Wolsey~\cite{Nemhauser}, which covers this topic with a focus on \gls{ilp}, one
 of the main tools used in this work. Basic concepts related to graph theory are
 also assumed to be known. Should the reader require a refresher, the material
@@ -11,9 +10,9 @@ can be found in standard textbooks on the subject, such as
 Diestel~\cite{diestel:2005}.
 
 \section{Integer Linear Programming}\label{sec:integer-linear-programming}
-A \gls{lp} problem consists of maximizing (or minimizing) a linear objective function subject to a set of linear constraints. An \gls{lp} can be formulated as
+A \gls{lp} problem consists of maximizing (or minimizing) a linear objective function subject to a set of linear constraints. A \gls{lp} can be formulated as
 \begin{equation}
-	\text{(PLP)}:\quad \max \{ c x : A x \; f \; b, \; x \in \mathbb{R}^n \},
+	\text{(PLP)}:\quad \max \{ c x : A x \leq b, \; x \in \mathbb{R}^n \},
 \end{equation}
 where $A$ is an $m \times n$ real matrix, $b$ and $c$ are real vectors of dimensions $m \times 1$ and $1 \times n$, respectively, and $x$ is a vector of $n$ decision variables.
 The set of all $x \in \mathbb{R}^n$ satisfying the constraints defines the feasible region of the \gls{lp}. Because all inequalities are linear, this region forms a convex polyhedron, and if it is bounded, the optimal solution of the \gls{lp} lies at one of its vertices.
@@ -22,11 +21,13 @@ The set of all $x \in \mathbb{R}^n$ satisfying the constraints defines the feasi
 
 When the decision variables $x$ are restricted to take integer values, the problem becomes an \gls{ilp} problem, which can be expressed as
 \begin{equation}
-	\text{(PILP)}:\quad \max \{ c x : A x \; f \; b, \; x \in \mathbb{Z}^n \}.
+	\text{(PILP)}:\quad \max \{ c x : A x \leq b, \; x \in \mathbb{Z}^n \}.
 \end{equation}
 Although \gls{lp}s can be solved in polynomial time, \gls{ilp}s are generally NP-hard, and many combinatorial optimization problems can be modeled in this way.
 
-By relaxing the integrality constraints of PILP, one obtains the linear relaxation of the \gls{ilp}. Let $Q \subset \mathbb{R}^n$ denote the feasible region satisfying $A x \; f \; b$, and let $P = Q \cap \mathbb{Z}^n$ denote the set of feasible integer solutions. The polyhedron $Q$ is said to be a formulation (or model) of the \gls{ilp}. Among the infinitely many possible formulations satisfying $P = Q \cap \mathbb{Z}^n$, one of particular theoretical interest is the convex hull of $P$, denoted $\text{CH}(P)$---the smallest convex polyhedron containing all integer feasible points.
+When only a subset of the decision variables is restricted to integer values while the remaining variables are allowed to be continuous, the resulting problem is known as a \gls{milp}. Formally, a \gls{milp} can be expressed as $\max \{ c_1 x_1 + c_2 x_2 : A_1 x_1 + A_2 x_2 \leq b, \; x_1 \in \mathbb{Z}^{n_1}, \; x_2 \in \mathbb{R}^{n_2} \}$, where $x_1$ represents the integer variables and $x_2$ the continuous ones. \gls{milp} formulations arise naturally in many practical applications, including vehicle routing, scheduling, and network design, where binary or integer variables model discrete decisions (e.g., selecting routes or assigning tasks) while continuous variables capture quantities such as flows or times. The solution methods described below for \gls{ilp}s, including branch-and-bound and branch-and-cut, extend directly to the \gls{milp} setting.
+
+By relaxing the integrality constraints of PILP, one obtains the linear relaxation of the \gls{ilp}. Let $Q \subset \mathbb{R}^n$ denote the feasible region satisfying $A x \leq b$, and let $P = Q \cap \mathbb{Z}^n$ denote the set of feasible integer solutions. The polyhedron $Q$ is said to be a formulation (or model) of the \gls{ilp}. Among the infinitely many possible formulations satisfying $P = Q \cap \mathbb{Z}^n$, one of particular theoretical interest is the convex hull of $P$, denoted $\text{CH}(P)$, that is, the smallest convex polyhedron containing all integer feasible points.
 
 Ideally, one would have $\text{CH}(P) = Q$, as solving the linear relaxation would then yield the exact \gls{ilp} optimum in polynomial time. However, for NP-hard problems, the convex hull is typically defined by an exponential number of inequalities, making it computationally intractable.
 
@@ -119,9 +120,9 @@ The following proposition establishes the relationship between $z(u)$ and $z$.
 \end{proposition}
 
 The penalty $u_i$ associated with constraint $D_ix \geq d_i$ is called the
-Lagrange multiplier for that constraint. We now define the following problem:
+Lagrange multiplier for that constraint. The following problem is now defined:
 determine the set of multipliers that provide the best (i.e., greatest) dual
-bound $z(u)$. To find these values, we must solve the Lagrangian dual problem
+bound $z(u)$. To find these values, it is necessary to solve the Lagrangian dual problem
 (\gls{ldp}), described as:
 
 \begin{align*}
@@ -136,18 +137,18 @@ which is based on the following result.
 \end{proposition}
 
 Thus, at point $\bar{x}$, it is necessary to choose a direction in which to move
-to increase $g(x)$. From Proposition~\ref{proposition:convex}, we know that if
+to increase $g(x)$. From Proposition~\ref{proposition:convex}, it follows that if
 $g(x) > g(\bar{x})$, then $s(x - \bar{x}) > 0$. That is, moving an appropriate
 amount in the direction of $s$ from $\bar{x}$ will increase the value of $g$.
-Therefore, we must find a vector $s$ that satisfies
+Therefore, it is necessary to find a vector $s$ that satisfies
 Proposition~\ref{proposition:convex}. When $g$ is differentiable at $\bar{x}$,
-we can take $s = \nabla g(\bar{x})$, i.e., the gradient of $g$ at $\bar{x}$.
+one can take $s = \nabla g(\bar{x})$, i.e., the gradient of $g$ at $\bar{x}$.
 However, when $g$ is not differentiable, Proposition~\ref{proposition:convex}
 still guarantees the existence of a vector $s$ such that $s(x^* - \bar{x}) > 0$
 for an optimal point $x^*$. This means it is possible to move from $\bar{x}$ a
 small step in the direction of $s$ to get closer to an optimal point, even if
-$g$ does not increase. Before finding such a vector $s$, we define the notions
-of subgradient and subdifferential.
+$g$ does not increase. Before finding such a vector $s$, the notions of
+subgradient and subdifferential are defined.
 
 \begin{definition}\label{definition:subgradient}
 	Let $g : \mathbb{R}^n \rightarrow \mathbb{R}$ be a concave function. A vector $s$ is a subgradient of $g$ at $\bar{x}$ if and only if $s(x - \bar{x}) \geq g(x) - g(\bar{x})$ for all $x \in \mathbb{R}^n$. The subdifferential $(\delta g(\bar{x}))$ of $g$ at $\bar{x}$ is the set of all subgradients at that point.
@@ -162,8 +163,8 @@ An immediate consequence of the above is the following:
 Therefore, in theory, to maximize a concave function $g$, it is sufficient to
 start from any point and iteratively take small steps in the direction of a
 subgradient at that point until $0$ belongs to the subdifferential of the
-current point—that is, the current point is optimal. The results below allow us
-to apply this theory to the Lagrangian relaxation technique for \gls{ilp}.
+current point, that is, the current point is optimal. The results below allow
+the application of this theory to the Lagrangian relaxation technique for \gls{ilp}.
 
 \begin{proposition} \label{proposition-zu-convex}
 	$z(u) = \min \{cx + u (d - Dx)\}$ is concave.
@@ -176,10 +177,10 @@ The next result shows how to compute a subgradient of $z(u) = \min \{cx + u (d -
 	Let $\bar{x} \in X$ such that $z(u) = c \bar{x} + u(d - D\bar{x})$. Then, $(d - D\bar{x})$ is a subgradient of $z(u)$ at $u$.
 \end{proposition}
 
-Based on the previous definitions and results, we can now present a procedure to
-minimize a concave function for which a subgradient is known at all points in
-its domain. For this purpose, a high-level pseudocode of the subgradient method
-is presented in Algorithm~\ref{code:subgradient}.
+Based on the previous definitions and results, a procedure to minimize a
+concave function for which a subgradient is known at all points in its domain
+can now be presented. For this purpose, a high-level pseudocode of the
+subgradient method is presented in Algorithm~\ref{code:subgradient}.
 
 \begin{algorithm}[!ht]
 	\caption{\label{code:subgradient} Subgradient Method (Minimization Problem)}
@@ -248,23 +249,23 @@ This Section presents the basic concepts of Stochastic Programming and is
 strongly based on the textbook by Birge and Louveaux~\cite{birge:2011}.
 
 Two-Stage Stochastic Programming models with recourse deal with uncertain data,
-represented by random variables. A decision must be made at the present time; we
-call this the first-stage (or first-phase) decision, and at a later time, after
-its implementation, the uncertainties are revealed. Then, based on the
-first-stage decision and the revealed uncertain data, we can make a corrective
-(recourse) decision, called the second-stage (or second-phase)
+represented by random variables. A decision must be made at the present time;
+this is called the first-stage (or first-phase) decision, and at a later time,
+after its implementation, the uncertainties are revealed. Then, based on the
+first-stage decision and the revealed uncertain data, a corrective (recourse)
+decision can be made, called the second-stage (or second-phase)
 decision~\cite{birge:2011}.
 
-The uncertain data of the problem are represented by a random vector~$\xi$. We
-are interested in the case where~$\xi$ is a discrete random variable, that is,
-it can take values from a finite set $\Xi = \{\xi_{1}, \ldots, \xi_{k}\}$. We
-denote each possible random event by $\omega \in \Omega$. Alternatively, $\xi$
+The uncertain data of the problem are represented by a random vector~$\xi$. Of
+particular interest is the case where~$\xi$ is a discrete random variable, that
+is, it can take values from a finite set $\Xi = \{\xi_{1}, \ldots, \xi_{k}\}$.
+Each possible random event is denoted by $\omega \in \Omega$. Alternatively, $\xi$
 can be represented as a function of $\omega \in \Omega$, with $\xi(\omega)$
 being the value taken by the random variable when event $\omega$ occurs.
 
 First-stage decision variables are represented by vector~$x$, of
 dimension~$n_{1}$, while second-stage decision variables are represented by the
-random vector~$y$, of dimension~$n_{2}$. We denote by $y(\omega)$ the
+random vector~$y$, of dimension~$n_{2}$. The notation $y(\omega)$ represents the
 second-stage decision variables associated with the realization of random
 event~$\omega$.
 
@@ -285,12 +286,12 @@ $m_{1} \times n_{1}$, $m_{1}$, and $n_{1}$, respectively. Once uncertainties are
 revealed through the realization of event $\omega \in \Omega$, $T(\omega)$,
 $h(\omega)$, and $q(\omega)$, with dimensions $m_{2} \times n_{1}$, $m_{2}$, and
 $n_{2}$, respectively, become known. To represent the problem's uncertainties as
-a single random vector, we define
+a single random vector, the following is defined:
 \[
 	\xi(\omega)^{T} = \left(q(\omega)^{T}, \; h(\omega)^{T}, \; T_{1\cdot}(\omega), \ldots, T_{m_{2}\cdot}(\omega) \right),
 \]
 for every $\omega \in \Omega$, where $T_{i\cdot}(\omega)$ denotes the $i$-th row
-of matrix $T(\omega)$. We are interested in the class of \emph{fixed recourse
+of matrix $T(\omega)$. Of particular interest is the class of \emph{fixed recourse
 	problems}~\cite{birge:2011}, in which the matrix $W$, of dimension $m_{2}
 	\times n_{2}$, represents the second-stage actions and does not depend on the
 realization of the random event, and is thus known before making the first-stage
@@ -303,7 +304,7 @@ difficult is that, for each $\omega \in \Omega$, determining $y(\omega)$
 requires solving a \gls{lp} (or \gls{ilp}) problem. To make this more explicit,
 an alternative notation for the same problem is known as the \emph{deterministic
 	equivalent program}. For a given realization~$\omega$ and first-stage
-decision~$x$, we define:
+decision~$x$, the following is defined:
 \[
 	Q(x, \xi(\omega)) = \max_{y} \left\{ q(\omega)^{T} y \; \middle| \; W y = h(\omega) - T(\omega) x, \; y \geq 0 \right\},
 \]
@@ -332,7 +333,7 @@ solution. Consider:
 	                  & x \geq 0,
 	\label{eq:scenario_problem}
 \end{align}
-which is the optimization problem for a given scenario $\xi(\omega)$. We assume
+which is the optimization problem for a given scenario $\xi(\omega)$. It is assumed
 that for every $\xi(\omega) \in \Xi$, this problem is neither infeasible nor
 unbounded.
 
@@ -346,9 +347,9 @@ objective value. The so-called \emph{wait-and-see} (WS) solution is given by:
 	\label{eq:ws}
 \end{equation}
 
-That is, for each scenario $\xi(\omega)$, we solve~\eqref{eq:scenario_problem}
-to optimality and take the expected value of the objective over all $\omega \in
-	\Omega$. The \gls{rp}, defined by~\eqref{eq:rp} or~\eqref{eq:rp_det}, can be
+That is, for each scenario $\xi(\omega)$, problem~\eqref{eq:scenario_problem}
+is solved to optimality and the expected value of the objective over all $\omega \in
+	\Omega$ is computed. The \gls{rp}, defined by~\eqref{eq:rp} or~\eqref{eq:rp_det}, can be
 written as:
 
 \begin{equation}
@@ -363,12 +364,12 @@ here-and-now solutions:
 
 \subsection{Value of the Stochastic Solution}
 
-A practical difficulty of the wait-and-see approach is that we must solve a
-subproblem for each scenario~$\xi(\omega)$. A simpler approach is to replace the
+A practical difficulty of the wait-and-see approach is that a subproblem must be
+solved for each scenario~$\xi(\omega)$. A simpler approach is to replace the
 random vector~$\xi$ with its expected value $\bar{\xi} = \mathbb{E}[\xi]$. This
 problem is known as the \gls{evp}, or \emph{mean value
 	problem}~\cite{birge:2011}. This corresponds to a simpler problem than the
-recourse problem, since we only solve for a single future scenario. The
+recourse problem, since only a single future scenario is solved. The
 objective of the \gls{evp} is:
 
 \begin{equation}
@@ -380,8 +381,8 @@ Let $\bar{x}(\bar{\xi})$ be an optimal solution to~\eqref{eq:evp}. Given the
 stochastic nature of the problem, in general $\bar{x}(\bar{\xi})$ may not be
 close to the optimal solution of the recourse problem~\eqref{eq:rp}. However,
 this solution is useful for defining the \gls{vss}, which measures the quality
-of the solution in terms of~\eqref{eq:rp}. We define the expected value of the
-\gls{evp} solution as:
+of the solution in terms of~\eqref{eq:rp}. The expected value of the \gls{evp}
+solution is defined as:
 
 \begin{equation}
 	EEV = \mathbb{E}_{\xi} \left[ z(\bar{x}(\bar{\xi}), \xi) \right].
@@ -452,8 +453,9 @@ in~\cite{amouroux:2008,damien:2017}, where epidemiological experts were
 consulted to evaluate the model's realism and reliability.
 
 Regardless of the scale, it is possible to use compartmental theory, where the
-main idea is to represent the states of individuals~\citep{brauer-2008}. In our
-Dengue spread simulation, we adopted the following states: susceptible (S),
+main idea is to represent the states of individuals~\citep{brauer-2008}. In the
+Dengue spread simulation proposed in this thesis, the following states are
+adopted: susceptible (S),
 exposed or latent (E), infected (I), and recovered (R) as illustrated in
 Figure~\ref{fig:dynamicmodel}. Individuals who have never been exposed to the
 disease are in state S. If an individual carries the virus but does not yet
@@ -559,6 +561,62 @@ among others.  Classical mathematical models are mainly based on compartmental
 theory, and a system of \gls{ode} describes the changes between
 states~\citep{da-silva:2020}.
 
+\section{Simulated Annealing}\label{sec:simulated-annealing}
+
+\gls{sa} is a probabilistic metaheuristic that allows the search process to
+escape local optima~\cite{kirkpatrick:1983}. The method is a metaphor for a
+thermal process known as annealing, used in metallurgy to obtain low-energy
+states in a solid. In the physical process, a solid in a thermal bath is
+initially heated by increasing the temperature, so that thermal stresses are
+released and all particles are randomly distributed in a liquid phase. This is
+followed by slow cooling to ambient temperature, so that all particles arrange
+themselves in a low-energy state in which solidification occurs.
+
+More specifically, each iteration of \gls{sa} seeks movements from the current
+trial solution to an immediate neighbor in the local
+neighborhood~\cite{hillier:2013}. The technique starts the search from an
+arbitrary initial solution, and for each generated neighbor a calculation is
+performed, based on the current temperature, that determines whether the
+neighboring solution will replace the current one. At the end of each iteration,
+the temperature is reduced. A pseudocode of \gls{sa} is presented in
+Algorithm~\ref{alg:sa-preliminary}.
+
+\begin{algorithm}[!ht]
+	\caption{\label{alg:sa-preliminary} Simulated Annealing}
+	\SetAlgoLined
+	\KwResult{Best solution found}
+	$s \leftarrow$ initial random solution\;
+	$T \leftarrow T_{\max}$\;
+	\While{stopping criterion not satisfied}{
+		$s' \leftarrow$ neighbor of $s$\;
+		$\Delta \leftarrow f(s') - f(s)$\;
+		$u \leftarrow$ random value in $[0, 1]$\;
+		\If{$\Delta < 0$ \textbf{or} $e^{-\Delta / T} > u$}{
+			$s \leftarrow s'$\;
+		}
+		Reduce $T$\;
+	}
+\end{algorithm}
+
+One of the most important parameters of \gls{sa} is the maximum temperature
+$T_{\max}$, since it directly influences the acceptance probability: the higher
+the temperature, the greater the probability that a neighboring solution is
+accepted, even if it has a worse objective value than the current solution. The
+maximum temperature can also be used as a stopping criterion, since at each
+iteration the temperature is reduced; alternatively, a maximum execution time
+or a minimum temperature threshold can serve as stopping conditions.
+
+The most distinctive characteristic of \gls{sa} lies in the acceptance
+probability of worse neighboring solutions. By accepting solutions with inferior
+objective values with probability $e^{-\Delta / T}$, the algorithm can escape
+what are considered local optima and explore new regions of the solution space.
+Common cooling strategies include geometric cooling ($T_{k+1} = \alpha \cdot
+T_k$ with $0 < \alpha < 1$) and linear cooling. As $T$ decreases, the
+probability of accepting worse solutions diminishes, and the algorithm
+increasingly behaves like a deterministic hill-climbing method. Under certain
+theoretical conditions on the cooling schedule, \gls{sa} is guaranteed to
+converge to the global optimum~\cite{kirkpatrick:1983}.
+
 \section{Simheuristics}\label{sec:simheuristics}
 
 Simulation methods are widely used to analyze complex real-life systems under
@@ -621,7 +679,7 @@ The simulation component returns not only estimates of statistics, such as the
 mean, variance, and percentiles associated with the proposed solution, but also
 probabilistic information that can be useful in risk or reliability analyses, as
 well as information about the status of different system variables. Since
-simulation is a time consuming procedure, it is usually a good idea to employ a
+simulation is a time-consuming procedure, it is usually a good idea to employ a
 short number of simulation runs every time a new promising solution is evaluated
 at this stage, otherwise the simulation computing time might jeopardize the time
 required by the metaheuristic to converge to near-optimal solutions.  Some
@@ -638,12 +696,12 @@ offer sub-optimal values under uncertainty conditions; and (iii) develop a
 surrogate model that, at least partially, substitutes time-consuming simulations
 when estimating the value of the stochastic objective function or probabilistic
 constraints associated with a new promising solution proposed by the
-metaheuristic component
+metaheuristic component.
 
 As a result of this first stage, a reduced list of ``elite'' solutions is
-obtained. According to our initial estimates, each of these solutions show a
+obtained. According to initial estimates, each of these solutions shows a
 high performance in a scenario under uncertainty. Now, in order to increase the
-accuracy of our estimates, a more intensive simulation is executed on each of
+accuracy of these estimates, a more intensive simulation is executed on each of
 the elite solutions. Of course, variance reduction techniques, such as the use
 of common random numbers, can be employed here to speed up these simulations,
 which can also be run in parallel processors. As a final stage, the simulation
