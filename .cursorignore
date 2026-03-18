@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+# Allow directories (needed for recursive patterns to work)
+!*/
+
+# Allow .tex files
+!**/*.tex
+!**/*.bib
